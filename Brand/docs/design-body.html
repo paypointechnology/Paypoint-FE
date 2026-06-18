@@ -1,0 +1,1572 @@
+<style>
+/* ============================================================
+   PAYPOINT — UX/UI DESIGN SYSTEM & MVP SCREENS
+   Inter only · indigo-led Stripe-clean · mobile-first @375px
+   ============================================================ */
+:root{
+  --brand:#5F58F4; --brand-hover:#4A43D6; --brand-tint:#EEEDFE; --brand-soft:#F5F4FF;
+  --ink:#14132B; --text:#33323F; --muted:#6C6B7B; --subtle:#9A99A8;
+  --bg:#FFFFFF; --bg-soft:#FAFAFE; --surface:#FFFFFF; --border:#ECEBF3; --border-strong:#E3E2EE;
+  --success:#12B76A; --success-tint:#E7F8EF; --success-text:#0B7A4B;
+  --warning:#F79009; --warning-tint:#FEF0DC; --warning-text:#9A5A00;
+  --danger:#F04438; --danger-tint:#FEECEB; --danger-text:#B42318; --star:#F5A623;
+  --deep-teal:#093D3D; --mint-green:#4CA672; --spring-green:#BCED87; --mustard:#FFD071;
+  /* radius */
+  --r-input:8px; --r-btn:12px; --r-card:12px; --r-lg:16px; --r-checkout:20px; --r-pill:999px;
+  /* spacing scale (4px base) */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s6:24px; --s8:32px; --s12:48px; --s16:64px;
+}
+
+/* ---- document shell ---- */
+.pp-doc{
+  font-family:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;
+  color:var(--text); background:var(--bg); line-height:1.5;
+  -webkit-font-smoothing:antialiased; max-width:1080px; margin:0 auto; padding-bottom:80px;
+}
+.pp-doc *{box-sizing:border-box;}
+.pp-doc h1,.pp-doc h2,.pp-doc h3,.pp-doc h4{color:var(--ink);font-weight:700;letter-spacing:-0.01em;margin:0;}
+.pp-doc p{margin:0;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+
+/* ---- cover band ---- */
+.pp-cover{
+  background:var(--ink);
+  background-image:linear-gradient(135deg,#1B1840 0%,#14132B 55%,#0F0E22 100%);
+  border-radius:var(--r-lg); padding:56px 44px; color:#fff; margin:8px 0 48px;
+}
+.pp-cover .word{height:30px;display:block;margin-bottom:28px;}
+.pp-cover h1{color:#fff;font-size:38px;line-height:1.12;font-weight:700;letter-spacing:-0.02em;max-width:620px;}
+.pp-cover .sub{color:#C9C7E8;font-size:16px;margin-top:16px;max-width:560px;line-height:1.6;}
+.pp-cover .meta{color:var(--spring-green);font-size:13px;font-weight:500;margin-top:30px;letter-spacing:0.01em;}
+
+/* ---- section scaffolding ---- */
+.pp-section{margin:0 0 56px;padding:0 8px;}
+.pp-kicker{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--brand);margin-bottom:8px;}
+.pp-section > h2{font-size:26px;letter-spacing:-0.02em;margin-bottom:6px;}
+.pp-section > .lede{font-size:15px;color:var(--muted);max-width:640px;margin-bottom:28px;line-height:1.6;}
+.pp-block-title{font-size:14px;font-weight:600;color:var(--ink);margin:28px 0 14px;text-transform:uppercase;letter-spacing:0.05em;}
+
+/* ---- swatches ---- */
+.pp-swatch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.pp-swatch{border:1px solid var(--border);border-radius:var(--r-card);overflow:hidden;}
+.pp-swatch .chip{height:64px;}
+.pp-swatch .meta{padding:9px 11px;}
+.pp-swatch .nm{font-size:12px;font-weight:600;color:var(--ink);}
+.pp-swatch .hex{font-size:11px;color:var(--subtle);font-variant-numeric:tabular-nums;margin-top:2px;}
+
+/* ---- type scale ---- */
+.pp-type-row{display:flex;align-items:baseline;gap:18px;padding:11px 0;border-bottom:1px solid var(--border);}
+.pp-type-row .lbl{width:110px;flex-shrink:0;font-size:11px;color:var(--subtle);font-variant-numeric:tabular-nums;}
+.pp-type-sample{color:var(--ink);}
+
+/* ---- spacing scale ---- */
+.pp-space-row{display:flex;align-items:center;gap:16px;padding:6px 0;}
+.pp-space-row .bar{background:var(--brand);height:14px;border-radius:3px;}
+.pp-space-row .lbl{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;}
+
+/* ---- radius demo ---- */
+.pp-radius-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+.pp-radius-cell{text-align:center;}
+.pp-radius-cell .box{height:56px;background:var(--brand-tint);border:1px solid var(--border-strong);}
+.pp-radius-cell .cap{font-size:11px;color:var(--muted);margin-top:7px;}
+
+/* ---- component gallery ---- */
+.pp-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.pp-demo{border:1px solid var(--border);border-radius:var(--r-card);padding:18px;background:var(--bg-soft);}
+.pp-demo .demo-label{font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--subtle);margin-bottom:14px;}
+.pp-demo .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+
+/* ===== reusable PRODUCT components ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;
+  font-weight:600;font-size:15px;border:none;cursor:pointer;border-radius:var(--r-btn);
+  height:48px;padding:0 20px;transition:background .15s ease,transform .1s ease;}
+.btn--primary{background:var(--brand);color:#fff;}
+.btn--primary:hover{background:var(--brand-hover);}
+.btn--full{width:100%;}
+.btn--secondary{background:#fff;color:var(--ink);border:1px solid var(--border-strong);}
+.btn--secondary:hover{background:var(--bg-soft);}
+.btn--disabled,.btn:disabled{background:var(--brand);opacity:.45;cursor:not-allowed;}
+.btn--sm{height:38px;font-size:13px;border-radius:10px;padding:0 14px;}
+
+.field-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;display:block;}
+.input{width:100%;height:44px;border:1px solid var(--border-strong);border-radius:var(--r-input);
+  padding:0 12px;font-size:14px;color:var(--ink);font-family:inherit;background:#fff;display:flex;align-items:center;}
+.input::placeholder{color:var(--subtle);}
+.input--placeholder{color:var(--subtle);}
+.input--focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(95,88,244,.14);}
+.input-money{display:flex;align-items:center;height:44px;border:1px solid var(--border-strong);
+  border-radius:var(--r-input);padding:0 12px;font-size:14px;color:var(--ink);background:#fff;}
+.input-money .naira{color:var(--subtle);margin-right:6px;}
+
+.toggle{display:inline-flex;background:#F4F4FB;border-radius:10px;padding:3px;}
+.toggle span{font-size:13px;color:var(--muted);padding:7px 16px;border-radius:8px;cursor:pointer;}
+.toggle span.on{font-weight:600;color:var(--brand);background:#fff;box-shadow:0 1px 2px rgba(20,19,43,.06);}
+
+.switch{width:40px;height:23px;border-radius:var(--r-pill);background:var(--success);position:relative;flex-shrink:0;}
+.switch.off{background:#D8D6E8;}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.15);}
+.switch.off::after{left:2px;}
+.switch:not(.off)::after{left:19px;}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:5px 11px;border-radius:var(--r-pill);}
+.pill--on{color:var(--brand);background:var(--brand-tint);font-weight:500;}
+.pill--off{color:var(--subtle);background:#F4F4FB;}
+
+.status{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 9px;border-radius:var(--r-pill);}
+.status--success{background:var(--success-tint);color:var(--success-text);}
+.status--pending{background:var(--warning-tint);color:var(--warning-text);}
+.status--abandoned{background:#F4F4FB;color:var(--muted);}
+.status--failed{background:var(--danger-tint);color:var(--danger-text);}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r-card);overflow:hidden;}
+.metric{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--r-card);padding:14px 16px;}
+.metric .k{font-size:12px;color:var(--muted);}
+.metric .v{font-size:22px;font-weight:700;color:var(--ink);margin-top:6px;letter-spacing:-0.01em;}
+
+.share-row{display:flex;gap:14px;color:var(--subtle);font-size:18px;}
+.share-row .act{display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:13px;cursor:pointer;}
+.share-row .act i{color:var(--brand);font-size:16px;}
+
+.navitem{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;color:var(--muted);font-size:13px;font-weight:500;}
+.navitem.active{background:var(--brand-tint);color:var(--brand);font-weight:600;}
+.navitem i{font-size:18px;}
+
+/* ===== phone frame ===== */
+.pp-screen{margin:18px 0 8px;}
+.pp-stage{background:#F4F4FB;border-radius:var(--r-lg);padding:26px 16px;display:flex;justify-content:center;gap:28px;flex-wrap:wrap;}
+.phone{width:375px;max-width:100%;background:#fff;border:1px solid var(--border-strong);
+  border-radius:30px;box-shadow:0 12px 40px rgba(20,19,43,.10);overflow:hidden;flex-shrink:0;}
+.phone .statusbar{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11px;font-weight:600;color:var(--ink);}
+.phone .statusbar .dots{display:flex;gap:5px;align-items:center;}
+.phone-screen{height:680px;overflow:hidden;position:relative;}
+.phone-scroll{padding:0;}
+
+/* generic screen helpers used inside phones */
+.appbar{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);}
+.appbar .ttl{font-size:16px;font-weight:600;color:var(--ink);}
+.appbar .logo{height:18px;}
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:1px solid var(--border);display:flex;}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:var(--subtle);}
+.tabbar a i{font-size:20px;}
+.tabbar a.active{color:var(--brand);}
+
+/* spec callout */
+.pp-spec{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;margin:14px 0 4px;}
+.pp-spec .grp h4{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--brand);margin-bottom:7px;}
+.pp-spec ul{margin:0;padding-left:18px;}
+.pp-spec li{font-size:13px;color:var(--text);line-height:1.55;margin-bottom:4px;}
+.pp-spec li b{color:var(--ink);font-weight:600;}
+.screen-head{display:flex;align-items:baseline;gap:12px;margin-top:8px;}
+.screen-head .num{font-size:13px;font-weight:700;color:#fff;background:var(--brand);width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center;}
+.screen-head h3{font-size:20px;letter-spacing:-0.01em;}
+.screen-head .route{font-size:12px;font-family:'JetBrains Mono',ui-monospace,monospace;color:var(--muted);background:var(--bg-soft);border:1px solid var(--border);padding:3px 8px;border-radius:6px;}
+.annot{font-size:12px;color:var(--muted);line-height:1.6;background:var(--brand-soft);border-left:3px solid var(--brand);border-radius:0 8px 8px 0;padding:12px 14px;margin:16px 0 4px;}
+.annot b{color:var(--ink);}
+
+/* ===== checkout component (shared) ===== */
+.co{width:100%;}
+.co .cohead{padding:16px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.co .seller-logo{width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.co .bizname{font-size:14px;font-weight:600;color:var(--ink);}
+.co .secure{margin-left:auto;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;}
+.co .photo{height:200px;background:#EEEDFE;background-size:cover;background-position:center;}
+.co .neutral{height:160px;background:var(--brand-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--brand);border-bottom:1px solid var(--border);}
+.co .neutral .nlogo{height:26px;opacity:.9;}
+.co .neutral .nlbl{font-size:12px;color:var(--muted);font-weight:500;}
+.co .body{padding:20px 18px 22px;}
+.co .pname{font-size:20px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;}
+.co .pdesc{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.55;}
+.co .price{font-size:30px;font-weight:700;color:var(--ink);margin:14px 0 12px;letter-spacing:-0.02em;}
+.co .metarow{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--muted);margin-bottom:18px;}
+.co .metarow span{display:flex;align-items:center;gap:5px;}
+.co .paystack-line{text-align:center;font-size:11px;color:var(--muted);margin-top:14px;display:flex;align-items:center;justify-content:center;gap:5px;}
+.co .contact{margin-top:16px;border-top:1px solid var(--border);padding-top:14px;display:flex;gap:10px;justify-content:center;}
+.co .contact a{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--brand);background:var(--brand-tint);padding:7px 13px;border-radius:var(--r-pill);}
+
+/* ===== device prototype captions ===== */
+.proto-caption{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--subtle);margin:0 0 10px;display:flex;align-items:center;gap:6px;}
+.proto-caption i{font-size:14px;color:var(--brand);}
+
+/* ===== desktop / laptop browser web-frame ===== */
+.web-wrap{margin:18px 0 8px;}
+.web-frame{width:100%;background:#fff;border:1px solid var(--border-strong);border-radius:14px;
+  box-shadow:0 12px 40px rgba(20,19,43,.10);overflow:hidden;}
+.web-bar{height:42px;background:var(--bg-soft);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:14px;padding:0 16px;}
+.web-bar .lights{display:flex;gap:7px;flex-shrink:0;}
+.web-bar .lights span{width:11px;height:11px;border-radius:50%;display:block;}
+.web-bar .lights .r{background:#FF5F57;}
+.web-bar .lights .y{background:#FEBC2E;}
+.web-bar .lights .g{background:#28C840;}
+.web-bar .addr{flex:1;height:26px;background:#fff;border:1px solid var(--border);border-radius:var(--r-pill);
+  display:flex;align-items:center;gap:7px;padding:0 14px;font-size:12px;color:var(--muted);
+  font-family:'JetBrains Mono',ui-monospace,monospace;max-width:520px;}
+.web-bar .addr i{font-size:13px;color:var(--success);}
+.web-bar .winacts{display:flex;gap:14px;color:var(--subtle);font-size:15px;flex-shrink:0;}
+.web-body{display:block;background:#fff;}
+
+/* seller app desktop shell: left sidebar + content */
+.web-app{display:flex;min-height:560px;}
+.web-side{width:212px;flex-shrink:0;background:var(--bg-soft);border-right:1px solid var(--border);
+  padding:18px 14px;display:flex;flex-direction:column;}
+.web-side .brand{display:flex;align-items:center;gap:9px;padding:4px 8px 18px;}
+.web-side .brand img{height:22px;}
+.web-side .brand .pmark{width:26px;height:26px;border-radius:7px;flex-shrink:0;}
+.web-side .navitem{margin-bottom:3px;}
+.web-side .side-foot{margin-top:auto;display:flex;align-items:center;gap:9px;padding:10px 8px 2px;border-top:1px solid var(--border);}
+.web-side .side-foot img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+.web-side .side-foot .nm{font-size:12px;font-weight:600;color:var(--ink);line-height:1.2;}
+.web-side .side-foot .em{font-size:11px;color:var(--subtle);}
+.web-main{flex:1;min-width:0;background:#fff;overflow:hidden;}
+.web-topbar{display:flex;align-items:center;gap:12px;padding:18px 28px;border-bottom:1px solid var(--border);}
+.web-topbar h4{font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.01em;}
+.web-content{padding:24px 28px;}
+
+/* buyer / auth centered desktop canvas */
+.web-canvas{background:var(--bg-soft);min-height:560px;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.web-card{width:100%;max-width:430px;background:#fff;border:1px solid var(--border);border-radius:var(--r-checkout);overflow:hidden;box-shadow:0 12px 40px rgba(20,19,43,.08);}
+
+@media (max-width:760px){
+  .web-app{flex-direction:column;}
+  .web-side{width:100%;flex-direction:row;align-items:center;border-right:none;border-bottom:1px solid var(--border);padding:12px;overflow-x:auto;}
+  .web-side .brand{padding:0 12px 0 4px;}
+  .web-side .navitem{margin-bottom:0;}
+  .web-side .side-foot{margin:0 0 0 auto;border-top:none;padding:0 4px;}
+}
+
+@media (max-width:520px){
+  .pp-swatch-grid{grid-template-columns:repeat(2,1fr);}
+  .pp-gallery,.pp-spec{grid-template-columns:1fr;}
+  .pp-radius-grid{grid-template-columns:repeat(3,1fr);}
+  .pp-cover{padding:36px 24px;}
+  .pp-cover h1{font-size:28px;}
+}
+
+/* ===== print / PDF pagination ===== */
+.screen-head{ break-before: page; page-break-before: always; }
+.phone, .web-frame{ break-inside: avoid; page-break-inside: avoid; }
+.proto-caption{ break-after: avoid; page-break-after: avoid; }
+</style>
+
+<div class="pp-doc">
+<h1 class="sr-only">Paypoint UX/UI Design System and MVP Screens design document with live component gallery and mobile screen prototypes</h1>
+
+<!-- ============ COVER ============ -->
+<header class="pp-cover">
+  <img class="word" src="{{LOGO_WORD_MINT}}" alt="Paypoint">
+  <h1>Paypoint — UX/UI Design System &amp; MVP Screens</h1>
+  <p class="sub">The indigo-led, Stripe-clean design language for Paypoint's 2-week MVP — one calm, trustworthy system carrying a stranger from a shared link to a completed payment.</p>
+  <p class="meta">v1.0 · Newman Haruna · for Yvonne Joseph · 16 June 2026</p>
+</header>
+
+<!-- ============ DESIGN SYSTEM ============ -->
+<section class="pp-section">
+  <div class="pp-kicker">Foundations</div>
+  <h2>Design system</h2>
+  <p class="lede">Every product surface is built from these tokens. Indigo leads; the secondary palette appears only as brand expression (doc chrome, illustration, empty-state art) — never as a second accent competing with indigo in product chrome. Type is Inter only. Separation is done with 1px borders, not shadows.</p>
+
+  <!-- COLOR -->
+  <div class="pp-block-title">Color tokens</div>
+  <div class="pp-swatch-grid">
+    <div class="pp-swatch"><div class="chip" style="background:var(--brand)"></div><div class="meta"><div class="nm">--brand</div><div class="hex">#5F58F4</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--brand-hover)"></div><div class="meta"><div class="nm">--brand-hover</div><div class="hex">#4A43D6</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--brand-tint)"></div><div class="meta"><div class="nm">--brand-tint</div><div class="hex">#EEEDFE</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--brand-soft)"></div><div class="meta"><div class="nm">--brand-soft</div><div class="hex">#F5F4FF</div></div></div>
+
+    <div class="pp-swatch"><div class="chip" style="background:var(--ink)"></div><div class="meta"><div class="nm">--ink</div><div class="hex">#14132B</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--text)"></div><div class="meta"><div class="nm">--text</div><div class="hex">#33323F</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--muted)"></div><div class="meta"><div class="nm">--muted</div><div class="hex">#6C6B7B</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--subtle)"></div><div class="meta"><div class="nm">--subtle</div><div class="hex">#9A99A8</div></div></div>
+
+    <div class="pp-swatch"><div class="chip" style="background:var(--bg-soft)"></div><div class="meta"><div class="nm">--bg-soft</div><div class="hex">#FAFAFE</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:#fff;border-bottom:1px solid var(--border)"></div><div class="meta"><div class="nm">--surface / --bg</div><div class="hex">#FFFFFF</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--border)"></div><div class="meta"><div class="nm">--border</div><div class="hex">#ECEBF3</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--border-strong)"></div><div class="meta"><div class="nm">--border-strong</div><div class="hex">#E3E2EE</div></div></div>
+
+    <div class="pp-swatch"><div class="chip" style="background:var(--success)"></div><div class="meta"><div class="nm">--success</div><div class="hex">#12B76A</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--warning)"></div><div class="meta"><div class="nm">--warning</div><div class="hex">#F79009</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--danger)"></div><div class="meta"><div class="nm">--danger</div><div class="hex">#F04438</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--star)"></div><div class="meta"><div class="nm">--star</div><div class="hex">#F5A623</div></div></div>
+  </div>
+
+  <div class="pp-block-title" style="margin-top:20px;">Secondary brand palette · expression only</div>
+  <div class="pp-swatch-grid">
+    <div class="pp-swatch"><div class="chip" style="background:var(--deep-teal)"></div><div class="meta"><div class="nm">--deep-teal</div><div class="hex">#093D3D</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--mint-green)"></div><div class="meta"><div class="nm">--mint-green</div><div class="hex">#4CA672</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--spring-green)"></div><div class="meta"><div class="nm">--spring-green</div><div class="hex">#BCED87</div></div></div>
+    <div class="pp-swatch"><div class="chip" style="background:var(--mustard)"></div><div class="meta"><div class="nm">--mustard</div><div class="hex">#FFD071</div></div></div>
+  </div>
+
+  <!-- TYPE -->
+  <div class="pp-block-title">Type scale · Inter</div>
+  <div>
+    <div class="pp-type-row"><span class="lbl">36 / 700 / -.02em</span><span class="pp-type-sample" style="font-size:36px;font-weight:700;letter-spacing:-.02em;">Display heading</span></div>
+    <div class="pp-type-row"><span class="lbl">30 / 700 / -.02em</span><span class="pp-type-sample" style="font-size:30px;font-weight:700;letter-spacing:-.02em;">₦35,000 price</span></div>
+    <div class="pp-type-row"><span class="lbl">20 / 600 / -.01em</span><span class="pp-type-sample" style="font-size:20px;font-weight:600;letter-spacing:-.01em;">Section title</span></div>
+    <div class="pp-type-row"><span class="lbl">16 / 600</span><span class="pp-type-sample" style="font-size:16px;font-weight:600;">Card / app-bar title</span></div>
+    <div class="pp-type-row"><span class="lbl">15 / 600</span><span class="pp-type-sample" style="font-size:15px;font-weight:600;">Button label</span></div>
+    <div class="pp-type-row"><span class="lbl">14 / 400</span><span class="pp-type-sample" style="font-size:14px;">Body text — the default reading size for inputs and copy.</span></div>
+    <div class="pp-type-row"><span class="lbl">13 / 400</span><span class="pp-type-sample" style="font-size:13px;color:var(--muted);">Secondary / muted description</span></div>
+    <div class="pp-type-row"><span class="lbl">12 / 600</span><span class="pp-type-sample" style="font-size:12px;font-weight:600;color:var(--muted);">FIELD LABEL</span></div>
+    <div class="pp-type-row"><span class="lbl">11 / 500</span><span class="pp-type-sample" style="font-size:11px;color:var(--subtle);">Caption · trust line</span></div>
+  </div>
+
+  <!-- SPACING -->
+  <div class="pp-block-title">Spacing scale · 4px base</div>
+  <div>
+    <div class="pp-space-row"><span class="bar" style="width:4px;"></span><span class="lbl">4 · --s1</span></div>
+    <div class="pp-space-row"><span class="bar" style="width:8px;"></span><span class="lbl">8 · --s2</span></div>
+    <div class="pp-space-row"><span class="bar" style="width:12px;"></span><span class="lbl">12 · --s3</span></div>
+    <div class="pp-space-row"><span class="bar" style="width:16px;"></span><span class="lbl">16 · --s4</span></div>
+    <div class="pp-space-row"><span class="bar" style="width:24px;"></span><span class="lbl">24 · --s6</span></div>
+    <div class="pp-space-row"><span class="bar" style="width:32px;"></span><span class="lbl">32 · --s8</span></div>
+    <div class="pp-space-row"><span class="bar" style="width:48px;"></span><span class="lbl">48 · --s12</span></div>
+    <div class="pp-space-row"><span class="bar" style="width:64px;"></span><span class="lbl">64 · --s16</span></div>
+  </div>
+
+  <!-- RADIUS -->
+  <div class="pp-block-title">Radius</div>
+  <div class="pp-radius-grid">
+    <div class="pp-radius-cell"><div class="box" style="border-radius:8px;"></div><div class="cap">8 · input</div></div>
+    <div class="pp-radius-cell"><div class="box" style="border-radius:12px;"></div><div class="cap">12 · btn / card</div></div>
+    <div class="pp-radius-cell"><div class="box" style="border-radius:16px;"></div><div class="cap">16 · lg card / modal</div></div>
+    <div class="pp-radius-cell"><div class="box" style="border-radius:20px;"></div><div class="cap">20 · checkout</div></div>
+    <div class="pp-radius-cell"><div class="box" style="border-radius:999px;width:56px;margin:0 auto;"></div><div class="cap">999 · pill</div></div>
+    <div class="pp-radius-cell"><div class="box" style="border-radius:50%;width:56px;margin:0 auto;"></div><div class="cap">50% · avatar</div></div>
+  </div>
+
+  <!-- COMPONENT GALLERY -->
+  <div class="pp-block-title">Component gallery</div>
+  <div class="pp-gallery">
+
+    <div class="pp-demo">
+      <div class="demo-label">Buttons</div>
+      <div class="row">
+        <button class="btn btn--primary">Pay ₦35,000</button>
+        <button class="btn btn--secondary">Cancel</button>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <button class="btn btn--primary btn--sm">Create Paypoint</button>
+        <button class="btn btn--primary btn--disabled" disabled>Disabled</button>
+      </div>
+    </div>
+
+    <div class="pp-demo">
+      <div class="demo-label">Text input · focus · ₦ price</div>
+      <label class="field-label">Your name</label>
+      <div class="input">Chidinma Okeke</div>
+      <label class="field-label" style="margin-top:12px;">Phone number</label>
+      <div class="input input--focus"><span class="input--placeholder">080…</span></div>
+      <label class="field-label" style="margin-top:12px;">Price</label>
+      <div class="input-money"><span class="naira">₦</span>35,000</div>
+    </div>
+
+    <div class="pp-demo">
+      <div class="demo-label">Toggle · switch</div>
+      <div class="toggle"><span>Product</span><span class="on">Service</span></div>
+      <div class="row" style="margin-top:16px;">
+        <span class="switch"></span><span style="font-size:13px;color:var(--muted);">Active</span>
+        <span class="switch off" style="margin-left:14px;"></span><span style="font-size:13px;color:var(--muted);">Inactive</span>
+      </div>
+    </div>
+
+    <div class="pp-demo">
+      <div class="demo-label">Checkbox pills · buyer fields</div>
+      <div class="row">
+        <span class="pill pill--on"><i class="ti ti-check"></i>Name</span>
+        <span class="pill pill--on"><i class="ti ti-check"></i>Phone</span>
+        <span class="pill pill--off">Email</span>
+        <span class="pill pill--off">Address</span>
+      </div>
+    </div>
+
+    <div class="pp-demo">
+      <div class="demo-label">Status pills</div>
+      <div class="row">
+        <span class="status status--success">Success</span>
+        <span class="status status--pending">Pending</span>
+        <span class="status status--abandoned">Abandoned</span>
+        <span class="status status--failed">Failed</span>
+      </div>
+    </div>
+
+    <div class="pp-demo">
+      <div class="demo-label">Metric card</div>
+      <div class="metric"><div class="k">Total collected</div><div class="v">₦1,240,000</div></div>
+    </div>
+
+    <div class="pp-demo">
+      <div class="demo-label">QR / share row</div>
+      <div class="share-row">
+        <span class="act"><i class="ti ti-copy"></i>Copy</span>
+        <span class="act"><i class="ti ti-qrcode"></i>QR</span>
+        <span class="act"><i class="ti ti-share-2"></i>Share</span>
+      </div>
+    </div>
+
+    <div class="pp-demo">
+      <div class="demo-label">Nav item · active / idle</div>
+      <div class="navitem active"><i class="ti ti-home"></i>Home</div>
+      <div class="navitem"><i class="ti ti-file-invoice"></i>Pages</div>
+    </div>
+
+    <div class="pp-demo" style="grid-column:1 / -1;">
+      <div class="demo-label">Product card</div>
+      <div class="card" style="max-width:240px;">
+        <div style="height:92px;background:var(--brand-tint);position:relative;background-image:url(https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400);background-size:cover;background-position:center;"><span class="status status--success" style="position:absolute;top:8px;right:8px;background:#fff;">Active</span></div>
+        <div style="padding:12px;">
+          <div style="font-size:13px;font-weight:600;color:var(--ink);">Aso Oke Dress</div>
+          <div style="display:flex;align-items:baseline;gap:7px;margin:3px 0 11px;"><span style="font-size:15px;font-weight:700;color:var(--ink);">₦35,000</span><span style="font-size:11px;color:var(--subtle);">· 24 paid</span></div>
+          <div class="share-row" style="font-size:16px;"><i class="ti ti-copy"></i><i class="ti ti-qrcode"></i><i class="ti ti-share-2"></i></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ SCREENS ============ -->
+<section class="pp-section">
+  <div class="pp-kicker">Prototypes</div>
+  <h2>Screen by screen</h2>
+  <p class="lede">All 10 in-scope screens in priority order, each rendered inside a 375px phone frame. Checkout is #1 and most detailed — it owns the North Star of ≥40% conversion. Nothing out-of-scope appears: no KYC, wallet, storefront, edit-page, search, or multi-currency. NGN only.</p>
+
+  <!-- ===== 1. CHECKOUT ===== -->
+  <div class="screen-head"><span class="num">1</span><h3>Public buyer checkout</h3><span class="route">/p/:slug</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Carry a <b>stranger</b> from a shared link to a completed payment with zero hesitation. Owns the ≥40% North Star.</li>
+      <li>Chrome-free, single-column, one obvious action: <b>Pay ₦X</b>.</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements</h4><ul>
+      <li>Seller logo + business name + "Secure" cue in header.</li>
+      <li>Real product photo (or branded neutral state), title, muted description, large ₦ price.</li>
+      <li>Meta row: delivery + honest "★ N paid" (hidden at 0).</li>
+      <li>Collected fields (Name default), full-width indigo Pay button.</li>
+    </ul></div>
+    <div class="grp"><h4>Trust &amp; CRO (P0)</h4><ul>
+      <li><b>Real-photo</b> over placeholder icon — the single biggest conversion lever.</li>
+      <li><b>"Payments processed by Paystack"</b> line directly under the button.</li>
+      <li>Honest <b>social proof</b> ("24 paid") — hidden entirely at 0 rather than faked.</li>
+      <li><b>Tappable seller contact</b> (WhatsApp / Instagram) lowers stranger risk.</li>
+    </ul></div>
+    <div class="grp"><h4>Mobile @375px &amp; a11y</h4><ul>
+      <li>Designed at 375px first; survives WhatsApp/IG in-app browsers.</li>
+      <li>Pay button 48px tall — exceeds 44px touch target.</li>
+      <li>Price uses real text (screen-reader friendly), not an image.</li>
+      <li>Photo carries descriptive <code>alt</code>; "Secure" pairs icon + text.</li>
+    </ul></div>
+  </div>
+
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>paypoint.co/p/aso-oke-dress</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-canvas">
+          <div class="web-card">
+            <div class="co">
+              <div class="cohead">
+                <img class="seller-logo" src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=120" alt="Adaeze Couture logo">
+                <span class="bizname">Adaeze Couture</span>
+                <span class="secure"><i class="ti ti-lock"></i>Secure</span>
+              </div>
+              <div class="photo" style="background-image:url(https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=700)" role="img" aria-label="Hand-woven Aso Oke dress"></div>
+              <div class="body">
+                <div class="pname">Aso Oke Dress</div>
+                <div class="pdesc">Hand-woven Aso Oke, fully lined. Made to order in your measurements.</div>
+                <div class="price">₦35,000</div>
+                <div class="metarow">
+                  <span><i class="ti ti-truck" style="color:var(--brand)"></i>Nationwide · 3 days</span>
+                  <span><i class="ti ti-star" style="color:var(--star)"></i>24 paid</span>
+                </div>
+                <label class="field-label">Your name</label>
+                <div class="input" style="margin-bottom:12px;">Chidinma Okeke</div>
+                <label class="field-label">Phone number</label>
+                <div class="input" style="margin-bottom:18px;"><span class="input--placeholder">080…</span></div>
+                <button class="btn btn--primary btn--full"><i class="ti ti-lock" style="font-size:17px;"></i>Pay ₦35,000</button>
+                <div class="paystack-line"><i class="ti ti-shield-check"></i>Payments processed by Paystack</div>
+                <div class="contact">
+                  <a href="#"><i class="ti ti-brand-whatsapp"></i>WhatsApp</a>
+                  <a href="#"><i class="ti ti-brand-instagram"></i>Instagram</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <!-- variant A: with photo -->
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen">
+        <div class="co">
+          <div class="cohead">
+            <img class="seller-logo" src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=120" alt="Adaeze Couture logo">
+            <span class="bizname">Adaeze Couture</span>
+            <span class="secure"><i class="ti ti-lock"></i>Secure</span>
+          </div>
+          <div class="photo" style="background-image:url(https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=700)" role="img" aria-label="Hand-woven Aso Oke dress"></div>
+          <div class="body">
+            <div class="pname">Aso Oke Dress</div>
+            <div class="pdesc">Hand-woven Aso Oke, fully lined. Made to order in your measurements.</div>
+            <div class="price">₦35,000</div>
+            <div class="metarow">
+              <span><i class="ti ti-truck" style="color:var(--brand)"></i>Nationwide · 3 days</span>
+              <span><i class="ti ti-star" style="color:var(--star)"></i>24 paid</span>
+            </div>
+            <label class="field-label">Your name</label>
+            <div class="input" style="margin-bottom:12px;">Chidinma Okeke</div>
+            <label class="field-label">Phone number</label>
+            <div class="input" style="margin-bottom:18px;"><span class="input--placeholder">080…</span></div>
+            <button class="btn btn--primary btn--full"><i class="ti ti-lock" style="font-size:17px;"></i>Pay ₦35,000</button>
+            <div class="paystack-line"><i class="ti ti-shield-check"></i>Payments processed by Paystack</div>
+            <div class="contact">
+              <a href="#"><i class="ti ti-brand-whatsapp"></i>WhatsApp</a>
+              <a href="#"><i class="ti ti-brand-instagram"></i>Instagram</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- variant B: branded neutral (no photo) -->
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen">
+        <div class="co">
+          <div class="cohead">
+            <img class="seller-logo" src="{{LOGO_ICON_INDIGO}}" alt="Tunde Writes logo">
+            <span class="bizname">Tunde Writes</span>
+            <span class="secure"><i class="ti ti-lock"></i>Secure</span>
+          </div>
+          <div class="neutral">
+            <img class="nlogo" src="{{LOGO_WORD_INDIGO}}" alt="Paypoint">
+            <span class="nlbl">Professional CV Writing</span>
+          </div>
+          <div class="body">
+            <div class="pname">Professional CV Writing</div>
+            <div class="pdesc">ATS-ready CV rewrite with a tailored cover letter. 48-hour turnaround.</div>
+            <div class="price">₦25,000</div>
+            <div class="metarow">
+              <span><i class="ti ti-clock" style="color:var(--brand)"></i>Delivered in 2 days</span>
+              <!-- 0 paid → social proof intentionally hidden -->
+            </div>
+            <label class="field-label">Your name</label>
+            <div class="input" style="margin-bottom:18px;"><span class="input--placeholder">Enter your name</span></div>
+            <button class="btn btn--primary btn--full"><i class="ti ti-lock" style="font-size:17px;"></i>Pay ₦25,000</button>
+            <div class="paystack-line"><i class="ti ti-shield-check"></i>Payments processed by Paystack</div>
+            <div class="contact">
+              <a href="#"><i class="ti ti-brand-whatsapp"></i>WhatsApp</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot">
+    <b>Trust triggers, left → right:</b> (1) seller's own logo + name builds first-party credibility; (2) the <b>"Secure"</b> lock reassures before scroll; (3) a <b>real photo</b> — not a placeholder icon — is the #1 conversion lever; (4) honest <b>"24 paid"</b> social proof, shown only when true (right phone has 0, so it is hidden, not faked); (5) the <b>Paystack</b> line under the button answers "is my money safe?" at the moment of decision; (6) <b>tappable seller contact</b> de-risks paying a stranger. The right phone shows the <b>branded neutral state</b> for pages with no photo — Paypoint wordmark on soft indigo, never a grey placeholder icon.
+  </div>
+
+  <!-- ===== 2. REDIRECT INTERSTITIAL ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">2</span><h3>Paystack redirect interstitial</h3></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Hold the buyer's confidence during the jump to Paystack's hosted page — the riskiest second in the funnel inside an in-app browser.</li>
+    </ul></div>
+    <div class="grp"><h4>Trust &amp; a11y</h4><ul>
+      <li>Calm spinner, explicit "Securely redirecting to Paystack…" copy, no dead-end if redirect stalls (fallback link).</li>
+      <li><code>aria-live="polite"</code> status announces the redirect; spinner has reduced-motion fallback.</li>
+    </ul></div>
+  </div>
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>paypoint.co/pay/redirect</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-canvas">
+          <div class="web-card" style="max-width:460px;text-align:center;padding:56px 44px;">
+            <img src="{{LOGO_ICON_INDIGO}}" alt="Paypoint" style="height:48px;margin-bottom:24px;">
+            <div style="width:42px;height:42px;border:3px solid var(--brand-tint);border-top-color:var(--brand);border-radius:50%;margin:0 auto 22px;" aria-hidden="true"></div>
+            <div style="font-size:18px;font-weight:600;color:var(--ink);" aria-live="polite">Securely redirecting to Paystack…</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:8px;line-height:1.55;">Hold on a moment. We're taking you to Paystack's secure checkout to complete your ₦35,000 payment.</div>
+            <div style="margin-top:22px;font-size:11px;color:var(--subtle);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ti ti-shield-lock"></i>Your card details never touch Paypoint</div>
+            <a href="#" style="display:inline-block;margin-top:28px;font-size:12px;color:var(--brand);font-weight:600;">Not redirecting? Click to continue</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 36px;">
+        <img src="{{LOGO_ICON_INDIGO}}" alt="Paypoint" style="height:48px;margin-bottom:24px;">
+        <div style="width:42px;height:42px;border:3px solid var(--brand-tint);border-top-color:var(--brand);border-radius:50%;margin-bottom:22px;" aria-hidden="true"></div>
+        <div style="font-size:17px;font-weight:600;color:var(--ink);" aria-live="polite">Securely redirecting to Paystack…</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px;line-height:1.55;">Hold on a moment. We're taking you to Paystack's secure checkout to complete your ₦35,000 payment.</div>
+        <div style="margin-top:22px;font-size:11px;color:var(--subtle);display:flex;align-items:center;gap:5px;"><i class="ti ti-shield-lock"></i>Your card details never touch Paypoint</div>
+        <a href="#" style="margin-top:28px;font-size:12px;color:var(--brand);font-weight:600;">Not redirecting? Tap to continue</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 3. RECEIPT ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">3</span><h3>Receipt</h3><span class="route">/pay/receipt/:reference</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Confirm money moved and give the buyer something to keep — proof for a stranger transaction.</li>
+      <li>Lives at a <b>stable reference URL</b> that survives a closed tab (≥98% receipt-reach metric).</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements / states</h4><ul>
+      <li>Success: green check, amount, item, paid-by, reference, date; <b>Download PDF</b> + <b>Share</b>.</li>
+      <li>Failed: "payment didn't go through" with a clear <b>Try again</b> path back to checkout.</li>
+      <li>Secured-by-Paystack footer carries trust past the payment.</li>
+    </ul></div>
+  </div>
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>paypoint.co/pay/receipt/PP-7F3A9C2E</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-canvas">
+          <div class="web-card">
+            <div style="padding:40px 28px 24px;text-align:center;border-bottom:1px solid var(--border);">
+              <div style="width:56px;height:56px;border-radius:50%;background:var(--success-tint);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><i class="ti ti-check" style="font-size:30px;color:var(--success);"></i></div>
+              <div style="font-size:19px;font-weight:600;color:var(--ink);">Payment successful</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px;">Your payment to Adaeze Couture is complete</div>
+              <div style="font-size:32px;font-weight:700;color:var(--ink);margin-top:14px;letter-spacing:-.02em;">₦35,000</div>
+            </div>
+            <div style="padding:20px 28px;">
+              <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Item</span><span style="color:var(--ink);font-weight:500;">Aso Oke Dress</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Paid by</span><span style="color:var(--ink);font-weight:500;">Chidinma Okeke</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Reference</span><span style="color:var(--ink);font-weight:500;font-family:'JetBrains Mono',monospace;">PP-7F3A9C2E</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Date</span><span style="color:var(--ink);font-weight:500;">12 Jun 2026, 9:42 PM</span></div>
+            </div>
+            <div style="padding:4px 28px 18px;display:flex;gap:10px;">
+              <button class="btn btn--secondary" style="flex:1;height:44px;font-size:13px;"><i class="ti ti-download" style="font-size:16px;"></i>Receipt PDF</button>
+              <button class="btn btn--primary" style="flex:1;height:44px;font-size:13px;"><i class="ti ti-share-2" style="font-size:16px;"></i>Share</button>
+            </div>
+            <div style="text-align:center;font-size:11px;color:var(--muted);padding-bottom:24px;display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ti ti-shield-check"></i>Secured by Paystack</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <!-- success -->
+    <div class="phone">
+      <div class="statusbar"><span>9:42</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen">
+        <div style="padding:36px 22px 22px;text-align:center;border-bottom:1px solid var(--border);">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--success-tint);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><i class="ti ti-check" style="font-size:30px;color:var(--success);"></i></div>
+          <div style="font-size:18px;font-weight:600;color:var(--ink);">Payment successful</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;">Your payment to Adaeze Couture is complete</div>
+          <div style="font-size:32px;font-weight:700;color:var(--ink);margin-top:14px;letter-spacing:-.02em;">₦35,000</div>
+        </div>
+        <div style="padding:18px 22px;">
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Item</span><span style="color:var(--ink);font-weight:500;">Aso Oke Dress</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Paid by</span><span style="color:var(--ink);font-weight:500;">Chidinma Okeke</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Reference</span><span style="color:var(--ink);font-weight:500;font-family:'JetBrains Mono',monospace;">PP-7F3A9C2E</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Date</span><span style="color:var(--ink);font-weight:500;">12 Jun 2026, 9:42 PM</span></div>
+        </div>
+        <div style="padding:4px 22px 18px;display:flex;gap:10px;">
+          <button class="btn btn--secondary" style="flex:1;height:44px;font-size:13px;"><i class="ti ti-download" style="font-size:16px;"></i>Receipt PDF</button>
+          <button class="btn btn--primary" style="flex:1;height:44px;font-size:13px;"><i class="ti ti-share-2" style="font-size:16px;"></i>Share</button>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--muted);padding-bottom:18px;display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ti ti-shield-check"></i>Secured by Paystack</div>
+      </div>
+    </div>
+
+    <!-- failed -->
+    <div class="phone">
+      <div class="statusbar"><span>9:42</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen">
+        <div style="padding:36px 22px 22px;text-align:center;border-bottom:1px solid var(--border);">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><i class="ti ti-x" style="font-size:30px;color:var(--danger);"></i></div>
+          <div style="font-size:18px;font-weight:600;color:var(--ink);">Payment didn't go through</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;line-height:1.55;">No money left your account. You can safely try again.</div>
+        </div>
+        <div style="padding:18px 22px;">
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Item</span><span style="color:var(--ink);font-weight:500;">Aso Oke Dress</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Amount</span><span style="color:var(--ink);font-weight:500;">₦35,000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;"><span style="color:var(--muted);">Reference</span><span style="color:var(--ink);font-weight:500;font-family:'JetBrains Mono',monospace;">PP-7F3A9C2E</span></div>
+        </div>
+        <div style="padding:4px 22px 18px;">
+          <button class="btn btn--primary btn--full" style="height:46px;"><i class="ti ti-refresh" style="font-size:17px;"></i>Try again</button>
+          <a href="#" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:var(--muted);">Contact Adaeze Couture</a>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--muted);padding-bottom:18px;display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ti ti-shield-check"></i>Secured by Paystack</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 4. CREATE BUILDER ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">4</span><h3>Create-page builder</h3><span class="route">/create</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Let a seller publish a payment page in <b>under 90s</b> with a live preview that removes doubt.</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements</h4><ul>
+      <li>Product/Service toggle, title, ₦ price, photo upload with <b>real-photo nudge</b>, description, delivery.</li>
+      <li>Buyer-field checkbox pills (<b>Name default</b>; Phone/Email/Address optional).</li>
+      <li>Live preview + success panel with <b>Copy / QR / Share</b>.</li>
+    </ul></div>
+    <div class="grp"><h4>Mobile @375px</h4><ul>
+      <li>On mobile the live preview <b>collapses above the form</b> as a sticky thumbnail; desktop shows it side-by-side.</li>
+    </ul></div>
+    <div class="grp"><h4>A11y</h4><ul>
+      <li>Every field has a real <code>&lt;label&gt;</code>; toggle and pills are keyboard-operable with visible focus.</li>
+    </ul></div>
+  </div>
+
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>app.paypoint.co/create</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-app">
+          <aside class="web-side">
+            <div class="brand"><img class="pmark" src="{{LOGO_ICON_INDIGO}}" alt=""><img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:18px;"></div>
+            <div class="navitem"><i class="ti ti-home"></i>Home</div>
+            <div class="navitem active"><i class="ti ti-file-invoice"></i>Pages</div>
+            <div class="navitem"><i class="ti ti-arrows-left-right"></i>Payments</div>
+            <div class="navitem"><i class="ti ti-settings"></i>Settings</div>
+            <div class="side-foot"><img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=80" alt=""><div><div class="nm">Adaeze Couture</div><div class="em">adaeze@email.com</div></div></div>
+          </aside>
+          <div class="web-main">
+            <div class="web-topbar"><i class="ti ti-arrow-left" style="font-size:20px;color:var(--ink);"></i><h4>New payment page</h4></div>
+            <div class="web-content" style="display:grid;grid-template-columns:1.15fr 1fr;gap:32px;align-items:start;">
+              <!-- form -->
+              <div>
+                <div class="toggle" style="margin-bottom:16px;"><span>Product</span><span class="on">Service</span></div>
+                <label class="field-label">Title</label>
+                <div class="input" style="margin-bottom:14px;">Bridal Gele Styling</div>
+                <label class="field-label">Price</label>
+                <div class="input-money" style="margin-bottom:14px;"><span class="naira">₦</span>18,000</div>
+                <label class="field-label">Photo</label>
+                <div style="border:1.5px dashed var(--border-strong);border-radius:9px;padding:14px;display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                  <i class="ti ti-photo-up" style="font-size:22px;color:var(--brand);"></i>
+                  <div><div style="font-size:13px;font-weight:500;color:var(--ink);">Add a photo</div><div style="font-size:11px;color:var(--muted);">Real photos get paid up to 2× more often</div></div>
+                </div>
+                <div style="font-size:11px;color:var(--brand);display:flex;align-items:center;gap:4px;margin-bottom:16px;"><i class="ti ti-bulb"></i>Pages with a real photo convert best</div>
+                <label class="field-label">Description</label>
+                <div class="input" style="height:auto;min-height:64px;align-items:flex-start;padding:11px 12px;margin-bottom:14px;line-height:1.5;">Expert bridal gele tying for your big day — at your venue or ours.</div>
+                <label class="field-label">Collect from buyer</label>
+                <div class="row" style="gap:8px;margin-bottom:20px;">
+                  <span class="pill pill--on"><i class="ti ti-check"></i>Name</span>
+                  <span class="pill pill--on"><i class="ti ti-check"></i>Phone</span>
+                  <span class="pill pill--off">Email</span>
+                  <span class="pill pill--off">Address</span>
+                </div>
+                <button class="btn btn--primary btn--full">Publish page</button>
+              </div>
+              <!-- live preview -->
+              <div>
+                <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--subtle);margin-bottom:10px;">Live preview</div>
+                <div style="background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;">
+                  <div class="co" style="background:#fff;border:1px solid var(--border);border-radius:var(--r-checkout);overflow:hidden;">
+                    <div class="cohead">
+                      <img class="seller-logo" src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=120" alt="Adaeze Couture logo">
+                      <span class="bizname">Adaeze Couture</span>
+                      <span class="secure"><i class="ti ti-lock"></i>Secure</span>
+                    </div>
+                    <div class="photo" style="background-image:url(https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=500)" role="img" aria-label="Bridal gele styling"></div>
+                    <div class="body">
+                      <div class="pname">Bridal Gele Styling</div>
+                      <div class="pdesc">Expert bridal gele tying for your big day — at your venue or ours.</div>
+                      <div class="price">₦18,000</div>
+                      <label class="field-label">Your name</label>
+                      <div class="input" style="margin-bottom:14px;"><span class="input--placeholder">Enter your name</span></div>
+                      <button class="btn btn--primary btn--full"><i class="ti ti-lock" style="font-size:17px;"></i>Pay ₦18,000</button>
+                      <div class="paystack-line"><i class="ti ti-shield-check"></i>Payments processed by Paystack</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="overflow-y:auto;">
+        <div class="appbar"><i class="ti ti-arrow-left" style="font-size:20px;color:var(--ink);"></i><span class="ttl">New payment page</span></div>
+        <!-- mini live preview -->
+        <div style="padding:14px 16px;background:var(--bg-soft);border-bottom:1px solid var(--border);">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--subtle);margin-bottom:10px;">Live preview</div>
+          <div style="display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;">
+            <div style="width:56px;height:56px;border-radius:9px;background-image:url(https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=200);background-size:cover;flex-shrink:0;"></div>
+            <div style="min-width:0;"><div style="font-size:13px;font-weight:600;color:var(--ink);">Bridal Gele Styling</div><div style="font-size:16px;font-weight:700;color:var(--ink);margin-top:2px;">₦18,000</div></div>
+          </div>
+        </div>
+        <div style="padding:16px;">
+          <div class="toggle" style="margin-bottom:16px;"><span>Product</span><span class="on">Service</span></div>
+          <label class="field-label">Title</label>
+          <div class="input" style="margin-bottom:14px;">Bridal Gele Styling</div>
+          <label class="field-label">Price</label>
+          <div class="input-money" style="margin-bottom:14px;"><span class="naira">₦</span>18,000</div>
+          <label class="field-label">Photo</label>
+          <div style="border:1.5px dashed var(--border-strong);border-radius:9px;padding:14px;display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <i class="ti ti-photo-up" style="font-size:22px;color:var(--brand);"></i>
+            <div><div style="font-size:13px;font-weight:500;color:var(--ink);">Add a photo</div><div style="font-size:11px;color:var(--muted);">Real photos get paid up to 2× more often</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--brand);display:flex;align-items:center;gap:4px;margin-bottom:16px;"><i class="ti ti-bulb"></i>Pages with a real photo convert best</div>
+          <label class="field-label">Collect from buyer</label>
+          <div class="row" style="gap:8px;margin-bottom:18px;">
+            <span class="pill pill--on"><i class="ti ti-check"></i>Name</span>
+            <span class="pill pill--on"><i class="ti ti-check"></i>Phone</span>
+            <span class="pill pill--off">Email</span>
+            <span class="pill pill--off">Address</span>
+          </div>
+          <button class="btn btn--primary btn--full">Publish page</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- success panel phone -->
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 24px;">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--success-tint);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><i class="ti ti-check" style="font-size:30px;color:var(--success);"></i></div>
+        <div style="font-size:19px;font-weight:600;color:var(--ink);">Your page is live</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px;">Share it anywhere to start getting paid.</div>
+        <div style="width:100%;display:flex;align-items:center;gap:8px;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin:22px 0 16px;">
+          <i class="ti ti-link" style="color:var(--brand);"></i>
+          <span style="font-size:13px;color:var(--ink);font-family:'JetBrains Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">paypoint.ng/p/bridal-gele</span>
+          <i class="ti ti-copy" style="margin-left:auto;color:var(--muted);"></i>
+        </div>
+        <div style="width:128px;height:128px;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;background:#fff;margin-bottom:20px;"><i class="ti ti-qrcode" style="font-size:84px;color:var(--ink);"></i></div>
+        <div style="display:flex;gap:10px;width:100%;">
+          <button class="btn btn--secondary" style="flex:1;height:44px;font-size:13px;"><i class="ti ti-copy" style="font-size:16px;"></i>Copy</button>
+          <button class="btn btn--primary" style="flex:1;height:44px;font-size:13px;"><i class="ti ti-share-2" style="font-size:16px;"></i>Share</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot"><b>Desktop variant:</b> form (left, ~1.15fr) and live checkout preview (right, ~1fr) sit side-by-side, the preview updating on every keystroke — exactly the existing builder mockup. The mobile frame collapses the preview into the sticky thumbnail shown above so the form stays the focus on a 375px screen.</div>
+
+  <!-- ===== 5. SETTINGS ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">5</span><h3>Settings</h3><span class="route">/settings</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Connect Paystack (provision the seller's <b>Subaccount</b>) and set business identity (name + logo).</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements / trust</h4><ul>
+      <li>Prominent <b>"Paypoint never holds your money — it settles to your bank via Paystack"</b> explainer.</li>
+      <li>Connect-Paystack state changes to "Connected" with a green check once the Subaccount exists.</li>
+      <li>Business name, logo upload, sign out.</li>
+    </ul></div>
+  </div>
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>app.paypoint.co/settings</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-app">
+          <aside class="web-side">
+            <div class="brand"><img class="pmark" src="{{LOGO_ICON_INDIGO}}" alt=""><img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:18px;"></div>
+            <div class="navitem"><i class="ti ti-home"></i>Home</div>
+            <div class="navitem"><i class="ti ti-file-invoice"></i>Pages</div>
+            <div class="navitem"><i class="ti ti-arrows-left-right"></i>Payments</div>
+            <div class="navitem active"><i class="ti ti-settings"></i>Settings</div>
+            <div class="side-foot"><img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=80" alt=""><div><div class="nm">Adaeze Couture</div><div class="em">adaeze@email.com</div></div></div>
+          </aside>
+          <div class="web-main">
+            <div class="web-topbar"><h4>Settings</h4></div>
+            <div class="web-content" style="max-width:560px;">
+              <!-- never holds money explainer -->
+              <div style="background:var(--brand-soft);border:1px solid var(--border-strong);border-radius:12px;padding:16px;margin-bottom:24px;display:flex;gap:12px;">
+                <i class="ti ti-building-bank" style="font-size:22px;color:var(--brand);flex-shrink:0;"></i>
+                <div><div style="font-size:13px;font-weight:600;color:var(--ink);">Paypoint never holds your money</div><div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.55;">Every payment settles straight to your bank through Paystack. We're never in the money path.</div></div>
+              </div>
+              <div class="field-label" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Payments</div>
+              <div style="border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:24px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:38px;height:38px;border-radius:9px;background:var(--success-tint);display:flex;align-items:center;justify-content:center;"><i class="ti ti-check" style="color:var(--success);font-size:20px;"></i></div>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--ink);">Paystack connected</div><div style="font-size:12px;color:var(--muted);">Settling to GTBank ••• 4821</div></div>
+                  <span class="status status--success">Active</span>
+                </div>
+              </div>
+              <div class="field-label" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Business</div>
+              <label class="field-label">Business name</label>
+              <div class="input" style="margin-bottom:14px;">Adaeze Couture</div>
+              <label class="field-label">Logo</label>
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+                <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=120" alt="" style="width:48px;height:48px;border-radius:10px;object-fit:cover;">
+                <button class="btn btn--secondary btn--sm">Change logo</button>
+              </div>
+              <button class="btn btn--secondary" style="height:44px;color:var(--danger-text);border-color:var(--border-strong);"><i class="ti ti-logout" style="font-size:16px;"></i>Sign out</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="overflow-y:auto;">
+        <div class="appbar"><span class="ttl">Settings</span></div>
+        <div style="padding:16px;">
+          <!-- never holds money explainer -->
+          <div style="background:var(--brand-soft);border:1px solid var(--border-strong);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;gap:12px;">
+            <i class="ti ti-building-bank" style="font-size:22px;color:var(--brand);flex-shrink:0;"></i>
+            <div><div style="font-size:13px;font-weight:600;color:var(--ink);">Paypoint never holds your money</div><div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.55;">Every payment settles straight to your bank through Paystack. We're never in the money path.</div></div>
+          </div>
+
+          <div class="field-label" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Payments</div>
+          <div style="border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:22px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:38px;height:38px;border-radius:9px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;"><i class="ti ti-credit-card" style="color:var(--brand);font-size:20px;"></i></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--ink);">Paystack</div><div style="font-size:12px;color:var(--muted);">Connect to receive payments to your bank</div></div>
+            </div>
+            <button class="btn btn--primary btn--full" style="margin-top:14px;height:44px;font-size:14px;">Connect Paystack</button>
+          </div>
+
+          <div class="field-label" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Business</div>
+          <label class="field-label">Business name</label>
+          <div class="input" style="margin-bottom:14px;">Adaeze Couture</div>
+          <label class="field-label">Logo</label>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px;">
+            <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=120" alt="" style="width:48px;height:48px;border-radius:10px;object-fit:cover;">
+            <button class="btn btn--secondary btn--sm">Change logo</button>
+          </div>
+
+          <button class="btn btn--secondary btn--full" style="height:44px;color:var(--danger-text);border-color:var(--border-strong);"><i class="ti ti-logout" style="font-size:16px;"></i>Sign out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- connected state -->
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="overflow-y:auto;">
+        <div class="appbar"><span class="ttl">Settings</span></div>
+        <div style="padding:16px;">
+          <div style="background:var(--brand-soft);border:1px solid var(--border-strong);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;gap:12px;">
+            <i class="ti ti-building-bank" style="font-size:22px;color:var(--brand);flex-shrink:0;"></i>
+            <div><div style="font-size:13px;font-weight:600;color:var(--ink);">Paypoint never holds your money</div><div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.55;">Every payment settles straight to your bank through Paystack. We're never in the money path.</div></div>
+          </div>
+          <div class="field-label" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Payments</div>
+          <div style="border:1px solid var(--border);border-radius:12px;padding:14px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:38px;height:38px;border-radius:9px;background:var(--success-tint);display:flex;align-items:center;justify-content:center;"><i class="ti ti-check" style="color:var(--success);font-size:20px;"></i></div>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;color:var(--ink);">Paystack connected</div><div style="font-size:12px;color:var(--muted);">Settling to GTBank ••• 4821</div></div>
+              <span class="status status--success">Active</span>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--subtle);text-align:center;margin-top:28px;">Connected as adaeze@email.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 6. PAGES GRID ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">6</span><h3>Pages grid</h3><span class="route">/pages</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Manage live payment pages: see each one's true paid-count, flip active/inactive, and re-share fast.</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements</h4><ul>
+      <li>Cards: thumb, title, price, <b>true paid-count</b>, active/inactive switch, Copy/QR/Share.</li>
+      <li><b>No edit affordance</b> — editing is off at launch (Week 3–4 fast-follow).</li>
+      <li>Friendly <b>empty state</b> for first-time sellers.</li>
+    </ul></div>
+  </div>
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>app.paypoint.co/pages</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-app">
+          <aside class="web-side">
+            <div class="brand"><img class="pmark" src="{{LOGO_ICON_INDIGO}}" alt=""><img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:18px;"></div>
+            <div class="navitem"><i class="ti ti-home"></i>Home</div>
+            <div class="navitem active"><i class="ti ti-file-invoice"></i>Pages</div>
+            <div class="navitem"><i class="ti ti-arrows-left-right"></i>Payments</div>
+            <div class="navitem"><i class="ti ti-settings"></i>Settings</div>
+            <div class="side-foot"><img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=80" alt=""><div><div class="nm">Adaeze Couture</div><div class="em">adaeze@email.com</div></div></div>
+          </aside>
+          <div class="web-main">
+            <div class="web-topbar"><h4>Your pages</h4><button class="btn btn--primary btn--sm" style="margin-left:auto;"><i class="ti ti-plus" style="font-size:15px;"></i>New page</button></div>
+            <div class="web-content" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+              <div class="card">
+                <div style="height:120px;background-image:url(https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400);background-size:cover;background-position:center;position:relative;"><span class="switch" style="position:absolute;top:10px;right:10px;"></span></div>
+                <div style="padding:14px;">
+                  <div style="font-size:14px;font-weight:600;color:var(--ink);">Aso Oke Dress</div>
+                  <div style="display:flex;align-items:baseline;gap:7px;margin:3px 0 12px;"><span style="font-size:15px;font-weight:700;color:var(--ink);">₦35,000</span><span style="font-size:11px;color:var(--subtle);">· 24 paid</span></div>
+                  <div class="share-row" style="font-size:18px;"><i class="ti ti-copy"></i><i class="ti ti-qrcode"></i><i class="ti ti-share-2"></i></div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div style="height:120px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;position:relative;"><i class="ti ti-file-text" style="font-size:34px;color:var(--brand);"></i><span class="switch" style="position:absolute;top:10px;right:10px;"></span></div>
+                <div style="padding:14px;">
+                  <div style="font-size:14px;font-weight:600;color:var(--ink);">CV Writing</div>
+                  <div style="display:flex;align-items:baseline;gap:7px;margin:3px 0 12px;"><span style="font-size:15px;font-weight:700;color:var(--ink);">₦25,000</span><span style="font-size:11px;color:var(--subtle);">· 60 paid</span></div>
+                  <div class="share-row" style="font-size:18px;"><i class="ti ti-copy"></i><i class="ti ti-qrcode"></i><i class="ti ti-share-2"></i></div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div style="height:120px;background-image:url(https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400);background-size:cover;background-position:center;position:relative;"><span class="switch off" style="position:absolute;top:10px;right:10px;"></span></div>
+                <div style="padding:14px;">
+                  <div style="font-size:14px;font-weight:600;color:var(--ink);">Bridal Gele</div>
+                  <div style="display:flex;align-items:baseline;gap:7px;margin:3px 0 12px;"><span style="font-size:15px;font-weight:700;color:var(--subtle);">₦18,000</span><span style="font-size:11px;color:var(--subtle);">· Inactive</span></div>
+                  <div class="share-row" style="font-size:18px;color:var(--border-strong);"><i class="ti ti-copy"></i><i class="ti ti-qrcode"></i><i class="ti ti-share-2"></i></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <!-- populated -->
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="overflow-y:auto;padding-bottom:60px;">
+        <div class="appbar"><span class="ttl">Your pages</span><button class="btn btn--primary btn--sm" style="margin-left:auto;"><i class="ti ti-plus" style="font-size:15px;"></i>New</button></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
+
+          <div class="card">
+            <div style="display:flex;">
+              <div style="width:96px;background-image:url(https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300);background-size:cover;background-position:center;"></div>
+              <div style="flex:1;padding:12px;">
+                <div style="display:flex;align-items:center;"><div style="font-size:14px;font-weight:600;color:var(--ink);">Aso Oke Dress</div><span class="switch" style="margin-left:auto;"></span></div>
+                <div style="display:flex;align-items:baseline;gap:7px;margin:3px 0 11px;"><span style="font-size:15px;font-weight:700;color:var(--ink);">₦35,000</span><span style="font-size:11px;color:var(--subtle);">· 24 paid</span></div>
+                <div class="share-row" style="font-size:18px;"><i class="ti ti-copy"></i><i class="ti ti-qrcode"></i><i class="ti ti-share-2"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex;">
+              <div style="width:96px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;"><i class="ti ti-file-text" style="font-size:30px;color:var(--brand);"></i></div>
+              <div style="flex:1;padding:12px;">
+                <div style="display:flex;align-items:center;"><div style="font-size:14px;font-weight:600;color:var(--ink);">CV Writing</div><span class="switch" style="margin-left:auto;"></span></div>
+                <div style="display:flex;align-items:baseline;gap:7px;margin:3px 0 11px;"><span style="font-size:15px;font-weight:700;color:var(--ink);">₦25,000</span><span style="font-size:11px;color:var(--subtle);">· 60 paid</span></div>
+                <div class="share-row" style="font-size:18px;"><i class="ti ti-copy"></i><i class="ti ti-qrcode"></i><i class="ti ti-share-2"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex;">
+              <div style="width:96px;background-image:url(https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=300);background-size:cover;background-position:center;"></div>
+              <div style="flex:1;padding:12px;">
+                <div style="display:flex;align-items:center;"><div style="font-size:14px;font-weight:600;color:var(--ink);">Bridal Gele</div><span class="switch off" style="margin-left:auto;"></span></div>
+                <div style="display:flex;align-items:baseline;gap:7px;margin:3px 0 11px;"><span style="font-size:15px;font-weight:700;color:var(--subtle);">₦18,000</span><span style="font-size:11px;color:var(--subtle);">· Inactive</span></div>
+                <div class="share-row" style="font-size:18px;color:var(--border-strong);"><i class="ti ti-copy"></i><i class="ti ti-qrcode"></i><i class="ti ti-share-2"></i></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="tabbar">
+          <a class="active"><i class="ti ti-home"></i>Home</a>
+          <a><i class="ti ti-file-invoice"></i>Pages</a>
+          <a><i class="ti ti-arrows-left-right"></i>Payments</a>
+          <a><i class="ti ti-settings"></i>Settings</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- empty state -->
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen">
+        <div class="appbar"><span class="ttl">Your pages</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:520px;padding:0 36px;">
+          <div style="width:72px;height:72px;border-radius:18px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;margin-bottom:18px;"><i class="ti ti-file-plus" style="font-size:34px;color:var(--brand);"></i></div>
+          <div style="font-size:18px;font-weight:600;color:var(--ink);">No pages yet</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:8px;line-height:1.55;">Create your first payment page in under a minute and share the link to get paid.</div>
+          <button class="btn btn--primary" style="margin-top:22px;"><i class="ti ti-plus" style="font-size:17px;"></i>Create your first page</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot"><b>Note:</b> there is deliberately no edit/pencil icon on these cards — edit-page is out-of-scope for the 2-week MVP. Inactive pages dim their price and disable the share row.</div>
+
+  <!-- ===== 7. DASHBOARD ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">7</span><h3>Dashboard home</h3><span class="route">/dashboard</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Give the seller a one-glance "is it working?" — money in, this month, active pages — and an obvious way to create more.</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements</h4><ul>
+      <li>Greeting, three metric cards (<b>Total collected / This month / Active pages</b>).</li>
+      <li>Recent payments list + prominent <b>Create Paypoint</b> CTA.</li>
+    </ul></div>
+  </div>
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>app.paypoint.co/dashboard</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-app">
+          <aside class="web-side">
+            <div class="brand"><img class="pmark" src="{{LOGO_ICON_INDIGO}}" alt=""><img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:18px;"></div>
+            <div class="navitem active"><i class="ti ti-home"></i>Home</div>
+            <div class="navitem"><i class="ti ti-file-invoice"></i>Pages</div>
+            <div class="navitem"><i class="ti ti-arrows-left-right"></i>Payments</div>
+            <div class="navitem"><i class="ti ti-settings"></i>Settings</div>
+            <div class="side-foot"><img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=80" alt=""><div><div class="nm">Adaeze Couture</div><div class="em">adaeze@email.com</div></div></div>
+          </aside>
+          <div class="web-main">
+            <div class="web-topbar">
+              <div><h4>Good morning, Adaeze</h4><div style="font-size:12px;color:var(--subtle);margin-top:2px;">Here's how today is going</div></div>
+              <button class="btn btn--primary btn--sm" style="margin-left:auto;"><i class="ti ti-plus" style="font-size:15px;"></i>Create Paypoint</button>
+            </div>
+            <div class="web-content">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px;">
+                <div class="metric" style="background:var(--brand);border-color:var(--brand);"><div class="k" style="color:#D9D7FC;">Total collected</div><div class="v" style="color:#fff;">₦1,240,000</div></div>
+                <div class="metric"><div class="k">This month</div><div class="v">₦320,000</div></div>
+                <div class="metric"><div class="k">Active pages</div><div class="v">8</div></div>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px;">Recent payments</div>
+              <div class="card">
+                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                  <tbody>
+                    <tr><td style="padding:13px 16px;"><div style="font-weight:500;color:var(--ink);">Chidinma Okeke</div><div style="font-size:11px;color:var(--subtle);">Aso Oke Dress</div></td><td style="padding:13px 16px;font-weight:600;color:var(--ink);text-align:right;">₦35,000</td><td style="padding:13px 16px;text-align:right;"><span class="status status--success">Paid</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:13px 16px;"><div style="font-weight:500;color:var(--ink);">Tunde Akin</div><div style="font-size:11px;color:var(--subtle);">CV Writing</div></td><td style="padding:13px 16px;font-weight:600;color:var(--ink);text-align:right;">₦25,000</td><td style="padding:13px 16px;text-align:right;"><span class="status status--success">Paid</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:13px 16px;"><div style="font-weight:500;color:var(--ink);">Ngozi Eze</div><div style="font-size:11px;color:var(--subtle);">Bridal Gele</div></td><td style="padding:13px 16px;font-weight:600;color:var(--ink);text-align:right;">₦18,000</td><td style="padding:13px 16px;text-align:right;"><span class="status status--pending">Pending</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="overflow-y:auto;padding-bottom:60px;">
+        <div style="padding:18px 16px 8px;display:flex;align-items:center;">
+          <div><div style="font-size:18px;font-weight:600;color:var(--ink);">Good morning, Adaeze</div><div style="font-size:12px;color:var(--subtle);margin-top:2px;">Here's how today is going</div></div>
+          <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=80" alt="" style="width:36px;height:36px;border-radius:50%;margin-left:auto;object-fit:cover;">
+        </div>
+        <div style="padding:12px 16px;">
+          <div class="metric" style="margin-bottom:10px;background:var(--brand);border-color:var(--brand);"><div class="k" style="color:#D9D7FC;">Total collected</div><div class="v" style="color:#fff;">₦1,240,000</div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="metric"><div class="k">This month</div><div class="v">₦320,000</div></div>
+            <div class="metric"><div class="k">Active pages</div><div class="v">8</div></div>
+          </div>
+          <button class="btn btn--primary btn--full" style="margin:16px 0 6px;"><i class="ti ti-plus" style="font-size:17px;"></i>Create Paypoint</button>
+        </div>
+        <div style="padding:6px 16px;">
+          <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;">Recent payments</div>
+          <div style="display:flex;flex-direction:column;gap:1px;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;">
+              <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:var(--ink);">Chidinma O.</div><div style="font-size:11px;color:var(--subtle);">Aso Oke Dress</div></div>
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">₦35,000</div>
+              <span class="status status--success">Paid</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid var(--border);">
+              <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:var(--ink);">Tunde A.</div><div style="font-size:11px;color:var(--subtle);">CV Writing</div></div>
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">₦25,000</div>
+              <span class="status status--success">Paid</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid var(--border);">
+              <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:var(--ink);">Ngozi E.</div><div style="font-size:11px;color:var(--subtle);">Bridal Gele</div></div>
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">₦18,000</div>
+              <span class="status status--pending">Pending</span>
+            </div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <a class="active"><i class="ti ti-home"></i>Home</a>
+          <a><i class="ti ti-file-invoice"></i>Pages</a>
+          <a><i class="ti ti-arrows-left-right"></i>Payments</a>
+          <a><i class="ti ti-settings"></i>Settings</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot"><b>Brand note:</b> the "Total collected" hero metric is filled solid indigo — the one place a colored fill earns its weight, anchoring the "is it working?" answer. The other two metrics stay calm on <code>--bg-soft</code> so indigo never competes with itself.</div>
+
+  <!-- ===== 8. PAYMENTS LIST ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">8</span><h3>Payments list</h3><span class="route">/payments</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>A trustworthy ledger of every payment with an honest status. <b>No search/filter</b> (out of scope).</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements / a11y</h4><ul>
+      <li>Status pills: <b>success / pending / abandoned / failed</b> — color paired with text, never color alone.</li>
+      <li>Mobile renders as stacked rows; desktop as a 4-column table.</li>
+    </ul></div>
+  </div>
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>app.paypoint.co/payments</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-app">
+          <aside class="web-side">
+            <div class="brand"><img class="pmark" src="{{LOGO_ICON_INDIGO}}" alt=""><img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:18px;"></div>
+            <div class="navitem"><i class="ti ti-home"></i>Home</div>
+            <div class="navitem"><i class="ti ti-file-invoice"></i>Pages</div>
+            <div class="navitem active"><i class="ti ti-arrows-left-right"></i>Payments</div>
+            <div class="navitem"><i class="ti ti-settings"></i>Settings</div>
+            <div class="side-foot"><img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=80" alt=""><div><div class="nm">Adaeze Couture</div><div class="em">adaeze@email.com</div></div></div>
+          </aside>
+          <div class="web-main">
+            <div class="web-topbar"><h4>Payments</h4></div>
+            <div class="web-content">
+              <div class="card">
+                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                  <thead><tr style="background:var(--bg-soft);color:var(--subtle);text-align:left;">
+                    <th style="padding:11px 16px;font-weight:500;">Customer</th><th style="padding:11px 16px;font-weight:500;">Item</th><th style="padding:11px 16px;font-weight:500;">Date</th><th style="padding:11px 16px;font-weight:500;">Amount</th><th style="padding:11px 16px;font-weight:500;">Status</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:12px 16px;color:var(--ink);font-weight:500;">Chidinma Okeke</td><td style="padding:12px 16px;color:var(--muted);">Aso Oke Dress</td><td style="padding:12px 16px;color:var(--muted);">Today · 9:42 PM</td><td style="padding:12px 16px;font-weight:600;color:var(--ink);">₦35,000</td><td style="padding:12px 16px;"><span class="status status--success">Success</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:12px 16px;color:var(--ink);font-weight:500;">Ngozi Eze</td><td style="padding:12px 16px;color:var(--muted);">Bridal Gele</td><td style="padding:12px 16px;color:var(--muted);">Today · 4:10 PM</td><td style="padding:12px 16px;font-weight:600;color:var(--ink);">₦18,000</td><td style="padding:12px 16px;"><span class="status status--pending">Pending</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:12px 16px;color:var(--ink);font-weight:500;">Tunde Akin</td><td style="padding:12px 16px;color:var(--muted);">CV Writing</td><td style="padding:12px 16px;color:var(--muted);">Yesterday · 6:55 PM</td><td style="padding:12px 16px;font-weight:600;color:var(--ink);">₦25,000</td><td style="padding:12px 16px;"><span class="status status--success">Success</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:12px 16px;color:var(--muted);">Anonymous</td><td style="padding:12px 16px;color:var(--muted);">Aso Oke Dress</td><td style="padding:12px 16px;color:var(--muted);">Yesterday · 2:30 PM</td><td style="padding:12px 16px;font-weight:600;color:var(--muted);">₦35,000</td><td style="padding:12px 16px;"><span class="status status--abandoned">Abandoned</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:12px 16px;color:var(--muted);">Emeka N.</td><td style="padding:12px 16px;color:var(--muted);">Bridal Gele</td><td style="padding:12px 16px;color:var(--muted);">Yesterday · 11:02 AM</td><td style="padding:12px 16px;font-weight:600;color:var(--muted);">₦18,000</td><td style="padding:12px 16px;"><span class="status status--failed">Failed</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div style="font-size:11px;color:var(--subtle);margin-top:14px;display:flex;align-items:center;gap:5px;"><i class="ti ti-info-circle"></i>A trustworthy ledger of every payment. Status pairs color with text — never color alone.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="overflow-y:auto;padding-bottom:60px;">
+        <div class="appbar"><span class="ttl">Payments</span></div>
+        <div style="padding:8px 16px 16px;">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--subtle);margin:10px 0;">Today</div>
+          <div style="display:flex;flex-direction:column;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;">
+              <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:var(--ink);">Chidinma Okeke</div><div style="font-size:11px;color:var(--subtle);">Aso Oke Dress · 9:42 PM</div></div>
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">₦35,000</div>
+              <span class="status status--success">Success</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;border-top:1px solid var(--border);">
+              <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:var(--ink);">Ngozi Eze</div><div style="font-size:11px;color:var(--subtle);">Bridal Gele · 4:10 PM</div></div>
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">₦18,000</div>
+              <span class="status status--pending">Pending</span>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--subtle);margin:18px 0 10px;">Yesterday</div>
+          <div style="display:flex;flex-direction:column;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;">
+              <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:var(--ink);">Tunde Akin</div><div style="font-size:11px;color:var(--subtle);">CV Writing · 6:55 PM</div></div>
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">₦25,000</div>
+              <span class="status status--success">Success</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;border-top:1px solid var(--border);">
+              <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:var(--subtle);">Anonymous</div><div style="font-size:11px;color:var(--subtle);">Aso Oke Dress · 2:30 PM</div></div>
+              <div style="font-size:13px;font-weight:600;color:var(--subtle);">₦35,000</div>
+              <span class="status status--abandoned">Abandoned</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;border-top:1px solid var(--border);">
+              <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:var(--subtle);">Emeka N.</div><div style="font-size:11px;color:var(--subtle);">Bridal Gele · 11:02 AM</div></div>
+              <div style="font-size:13px;font-weight:600;color:var(--subtle);">₦18,000</div>
+              <span class="status status--failed">Failed</span>
+            </div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <a><i class="ti ti-home"></i>Home</a>
+          <a><i class="ti ti-file-invoice"></i>Pages</a>
+          <a class="active"><i class="ti ti-arrows-left-right"></i>Payments</a>
+          <a><i class="ti ti-settings"></i>Settings</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 9. AUTH ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">9</span><h3>Seller auth</h3><span class="route">/login · /signup</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Minimal-friction entry: email/password + Google. Profile auto-created on first login.</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements / a11y</h4><ul>
+      <li>Single column, indigo CTA, Google button as outlined secondary, link to switch login↔signup.</li>
+      <li>Inputs labelled; password has show/hide; errors announced inline.</li>
+    </ul></div>
+  </div>
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>app.paypoint.co/login</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+        <div class="web-canvas">
+          <div class="web-card" style="max-width:400px;padding:40px 36px;">
+            <img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:24px;margin-bottom:28px;">
+            <div style="font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.01em;">Welcome back</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:26px;">Log in to your Paypoint account.</div>
+            <label class="field-label">Email</label>
+            <div class="input" style="margin-bottom:14px;">adaeze@email.com</div>
+            <label class="field-label">Password</label>
+            <div class="input" style="margin-bottom:22px;"><span style="letter-spacing:3px;">••••••••</span><i class="ti ti-eye" style="margin-left:auto;color:var(--subtle);"></i></div>
+            <button class="btn btn--primary btn--full">Log in</button>
+            <div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--subtle);font-size:12px;"><span style="flex:1;height:1px;background:var(--border);"></span>or<span style="flex:1;height:1px;background:var(--border);"></span></div>
+            <button class="btn btn--secondary btn--full" style="height:46px;"><i class="ti ti-brand-google" style="font-size:18px;"></i>Continue with Google</button>
+            <div style="text-align:center;font-size:13px;color:var(--muted);margin-top:24px;">New here? <a href="#" style="color:var(--brand);font-weight:600;">Create an account</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <div class="pp-stage">
+    <!-- login -->
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="padding:40px 24px;">
+        <img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:24px;margin-bottom:32px;">
+        <div style="font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.01em;">Welcome back</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:26px;">Log in to your Paypoint account.</div>
+        <label class="field-label">Email</label>
+        <div class="input" style="margin-bottom:14px;">adaeze@email.com</div>
+        <label class="field-label">Password</label>
+        <div class="input" style="margin-bottom:22px;"><span style="letter-spacing:3px;">••••••••</span><i class="ti ti-eye" style="margin-left:auto;color:var(--subtle);"></i></div>
+        <button class="btn btn--primary btn--full">Log in</button>
+        <div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--subtle);font-size:12px;"><span style="flex:1;height:1px;background:var(--border);"></span>or<span style="flex:1;height:1px;background:var(--border);"></span></div>
+        <button class="btn btn--secondary btn--full" style="height:46px;"><i class="ti ti-brand-google" style="font-size:18px;"></i>Continue with Google</button>
+        <div style="text-align:center;font-size:13px;color:var(--muted);margin-top:24px;">New here? <a href="#" style="color:var(--brand);font-weight:600;">Create an account</a></div>
+      </div>
+    </div>
+
+    <!-- signup -->
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="padding:40px 24px;">
+        <img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:24px;margin-bottom:32px;">
+        <div style="font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.01em;">Create your account</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:26px;">Start getting paid in under a minute.</div>
+        <label class="field-label">Email</label>
+        <div class="input" style="margin-bottom:14px;"><span class="input--placeholder">you@email.com</span></div>
+        <label class="field-label">Password</label>
+        <div class="input" style="margin-bottom:22px;"><span class="input--placeholder">Choose a password</span><i class="ti ti-eye-off" style="margin-left:auto;color:var(--subtle);"></i></div>
+        <button class="btn btn--primary btn--full">Create account</button>
+        <div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--subtle);font-size:12px;"><span style="flex:1;height:1px;background:var(--border);"></span>or<span style="flex:1;height:1px;background:var(--border);"></span></div>
+        <button class="btn btn--secondary btn--full" style="height:46px;"><i class="ti ti-brand-google" style="font-size:18px;"></i>Continue with Google</button>
+        <div style="text-align:center;font-size:13px;color:var(--muted);margin-top:24px;">Already have an account? <a href="#" style="color:var(--brand);font-weight:600;">Log in</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 10. MARKETING LANDING ===== -->
+  <div class="screen-head" style="margin-top:48px;"><span class="num">10</span><h3>Marketing landing</h3><span class="route">/</span></div>
+  <div class="pp-spec">
+    <div class="grp"><h4>Primary job</h4><ul>
+      <li>Convert a visitor into a signup by making the value obvious in one screen: turn anything you sell into a payment page.</li>
+    </ul></div>
+    <div class="grp"><h4>Key elements</h4><ul>
+      <li>Header (indigo wordmark), hero headline + the <b>one allowed subtle indigo gradient</b>, checkout preview.</li>
+      <li>3-step how-it-works, "secured by Paystack / we never hold your money" trust strip, footer.</li>
+    </ul></div>
+    <div class="grp"><h4>Mobile @375px</h4><ul>
+      <li>Hero stacks (headline → CTA → preview); how-it-works becomes a vertical 3-step list.</li>
+    </ul></div>
+    <div class="grp"><h4>A11y</h4><ul>
+      <li>Single H1 in hero; gradient is decorative behind real text that meets contrast on its own.</li>
+    </ul></div>
+  </div>
+
+  <!-- DESKTOP web view -->
+  <div class="proto-caption"><i class="ti ti-device-desktop"></i>Desktop · web</div>
+  <div class="web-wrap">
+    <div class="web-frame">
+      <div class="web-bar">
+        <span class="lights"><span class="r"></span><span class="y"></span><span class="g"></span></span>
+        <span class="addr"><i class="ti ti-lock"></i>paypoint.co</span>
+        <span class="winacts"><i class="ti ti-arrow-left"></i><i class="ti ti-arrow-right"></i><i class="ti ti-refresh"></i></span>
+      </div>
+      <div class="web-body">
+      <!-- header -->
+      <div style="display:flex;align-items:center;padding:16px 24px;border-bottom:1px solid var(--border);">
+        <img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:24px;">
+        <div style="margin-left:auto;display:flex;align-items:center;gap:16px;">
+          <span style="font-size:13px;color:var(--muted);">Log in</span>
+          <button class="btn btn--primary btn--sm">Get started</button>
+        </div>
+      </div>
+      <!-- hero with the one allowed subtle gradient -->
+      <div style="background:linear-gradient(135deg,#F5F4FF 0%,#EEEDFE 60%,#E6E4FF 100%);padding:48px 32px;display:flex;gap:32px;align-items:center;flex-wrap:wrap;">
+        <div style="flex:1.3;min-width:280px;">
+          <div style="font-size:34px;font-weight:700;color:var(--ink);line-height:1.12;letter-spacing:-.02em;">Turn anything you sell into a payment page.</div>
+          <div style="font-size:15px;color:var(--muted);line-height:1.6;margin:16px 0 24px;max-width:440px;">No website, no code. Add your product or service, share the link anywhere, and get paid — money settles straight to your bank through Paystack.</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn btn--primary">Get started free</button>
+            <button class="btn btn--secondary">See how it works</button>
+          </div>
+        </div>
+        <div style="flex:1;min-width:230px;display:flex;justify-content:center;">
+          <div style="width:240px;background:#fff;border-radius:16px;border:1px solid var(--border);box-shadow:0 16px 40px rgba(20,19,43,.12);overflow:hidden;">
+            <div style="padding:11px 13px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);"><img src="{{LOGO_ICON_INDIGO}}" style="width:22px;height:22px;border-radius:50%;" alt=""><span style="font-size:12px;font-weight:600;color:var(--ink);">Adaeze Couture</span></div>
+            <div style="height:120px;background-image:url(https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400);background-size:cover;background-position:center;"></div>
+            <div style="padding:13px;">
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">Aso Oke Dress</div>
+              <div style="font-size:19px;font-weight:700;color:var(--ink);margin:4px 0 11px;">₦35,000</div>
+              <div class="btn btn--primary" style="width:100%;height:38px;font-size:13px;"><i class="ti ti-lock" style="font-size:14px;"></i>Pay ₦35,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- how it works -->
+      <div style="padding:36px 32px 12px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+        <div>
+          <div style="width:40px;height:40px;border-radius:11px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;color:var(--brand);margin-bottom:12px;"><i class="ti ti-square-rounded-plus" style="font-size:21px;"></i></div>
+          <div style="font-size:15px;font-weight:600;color:var(--ink);">1 · Create a page</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;margin-top:5px;">Add your product or service, a price, and a photo.</div>
+        </div>
+        <div>
+          <div style="width:40px;height:40px;border-radius:11px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;color:var(--brand);margin-bottom:12px;"><i class="ti ti-link" style="font-size:21px;"></i></div>
+          <div style="font-size:15px;font-weight:600;color:var(--ink);">2 · Share the link</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;margin-top:5px;">Paste it anywhere — your bio, a chat, a post.</div>
+        </div>
+        <div>
+          <div style="width:40px;height:40px;border-radius:11px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;color:var(--brand);margin-bottom:12px;"><i class="ti ti-cash" style="font-size:21px;"></i></div>
+          <div style="font-size:15px;font-weight:600;color:var(--ink);">3 · Get paid</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;margin-top:5px;">Money settles to your bank through Paystack.</div>
+        </div>
+      </div>
+      <!-- trust strip -->
+      <div style="margin:24px 32px 0;background:var(--ink);border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;color:#fff;font-size:13px;font-weight:500;"><i class="ti ti-shield-check" style="color:var(--spring-green);font-size:18px;"></i>Secured by Paystack</div>
+        <div style="display:flex;align-items:center;gap:8px;color:#fff;font-size:13px;font-weight:500;"><i class="ti ti-building-bank" style="color:var(--spring-green);font-size:18px;"></i>We never hold your money</div>
+        <div style="display:flex;align-items:center;gap:8px;color:#fff;font-size:13px;font-weight:500;"><i class="ti ti-flag" style="color:var(--spring-green);font-size:18px;"></i>Built for Nigeria · ₦ NGN</div>
+      </div>
+      <!-- footer -->
+      <div style="padding:28px 32px;display:flex;align-items:center;flex-wrap:wrap;gap:16px;">
+        <img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:20px;">
+        <div style="margin-left:auto;display:flex;gap:20px;font-size:12px;color:var(--muted);">
+          <span>Privacy</span><span>Terms</span><span>Contact</span>
+        </div>
+        <div style="width:100%;font-size:11px;color:var(--subtle);">© 2026 Paypoint. Payments processed by Paystack. Paypoint is not a bank and never holds funds.</div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE web view -->
+  <div class="proto-caption" style="margin-top:18px;"><i class="ti ti-device-mobile"></i>Mobile · 375px</div>
+  <!-- mobile landing frame -->
+  <div class="pp-stage">
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="dots"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></span></div>
+      <div class="phone-screen" style="overflow-y:auto;">
+        <div style="display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);"><img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:20px;"><button class="btn btn--primary btn--sm" style="margin-left:auto;">Get started</button></div>
+        <div style="background:linear-gradient(160deg,#F5F4FF 0%,#EEEDFE 70%,#E6E4FF 100%);padding:32px 20px;">
+          <div style="font-size:26px;font-weight:700;color:var(--ink);line-height:1.15;letter-spacing:-.02em;">Turn anything you sell into a payment page.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;margin:14px 0 20px;">No website, no code. Share one link and get paid — money settles to your bank through Paystack.</div>
+          <button class="btn btn--primary btn--full" style="margin-bottom:24px;">Get started free</button>
+          <div style="background:#fff;border-radius:14px;border:1px solid var(--border);box-shadow:0 12px 30px rgba(20,19,43,.12);overflow:hidden;">
+            <div style="height:120px;background-image:url(https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500);background-size:cover;background-position:center;"></div>
+            <div style="padding:13px;"><div style="font-size:13px;font-weight:600;color:var(--ink);">Aso Oke Dress</div><div style="font-size:19px;font-weight:700;color:var(--ink);margin:4px 0 10px;">₦35,000</div><div class="btn btn--primary" style="width:100%;height:36px;font-size:12px;"><i class="ti ti-lock" style="font-size:13px;"></i>Pay ₦35,000</div></div>
+          </div>
+        </div>
+        <div style="padding:26px 20px;display:flex;flex-direction:column;gap:20px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;"><div style="width:38px;height:38px;border-radius:10px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;color:var(--brand);flex-shrink:0;"><i class="ti ti-square-rounded-plus" style="font-size:19px;"></i></div><div><div style="font-size:14px;font-weight:600;color:var(--ink);">1 · Create a page</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:3px;">Add your product or service, a price, and a photo.</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start;"><div style="width:38px;height:38px;border-radius:10px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;color:var(--brand);flex-shrink:0;"><i class="ti ti-link" style="font-size:19px;"></i></div><div><div style="font-size:14px;font-weight:600;color:var(--ink);">2 · Share the link</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:3px;">Paste it anywhere — your bio, a chat, a post.</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start;"><div style="width:38px;height:38px;border-radius:10px;background:var(--brand-tint);display:flex;align-items:center;justify-content:center;color:var(--brand);flex-shrink:0;"><i class="ti ti-cash" style="font-size:19px;"></i></div><div><div style="font-size:14px;font-weight:600;color:var(--ink);">3 · Get paid</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:3px;">Money settles to your bank through Paystack.</div></div></div>
+        </div>
+        <div style="margin:0 20px 24px;background:var(--ink);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:8px;color:#fff;font-size:13px;font-weight:500;"><i class="ti ti-shield-check" style="color:var(--spring-green);font-size:17px;"></i>Secured by Paystack</div>
+          <div style="display:flex;align-items:center;gap:8px;color:#fff;font-size:13px;font-weight:500;"><i class="ti ti-building-bank" style="color:var(--spring-green);font-size:17px;"></i>We never hold your money</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="annot"><b>Gradient note:</b> the marketing hero carries the single subtle indigo gradient permitted brand-wide (<code>#F5F4FF → #EEEDFE → #E6E4FF</code>). The product app stays flat — no gradients in-app. The dark trust strip uses <code>--spring-green</code> icons as legitimate secondary-brand expression on an indigo-ink surface.</div>
+
+</section>
+
+<footer style="text-align:center;padding:32px 8px 0;border-top:1px solid var(--border);margin:24px 8px 0;">
+  <img src="{{LOGO_WORD_INDIGO}}" alt="Paypoint" style="height:20px;opacity:.85;">
+  <p style="font-size:12px;color:var(--subtle);margin-top:12px;">Paypoint UX/UI Design System v1.0 · Inter · indigo-led Stripe-clean · mobile-first @375px · NGN only</p>
+</footer>
+
+</div>
