@@ -1335,8 +1335,6 @@ export default function Home() {
                           <ul className="flex flex-col gap-3">
                               <li><a href="#" className="text-sm text-[#33323F] hover:text-[#14132B] transition-colors hover:translate-x-1 duration-200 inline-block">Payment
                                       pages</a></li>
-                              <li><a href="#pricing" className="text-sm text-[#33323F] hover:text-[#14132B] transition-colors hover:translate-x-1 duration-200 inline-block">Pricing</a>
-                              </li>
                               <li><a href="#how-it-works" className="text-sm text-[#33323F] hover:text-[#14132B] transition-colors hover:translate-x-1 duration-200 inline-block">How
                                       it works</a></li>
                           </ul>
