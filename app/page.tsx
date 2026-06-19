@@ -67,8 +67,9 @@ export default function Home() {
                   </h1>
 
                   <p className="lg:text-2xl leading-relaxed [animation:fadeSlideIn_0.8s_ease-out_0.6s_both] animate-on-scroll animate text-xl font-semibold text-[#33323F] max-w-lg mb-12">
-                      Turn any product or service into a clean payment page. Share the link on WhatsApp or Instagram, and
-                      get paid, money settles straight to your bank. No website, no code.
+                      Turn any product or service into a beautiful payment page. Share it on WhatsApp, Instagram, TikTok,
+                      or anywhere your customers are. Get paid directly into your bank account. No website. No code. No
+                      complicated setup.
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-6 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate mb-16 gap-x-6 gap-y-6 items-center">
@@ -126,19 +127,11 @@ export default function Home() {
                           Trusted, secure payments</p>
                       <div className="flex flex-wrap gap-x-6 gap-y-3 opacity-90 hover:opacity-100 transition-all duration-500 text-[#33323F]">
                           <span className="inline-flex items-center gap-1.5 text-xs font-medium font-sans">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shield-check text-[#7A74F6]">
-                                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-
-                                  <path d="m9 12 2 2 4-4" />
-                              </svg>
-                              Bank-grade security
-                          </span>
-                          <span className="inline-flex items-center gap-1.5 text-xs font-medium font-sans">
                               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-lock text-[#7A74F6]">
                                   <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
                                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                               </svg>
-                              We never hold your money
+                              Secure Checkout
                           </span>
                           <span className="inline-flex items-center gap-1.5 text-xs font-medium font-sans">
                               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-receipt text-[#7A74F6]">
@@ -147,7 +140,15 @@ export default function Home() {
                                   <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
                                   <path d="M12 17.5v-11" />
                               </svg>
-                              Instant receipts
+                              Instant Receipts
+                          </span>
+                          <span className="inline-flex items-center gap-1.5 text-xs font-medium font-sans">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shield-check text-[#7A74F6]">
+                                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+
+                                  <path d="m9 12 2 2 4-4" />
+                              </svg>
+                              Bank-Grade Security
                           </span>
                           <span className="inline-flex items-center gap-1.5 text-xs font-medium font-sans">
                               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-landmark text-[#7A74F6]">
@@ -158,7 +159,7 @@ export default function Home() {
                                   <line x1="18" x2="18" y1="18" y2="11" />
                                   <polygon points="12 2 20 7 4 7" />
                               </svg>
-                              Settles to your bank
+                              Funds Settle Directly To Your Bank
                           </span>
                           {/* removed third-party logos */}
                       </div>
@@ -268,7 +269,7 @@ export default function Home() {
                                               </svg>
                                           </div>
                                           <span className="text-[10px] font-medium text-[#33323F] group-hover:text-[#14132B] transition-colors">New
-                                              page</span>
+                                              Page</span>
                                       </button>
                                       <button className="flex flex-col items-center gap-2 group">
                                           <div className="w-14 h-14 rounded-[20px] bg-white border border-[#ECEBF3] flex items-center justify-center text-[#5F58F4] group-hover:bg-[#5F58F4] group-hover:text-white transition-all duration-300 shadow-sm">
@@ -281,7 +282,8 @@ export default function Home() {
 
                                               </svg>
                                           </div>
-                                          <span className="text-[10px] font-medium text-[#33323F] group-hover:text-[#14132B] transition-colors">Withdraw</span>
+                                          <span className="text-[10px] font-medium text-[#33323F] group-hover:text-[#14132B] transition-colors">Share
+                                              Link</span>
                                       </button>
                                       <button className="flex flex-col items-center gap-2 group">
                                           <div className="w-14 h-14 rounded-[20px] bg-white border border-[#ECEBF3] flex items-center justify-center text-[#5F58F4] group-hover:bg-[#5F58F4] group-hover:text-white transition-all duration-300 shadow-sm">
@@ -298,8 +300,8 @@ export default function Home() {
 
                                               </svg>
                                           </div>
-                                          <span className="text-[10px] font-medium text-[#33323F] group-hover:text-[#14132B] transition-colors">Share
-                                              link</span>
+                                          <span className="text-[10px] font-medium text-[#33323F] group-hover:text-[#14132B] transition-colors">View
+                                              Payments</span>
                                       </button>
                                       <button className="flex flex-col items-center gap-2 group">
                                           <div className="w-14 h-14 rounded-[20px] bg-white border border-[#ECEBF3] flex items-center justify-center text-[#5F58F4] group-hover:bg-[#5F58F4] group-hover:text-white transition-all duration-300 shadow-sm">
@@ -485,13 +487,14 @@ export default function Home() {
                           </div>
 
                           <h2 className="text-5xl lg:text-6xl text-[#14132B] tracking-tighter leading-[0.9] font-sans font-semibold">
-                              CREATE A PAGE
-                              IN UNDER A
-                              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-sans font-semibold">MINUTE</span>
+                              Create a payment page in under a
+                              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-sans font-semibold"> minute.</span>
                           </h2>
 
                           <p className="text-[#33323F] text-base leading-relaxed max-w-xs font-sans">Add a title, set your
-                              price in ₦, drop a photo. Your payment page is ready to share, no website, no code.</p>
+                              price, upload a photo and your page is ready to share. Whether you're selling products,
+                              services, event tickets or collecting deposits, Paypoint helps you get paid professionally
+                              without building a website.</p>
 
                           <div className="h-px w-24 bg-gradient-to-r from-[#5F58F4]/40 to-transparent"></div>
                       </div>
@@ -651,11 +654,11 @@ export default function Home() {
                                           <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4" opacity=".5" />
                                           <path fill="currentColor" d="M12 15c-2.7 0-5.8 1.29-7 4.12c-.26.61.18 1.3.85 1.3h12.31c.66 0 1.11-.69.85-1.3C17.8 16.29 14.7 15 12 15M20.5 8.7l-2.1 2.1l-.6-.6a.996.996 0 1 0-1.41 1.41l1.3 1.3c.39.39 1.02.39 1.41 0l2.8-2.8a.996.996 0 1 0-1.41-1.41" className="text-blue-400" />
                                       </svg>
-                                      Built for buyers you've never met
+                                      Built for customers buying from you for the first time.
                                   </h3>
                                   <p className="text-[#33323F] text-sm leading-relaxed max-w-xs font-sans">
-                                      A clean, branded checkout with your name, photo and real "N paid" count, so a
-                                      stranger feels safe paying.
+                                      Your payment page includes your business name, product image and payment history so
+                                      customers feel confident paying you. Trust increases conversions.
                                   </p>
                               </div>
 
@@ -666,15 +669,14 @@ export default function Home() {
                                           <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2" opacity=".5" className="" />
                                           <path fill="currentColor" d="M15.5 12a1 1 0 0 1-.82.43l-2.6-.02l-1.5.02a1 1 0 0 1-1-1V7a1 1 0 1 1 2 0v3.6l2.22-.01a1 1 0 0 1 .7 1.71" className="text-blue-400" />
                                       </svg>
-                                      Works in WhatsApp &amp; Instagram
+                                      Works perfectly on WhatsApp and Instagram.
                                   </h3>
                                   <p className="text-[#33323F] text-sm leading-relaxed max-w-xs font-sans">
-                                      Your link opens and pays cleanly inside in-app browsers, and a receipt shows up
-                                      every time.
+                                      Share your payment link anywhere. Customers pay in seconds without leaving their
+                                      favourite apps. No screenshots. No back-and-forth. Just simple payments.
                                   </p>
                               </div>
 
-                              {/* Added Detail: Bank-grade Security */}
                               <div className="">
                                   <h3 className="text-sm font-medium text-[#14132B] mb-2 flex items-center gap-2 font-sans">
                                       {/* Solar Shield Check Bold Duotone */}
@@ -682,37 +684,12 @@ export default function Home() {
                                           <path fill="currentColor" d="M12 2C7.58 2 4 3.79 4 6c0 7.73 5.61 12.82 8 14c2.39-1.18 8-6.27 8-14c0-2.21-3.58-4-8-4" opacity=".5" />
                                           <path fill="currentColor" d="m15.3 9.3l-3.8 3.8a.75.75 0 0 1-1.06 0l-1.75-1.75a.75.75 0 0 1 1.06-1.06l1.22 1.22l3.27-3.27a.75.75 0 0 1 1.06 1.06" className="text-blue-400" />
                                       </svg>
-                                      We never hold your money
+                                      Your money goes straight to your bank.
                                   </h3>
                                   <p className="text-[#33323F] text-sm leading-relaxed max-w-xs font-sans">
-                                      Every payment settles directly to your own bank. Paypoint is never
-                                      in the money path.
+                                      Every payment settles directly into your account. Paypoint never holds your money.
+                                      Built on trusted payment infrastructure.
                                   </p>
-                              </div>
-
-                              {/* Partner Logos Row */}
-                              <div className="pt-4 border-t border-[#ECEBF3] mt-4">
-                                  <p className="text-[10px] font-mono uppercase text-[#9A99A8] mb-3 tracking-widest font-sans">
-                                      Powered by</p>
-                                  <div className="flex flex-wrap gap-x-4 gap-y-2 text-[#33323F]">
-                                      <span className="inline-flex items-center gap-1.5 text-xs font-medium font-sans">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A74F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-
-                                              <path d="m9 12 2 2 4-4" />
-                                          </svg>
-                                          Secure checkout
-                                      </span>
-                                      <span className="inline-flex items-center gap-1.5 text-xs font-medium font-sans">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A74F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                              <line x1="3" x2="21" y1="22" y2="22" />
-                                              <polygon points="12 2 20 7 4 7" />
-                                              <line x1="6" x2="6" y1="18" y2="11" />
-                                              <line x1="18" x2="18" y1="18" y2="11" />
-                                          </svg>
-                                          Settles to your bank
-                                      </span>
-                                  </div>
                               </div>
                           </div>
                       </div>
@@ -756,26 +733,25 @@ export default function Home() {
                               <span className="text-sm font-semibold text-[#14132B] tracking-tight font-sans">Trusted
                                   checkout</span>
                               <span className="text-xs text-[#33323F] font-medium pl-1 border-l border-[#ECEBF3] ml-1 font-sans">built
-                                  for Nigerian sellers</span>
+                                  for African businesses</span>
                           </div>
 
                           {/* Main Heading */}
                           <h2 className="text-5xl lg:text-7xl text-[#14132B] tracking-tighter leading-[1.05] font-sans font-semibold">
-                              Built so a
-                              stranger <span className="relative whitespace-nowrap text-blue-400 font-sans font-semibold">
-                                  trusts
+                              Trusted checkout built for
+                              <span className="relative whitespace-nowrap text-blue-400 font-sans font-semibold"> African
+                                  businesses.
                                   <svg className="absolute -bottom-2 left-0 w-full text-blue-400/30 -z-10" height="10" viewBox="0 0 100 10" preserveAspectRatio="none">
                                       <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
 
                                   </svg>
                               </span>
-                              your checkout.
                           </h2>
 
                           {/* Description */}
                           <p className="text-lg text-[#33323F] leading-relaxed max-w-lg font-medium font-sans">
-                              A branded payment page with your name, photo and honest "N paid" count that settles
-                              straight to your bank. Paypoint never holds your money.
+                              A clean, secure checkout experience that helps customers feel comfortable paying you.
+                              Designed for businesses that sell through social media, messaging apps and word of mouth.
                           </p>
 
                           {/* Buttons */}
@@ -877,7 +853,7 @@ export default function Home() {
                                               <div className="flex items-center justify-between">
                                                   <div className="flex flex-col">
                                                       <span className="text-[9px] text-[#9A99A8] font-medium uppercase tracking-wider font-sans">Receipt
-                                                          reach</span>
+                                                          delivery</span>
                                                       <span className="text-sm font-semibold text-[#14132B] font-sans">98%</span>
                                                   </div>
                                                   <div className="w-8 h-8 relative flex items-center justify-center">
@@ -961,7 +937,7 @@ export default function Home() {
                                               </svg>
                                           </div>
                                           <span className="text-[10px] font-semibold text-[#14132B] font-sans">"My buyers
-                                              actually pay now", Adaeze, Lagos</span>
+                                              trust me more now." Adaeze, Lagos</span>
                                       </div>
                                   </div>
                               </div>
@@ -990,9 +966,8 @@ export default function Home() {
                           {/* Heading */}
                           <h2 className="text-5xl lg:text-7xl text-[#14132B] tracking-tighter leading-[1.05] font-sans font-semibold">
                               Share one
-                              link, <span className="text-blue-500">get paid</span>
-                              <span className="relative inline-block">
-                                  to your bank.
+                              link. <span className="relative inline-block text-blue-500">
+                                  Get paid anywhere.
                                   <svg className="absolute -bottom-1 left-0 w-full text-blue-500/30" height="8" viewBox="0 0 100 8" preserveAspectRatio="none">
                                       <path d="M0 4 Q 50 8 100 4" stroke="currentColor" strokeWidth="6" fill="none" />
 
@@ -1000,10 +975,24 @@ export default function Home() {
                               </span>
                           </h2>
 
+                          {/* Destinations */}
+                          <div className="w-full">
+                              <p className="text-sm font-semibold text-[#14132B] mb-3 font-sans">Add your payment link
+                                  to:</p>
+                              <div className="flex flex-wrap gap-2">
+                                  {["WhatsApp", "Instagram", "TikTok", "Facebook", "X", "Your website"].map((dest) => (
+                                      <span key={dest} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#ECEBF3] text-xs font-medium text-[#33323F] shadow-sm hover:border-[#5F58F4]/40 hover:text-[#5F58F4] transition-colors font-sans">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-[#5F58F4]"></span>
+                                          {dest}
+                                      </span>
+                                  ))}
+                              </div>
+                          </div>
+
                           {/* Description */}
                           <p className="text-lg text-[#33323F] leading-relaxed max-w-lg font-medium font-sans">
-                              Drop your payment link in a WhatsApp chat or Instagram bio. Buyers pay on a branded, secure
-                              checkout, and the money settles straight to your bank account, Paypoint never holds it.
+                              Customers pay through a secure checkout and funds settle directly into your bank account. No
+                              manual confirmations. No payment screenshots. No chasing customers.
                           </p>
 
                           {/* Buttons */}
@@ -1242,6 +1231,268 @@ export default function Home() {
                   </div>
               </div>
           </section>
+
+          {/* Who Is Paypoint For */}
+          <section className="overflow-hidden selection:bg-[#EEEDFE] selection:text-[#14132B] lg:py-32 text-[#33323F] w-full border-[#ECEBF3] border-t pt-24 pb-24 relative bg-[#FAFAFE]">
+              {/* Background Atmosphere */}
+              <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-[#5F58F4]/10 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
+
+              <div className="max-w-7xl mx-auto px-6 relative z-10">
+                  <div className="max-w-2xl mb-16 [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate">
+                      <div className="flex items-center gap-3 mb-6">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          <span className="text-xs font-medium text-blue-400 tracking-widest font-sans uppercase">Who it's for</span>
+                      </div>
+                      <h2 className="text-4xl lg:text-6xl text-[#14132B] tracking-tighter leading-[1.05] font-sans font-semibold">
+                          Built for businesses that sell <span className="text-blue-500">everywhere.</span>
+                      </h2>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {[
+                          {
+                              title: "Fashion Sellers",
+                              body: "Sell products without building a website.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" data-icon="solar:bag-4-bold-duotone">
+                                      <path fill="currentColor" d="M4.035 11.573c.462-2.309.693-3.463 1.522-4.143s2.007-.68 4.362-.68h4.162c2.355 0 3.532 0 4.361.68c.83.68 1.06 1.834 1.523 4.143l.6 3c.664 3.32.996 4.98.096 6.079s-2.594 1.098-5.98 1.098H9.32c-3.386 0-5.08 0-5.98-1.098s-.568-2.758.096-6.079z" opacity=".5" />
+                                      <circle cx="15" cy="9.75" r="1" fill="currentColor" />
+                                      <circle cx="9" cy="9.75" r="1" fill="currentColor" />
+                                      <path fill="currentColor" d="M9.75 5.75a2.25 2.25 0 0 1 4.5 0v1h.431q.565 0 1.069.002V5.75a3.75 3.75 0 1 0-7.5 0v1.002q.504-.003 1.069-.002h.431z" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Coaches & Consultants",
+                              body: "Accept payments for sessions and services.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+                                      <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4" opacity=".5" />
+                                      <path fill="currentColor" d="M12 15c-2.7 0-5.8 1.29-7 4.12c-.26.61.18 1.3.85 1.3h12.31c.66 0 1.11-.69.85-1.3C17.8 16.29 14.7 15 12 15M20.5 8.7l-2.1 2.1l-.6-.6a.996.996 0 1 0-1.41 1.41l1.3 1.3c.39.39 1.02.39 1.41 0l2.8-2.8a.996.996 0 1 0-1.41-1.41" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Event Organisers",
+                              body: "Sell tickets and collect registrations.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" data-icon="solar:document-text-bold-duotone">
+                                      <path fill="currentColor" d="M3 10c0-3.771 0-5.657 1.172-6.828S7.229 2 11 2h2c3.771 0 5.657 0 6.828 1.172S21 6.229 21 10v4c0 3.771 0 5.657-1.172 6.828S16.771 22 13 22h-2c-3.771 0-5.657 0-6.828-1.172S3 17.771 3 14z" opacity=".5" />
+                                      <path fill="currentColor" d="M7.25 8a.75.75 0 0 1 .75-.75h8a.75.75 0 0 1 0 1.5H8A.75.75 0 0 1 7.25 8m0 4a.75.75 0 0 1 .75-.75h8a.75.75 0 0 1 0 1.5H8a.75.75 0 0 1-.75-.75m0 4a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5H8a.75.75 0 0 1-.75-.75" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Creators",
+                              body: "Get paid for digital products and services.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+                                      <path fill="currentColor" d="M12.94 3.47a1.5 1.5 0 0 0-2.88 0l-1.3 4.01H4.64a1.5 1.5 0 0 0-1.18 2.56l3.36 2.44l-1.28 3.95a1.5 1.5 0 0 0 2.31 1.68l3.4-2.47l3.4 2.47a1.5 1.5 0 0 0 2.31-1.68l-1.28-3.95l3.36-2.44a1.5 1.5 0 0 0-1.18-2.56h-4.12l-1.3-4.01Z" opacity=".5" />
+                                      <path fill="currentColor" d="M11.5 7.48L12.94 3.47a1.5 1.5 0 0 1 2.88 0l1.3 4.01h4.12a1.5 1.5 0 0 1 .88 2.7l-3.36 2.44l1.28 3.95a1.5 1.5 0 0 1-2.31 1.68L12 14.66V7.48h-.5Z" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Food Vendors & Restaurants",
+                              body: "Collect payments before delivery.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" data-icon="solar:bag-4-bold-duotone">
+                                      <path fill="currentColor" d="M4.035 11.573c.462-2.309.693-3.463 1.522-4.143s2.007-.68 4.362-.68h4.162c2.355 0 3.532 0 4.361.68c.83.68 1.06 1.834 1.523 4.143l.6 3c.664 3.32.996 4.98.096 6.079s-2.594 1.098-5.98 1.098H9.32c-3.386 0-5.08 0-5.98-1.098s-.568-2.758.096-6.079z" opacity=".5" />
+                                      <circle cx="15" cy="9.75" r="1" fill="currentColor" />
+                                      <circle cx="9" cy="9.75" r="1" fill="currentColor" />
+                                      <path fill="currentColor" d="M9.75 5.75a2.25 2.25 0 0 1 4.5 0v1h.431q.565 0 1.069.002V5.75a3.75 3.75 0 1 0-7.5 0v1.002q.504-.003 1.069-.002h.431z" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "SMEs",
+                              body: "Professional payment pages for growing businesses.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" data-icon="solar:graph-up-bold-duotone">
+                                      <path fill="currentColor" d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12" opacity=".5" />
+                                      <path fill="currentColor" d="M14.5 10.75a.75.75 0 0 1 0-1.5H17a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-1.5 0v-.69l-2.013 2.013a1.75 1.75 0 0 1-2.474 0l-1.586-1.586a.25.25 0 0 0-.354 0L7.53 14.53a.75.75 0 0 1-1.06-1.06l2.293-2.293a1.75 1.75 0 0 1 2.474 0l1.586 1.586a.25.25 0 0 0 .354 0l2.012-2.013z" />
+                                  </svg>
+                              ),
+                          },
+                      ].map((card, i) => (
+                          <div key={card.title} className="group bg-white border border-[#ECEBF3] rounded-[28px] p-7 shadow-[0_14px_36px_-24px_rgba(20,19,43,0.18)] hover:shadow-[0_18px_45px_-20px_rgba(95,88,244,0.25)] hover:-translate-y-1 transition-all duration-300 [animation:fadeSlideIn_0.8s_ease-out_both] animate-on-scroll animate" style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+                              <div className="w-12 h-12 rounded-2xl bg-[#EEEDFE] flex items-center justify-center text-[#5F58F4] mb-5 group-hover:bg-[#5F58F4] group-hover:text-white transition-colors duration-300">
+                                  {card.icon}
+                              </div>
+                              <h3 className="text-lg font-semibold text-[#14132B] tracking-tight mb-2 font-sans">{card.title}</h3>
+                              <p className="text-[#33323F] text-sm leading-relaxed font-sans">{card.body}</p>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+          </section>
+
+          {/* Why Paypoint */}
+          <section className="overflow-hidden selection:bg-[#EEEDFE] selection:text-[#14132B] lg:py-32 text-[#33323F] w-full border-[#ECEBF3] border-t pt-24 pb-24 relative bg-white">
+              {/* Background Tech Text Layer */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center select-none pointer-events-none z-0 opacity-[0.035]">
+                  <span className="text-[18vw] tracking-tighter text-[#14132B] leading-none whitespace-nowrap font-sans font-semibold">PAYPOINT</span>
+              </div>
+
+              <div className="max-w-7xl mx-auto px-6 relative z-10">
+                  <div className="max-w-2xl mb-16 [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate">
+                      <div className="flex items-center gap-3 mb-6">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          <span className="text-xs font-medium text-blue-400 tracking-widest font-sans uppercase">Why Paypoint</span>
+                      </div>
+                      <h2 className="text-4xl lg:text-6xl text-[#14132B] tracking-tighter leading-[1.05] font-sans font-semibold">
+                          Everything you need to <span className="text-blue-500">get paid.</span>
+                      </h2>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10">
+                      {[
+                          {
+                              title: "Create payment pages in seconds",
+                              body: "Turn anything you sell into a shareable payment page.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" data-icon="solar:add-circle-bold-duotone">
+                                      <path fill="currentColor" d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10" opacity=".5" />
+                                      <path fill="currentColor" d="M12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25z" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Secure checkout",
+                              body: "Built on trusted payment infrastructure.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" data-icon="solar:shield-check-bold-duotone">
+                                      <path fill="currentColor" d="M3.378 5.082C3 5.62 3 7.22 3 10.417v1.574c0 5.638 4.239 8.375 6.899 9.536c.721.315 1.082.473 2.101.473c1.02 0 1.38-.158 2.101-.473C16.761 20.365 21 17.63 21 11.991v-1.574c0-3.198 0-4.797-.378-5.335c-.377-.537-1.88-1.052-4.887-2.081l-.573-.196C13.595 2.268 12.812 2 12 2s-1.595.268-3.162.805L8.265 3c-3.007 1.03-4.51 1.545-4.887 2.082" opacity=".5" />
+                                      <path fill="currentColor" d="M15.06 10.5a.75.75 0 0 0-1.12-1l-3.011 3.374l-.87-.974a.75.75 0 0 0-1.118 1l1.428 1.6a.75.75 0 0 0 1.119 0z" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Instant receipts",
+                              body: "Customers receive payment confirmations immediately.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                      <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+                                      <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+                                      <path d="M12 17.5v-11" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Direct bank settlement",
+                              body: "Funds settle directly into your own bank account.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                      <line x1="3" x2="21" y1="22" y2="22" />
+                                      <line x1="6" x2="6" y1="18" y2="11" />
+                                      <line x1="10" x2="10" y1="18" y2="11" />
+                                      <line x1="14" x2="14" y1="18" y2="11" />
+                                      <line x1="18" x2="18" y1="18" y2="11" />
+                                      <polygon points="12 2 20 7 4 7" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Track every payment",
+                              body: "Know who paid, what they paid for and when they paid.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" data-icon="solar:chart-2-bold-duotone">
+                                      <path fill="currentColor" d="M3.293 9.293C3 9.586 3 10.057 3 11v6c0 .943 0 1.414.293 1.707S4.057 19 5 19s1.414 0 1.707-.293S7 17.943 7 17v-6c0-.943 0-1.414-.293-1.707S5.943 9 5 9s-1.414 0-1.707.293" />
+                                      <path fill="currentColor" d="M17.293 2.293C17 2.586 17 3.057 17 4v13c0 .943 0 1.414.293 1.707S18.057 19 19 19s1.414 0 1.707-.293S21 17.943 21 17V4c0-.943 0-1.414-.293-1.707S19.943 2 19 2s-1.414 0-1.707.293" opacity=".4" />
+                                      <path fill="currentColor" d="M10 7c0-.943 0-1.414.293-1.707S11.057 5 12 5s1.414 0 1.707.293S14 6.057 14 7v10c0 .943 0 1.414-.293 1.707S12.943 19 12 19s-1.414 0-1.707-.293S10 17.943 10 17z" opacity=".7" />
+                                      <path fill="currentColor" d="M3 21.25a.75.75 0 0 0 0 1.5h18a.75.75 0 0 0 0-1.5z" />
+                                  </svg>
+                              ),
+                          },
+                          {
+                              title: "Built for African businesses",
+                              body: "Designed for how modern businesses actually sell.",
+                              icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" data-icon="solar:graph-up-bold-duotone">
+                                      <path fill="currentColor" d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12" opacity=".5" />
+                                      <path fill="currentColor" d="M14.5 10.75a.75.75 0 0 1 0-1.5H17a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-1.5 0v-.69l-2.013 2.013a1.75 1.75 0 0 1-2.474 0l-1.586-1.586a.25.25 0 0 0-.354 0L7.53 14.53a.75.75 0 0 1-1.06-1.06l2.293-2.293a1.75 1.75 0 0 1 2.474 0l1.586 1.586a.25.25 0 0 0 .354 0l2.012-2.013z" />
+                                  </svg>
+                              ),
+                          },
+                      ].map((item, i) => (
+                          <div key={item.title} className="flex flex-col gap-3 [animation:fadeSlideIn_0.8s_ease-out_both] animate-on-scroll animate" style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+                              <div className="w-11 h-11 rounded-xl bg-[#EEEDFE] flex items-center justify-center text-[#5F58F4]">
+                                  {item.icon}
+                              </div>
+                              <h3 className="text-base font-semibold text-[#14132B] tracking-tight font-sans">{item.title}</h3>
+                              <p className="text-[#33323F] text-sm leading-relaxed max-w-xs font-sans">{item.body}</p>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+          </section>
+
+          {/* Testimonial */}
+          <section className="overflow-hidden selection:bg-[#EEEDFE] selection:text-[#14132B] lg:py-32 text-[#33323F] w-full border-[#ECEBF3] border-t pt-24 pb-24 relative bg-[#FAFAFE]">
+              {/* Background Atmosphere */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-[#5F58F4]/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+              <div className="max-w-4xl mx-auto px-6 relative z-10 text-center [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#EEEDFE] text-[#5F58F4] mb-8">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                          <path fill="currentColor" d="M7.5 4C5 4 3 6 3 8.5c0 2.4 1.8 4.4 4.2 4.5c-.1 1.6-.8 2.7-2.4 3.6a.75.75 0 0 0 .7 1.32C8.5 16.5 10 14 10 10.5V8.5C10 6 8 4 7.5 4m9 0C14 4 12 6 12 8.5c0 2.4 1.8 4.4 4.2 4.5c-.1 1.6-.8 2.7-2.4 3.6a.75.75 0 0 0 .7 1.32C17.5 16.5 19 14 19 10.5V8.5C19 6 17 4 16.5 4" opacity=".7" />
+                      </svg>
+                  </div>
+
+                  <p className="text-3xl lg:text-5xl text-[#14132B] tracking-tighter leading-[1.1] font-sans font-semibold mb-8">
+                      Getting paid has never been easier.
+                  </p>
+
+                  <p className="text-xl lg:text-2xl text-[#33323F] leading-relaxed font-medium max-w-3xl mx-auto mb-8 font-sans">
+                      "Before Paypoint, I spent hours confirming transfers and asking customers for screenshots. Now I
+                      just send one link and everything happens automatically."
+                  </p>
+
+                  <div className="flex items-center justify-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#5F58F4] flex items-center justify-center text-sm font-bold text-white font-sans">A</div>
+                      <span className="text-sm font-semibold text-[#14132B] tracking-tight font-sans">Adaeze, Lagos</span>
+                  </div>
+              </div>
+          </section>
+
+          {/* Final CTA */}
+          <section className="overflow-hidden selection:bg-[#EEEDFE] selection:text-[#14132B] lg:py-32 text-[#33323F] w-full border-[#ECEBF3] border-t pt-24 pb-24 relative bg-white">
+              {/* Background Atmosphere */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[#5F58F4]/10 rounded-full blur-[120px] -translate-y-1/3 pointer-events-none"></div>
+
+              <div className="max-w-5xl mx-auto px-6 relative z-10 [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate">
+                  <div className="relative overflow-hidden rounded-[40px] bg-gradient-to-br from-[#6F68FF] to-[#5F58F4] px-8 py-16 lg:px-20 lg:py-24 text-center shadow-[0_30px_80px_-30px_rgba(95,88,244,0.5)]">
+                      {/* Decorative glows */}
+                      <div className="absolute -right-16 -top-16 w-64 h-64 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
+                      <div className="absolute -left-16 -bottom-16 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl pointer-events-none"></div>
+                      {/* Vertical lines texture */}
+                      <div className="absolute inset-0 opacity-[0.06] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #fff, #fff 1px, transparent 1px, transparent 10px)' }}></div>
+
+                      <div className="relative z-10">
+                          <h2 className="text-4xl lg:text-6xl text-white tracking-tighter leading-[1.05] font-sans font-semibold mb-6">
+                              Start getting paid professionally.
+                          </h2>
+                          <p className="text-lg lg:text-xl text-white/90 leading-relaxed font-medium max-w-2xl mx-auto mb-10 font-sans">
+                              Create your first payment page in less than a minute and start accepting payments from
+                              anywhere.
+                          </p>
+                          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                              <button className="group inline-flex items-center justify-center gap-2 h-[54px] px-8 rounded-full bg-white text-[#5F58F4] text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] w-full sm:w-auto font-sans">
+                                  <span>Start Free</span>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1">
+                                      <path d="M5 12h14" />
+                                      <path d="m12 5 7 7-7 7" />
+                                  </svg>
+                              </button>
+                              <button className="inline-flex items-center justify-center gap-2 h-[54px] px-8 rounded-full bg-white/10 border border-white/30 text-white text-sm font-semibold transition-all duration-300 hover:bg-white/20 w-full sm:w-auto backdrop-blur-sm font-sans">
+                                  <span>See How It Works</span>
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </section>
+
           <footer className="bg-[#FAFAFE] text-[#33323F] w-full border-t border-[#ECEBF3] relative overflow-hidden font-sans z-20">
               {/* Ambient Background Glow */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[#5F58F4]/10 rounded-full blur-[100px] pointer-events-none -mt-32">
@@ -1324,6 +1575,20 @@ export default function Home() {
                           </div>
                       </a>
 
+                  </div>
+
+                  {/* Brand Tagline */}
+                  <div className="px-8 lg:px-12 pt-10 lg:pt-12 border-b border-[#ECEBF3]">
+                      <div className="flex items-center gap-3 mb-4">
+                          <img src="/assets/paypoint-icon.png" alt="Paypoint" className="w-8 h-8 rounded-full" />
+                          <span className="text-sm font-semibold text-[#14132B] tracking-tight">Paypoint</span>
+                      </div>
+                      <p className="text-sm text-[#33323F] leading-relaxed max-w-xl mb-3">
+                          Paypoint helps African businesses create payment pages, share one link and get paid directly
+                          into their bank accounts.
+                      </p>
+                      <p className="text-sm font-semibold text-[#14132B] pb-10 lg:pb-12">Secure. Simple. Built for
+                          growth.</p>
                   </div>
 
                   {/* Footer Links */}
