@@ -29,7 +29,7 @@ export default function Home() {
                       <span className="absolute inset-0 rounded-full bg-[#5F58F4] transition-opacity duration-300 group-hover:opacity-0"></span>
 
                       {/* 3D Button Surface & Content */}
-                      <span className="flex items-center justify-center gap-2 uppercase transition-colors duration-300 group-hover:text-white text-xs font-medium text-white tracking-widest bg-gradient-to-b from-[#6F68FF] to-[#5F58F4] w-full h-full rounded-full pt-2.5 pr-6 pb-2.5 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">
+                      <span className="flex items-center justify-center gap-1.5 sm:gap-2 uppercase transition-colors duration-300 group-hover:text-white text-[11px] sm:text-xs font-medium text-white tracking-wider sm:tracking-widest bg-gradient-to-b from-[#6F68FF] to-[#5F58F4] w-full h-full rounded-full py-2.5 px-4 sm:px-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] whitespace-nowrap">
                           <span className="z-10 relative">Get Started</span>
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5">
                               <path d="M5 12h14" className="" />
@@ -42,27 +42,27 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <main className="lg:pt-48 pt-36 relative">
+      <main className="lg:pt-48 pt-36 relative overflow-x-clip">
 
           {/* Background Glows */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none z-0">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none z-0 overflow-hidden">
               <div className="absolute top-20 right-10 w-[600px] h-[600px] bg-[#5F58F4]/15 rounded-full blur-[120px] opacity-40">
               </div>
               <div className="absolute top-40 left-10 w-[400px] h-[400px] bg-[#5F58F4]/10 rounded-full blur-[100px] opacity-30">
               </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 z-10 max-w-6xl mr-auto mb-24 ml-auto pr-6 pl-6 relative gap-x-20 gap-y-20 items-center">
+          <div className="grid lg:grid-cols-2 z-10 max-w-6xl mr-auto mb-24 ml-auto pr-6 pl-6 relative gap-x-12 lg:gap-x-20 gap-y-16 lg:gap-y-20 items-center">
 
               {/* Left Column: Copy */}
-              <div className="max-w-2xl">
+              <div className="max-w-2xl w-full min-w-0">
 
-                  <h1 className="leading-[1.05] lg:text-8xl text-6xl font-medium text-[#14132B] tracking-tighter mb-8">
-                      <span className="inline-block [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate font-sans font-semibold">Get</span>
-                      <span className="inline-block [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate font-sans font-semibold">paid
+                  <h1 className="leading-[1.05] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium text-[#14132B] tracking-tighter mb-8">
+                      <span className="inline-block mr-[0.25em] [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate font-sans font-semibold">Get</span>
+                      <span className="inline-block mr-[0.25em] [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate font-sans font-semibold">paid
                           with</span>
 
-                      <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#5F58F4] via-sky-300 to-indigo-400 [animation:fadeSlideIn_0.8s_ease-out_0.4s_both] animate-on-scroll animate font-sans font-semibold">one</span>
+                      <span className="inline-block mr-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-[#5F58F4] via-sky-300 to-indigo-400 [animation:fadeSlideIn_0.8s_ease-out_0.4s_both] animate-on-scroll animate font-sans font-semibold">one</span>
                       <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#5F58F4] via-sky-300 to-indigo-400 [animation:fadeSlideIn_0.8s_ease-out_0.5s_both] animate-on-scroll animate font-sans font-semibold">link.</span>
                   </h1>
 
@@ -72,7 +72,7 @@ export default function Home() {
                       complicated setup.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row gap-6 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate mb-16 gap-x-6 gap-y-6 items-center">
+                  <div className="flex flex-col sm:flex-row gap-6 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate mb-16 gap-x-6 gap-y-6 items-stretch sm:items-center">
 
                       {/* Animated Gradient Start Free Button */}
                       <button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(95,88,244,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{ position: 'relative', ['--border-gradient' as any]: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', ['--border-radius-before' as any]: '9999px' }}>
@@ -167,10 +167,10 @@ export default function Home() {
               </div>
 
               {/* Right Column: The Mockup */}
-              <div className="flex lg:justify-end relative justify-center [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate">
+              <div className="flex lg:justify-end relative justify-center w-full min-w-0 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate">
 
                   {/* Phone Frame */}
-                  <div className="border-[8px] overflow-hidden z-20 flex flex-col bg-[#0A0A0A] w-[340px] h-[680px] border-[#1A1A1A] ring-white/10 ring-1 rounded-[50px] relative shadow-2xl">
+                  <div className="border-[8px] overflow-hidden z-20 flex flex-col bg-[#0A0A0A] w-[300px] sm:w-[340px] max-w-full h-[600px] sm:h-[680px] border-[#1A1A1A] ring-white/10 ring-1 rounded-[50px] relative shadow-2xl">
 
                       {/* Dynamic Island */}
                       <div className="absolute top-0 w-full h-8 z-50 flex justify-center pt-2.5 pointer-events-none">
@@ -486,7 +486,7 @@ export default function Home() {
                               <span className="text-xs font-mono text-blue-400/80 tracking-widest font-sans">01 / 03</span>
                           </div>
 
-                          <h2 className="text-5xl lg:text-6xl text-[#14132B] tracking-tighter leading-[0.9] font-sans font-semibold">
+                          <h2 className="text-4xl sm:text-5xl lg:text-6xl text-[#14132B] tracking-tighter leading-[0.95] lg:leading-[0.9] font-sans font-semibold">
                               Create a payment page in under a
                               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-sans font-semibold"> minute.</span>
                           </h2>
@@ -509,7 +509,7 @@ export default function Home() {
                           </div>
 
                           {/* Phone Container with Float Animation */}
-                          <div className="animate-[float_6s_ease-in-out_infinite] border-[8px] overflow-hidden z-20 flex flex-col bg-[#050505] w-[320px] h-[640px] border-[#1A1A1A] ring-white/10 ring-1 rounded-[48px] relative shadow-2xl shadow-blue-900/20">
+                          <div className="animate-[float_6s_ease-in-out_infinite] border-[8px] overflow-hidden z-20 flex flex-col bg-[#050505] w-[290px] sm:w-[320px] max-w-full h-[600px] sm:h-[640px] border-[#1A1A1A] ring-white/10 ring-1 rounded-[48px] relative shadow-2xl shadow-blue-900/20">
 
                               {/* Dynamic Island */}
                               <div className="absolute top-0 w-full h-7 z-50 flex justify-center pt-2 pointer-events-none">
@@ -737,7 +737,7 @@ export default function Home() {
                           </div>
 
                           {/* Main Heading */}
-                          <h2 className="text-5xl lg:text-7xl text-[#14132B] tracking-tighter leading-[1.05] font-sans font-semibold">
+                          <h2 className="text-4xl sm:text-5xl lg:text-7xl text-[#14132B] tracking-tighter leading-[1.05] font-sans font-semibold">
                               Trusted checkout built for
                               <span className="relative whitespace-nowrap text-blue-400 font-sans font-semibold"> African
                                   businesses.
@@ -755,7 +755,7 @@ export default function Home() {
                           </p>
 
                           {/* Buttons */}
-                          <div className="flex flex-col sm:flex-row gap-6 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate mb-16 gap-x-6 gap-y-6 items-center">
+                          <div className="flex flex-col sm:flex-row gap-6 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate mb-16 gap-x-6 gap-y-6 items-stretch sm:items-center">
 
                               {/* Animated Gradient Start Free Button */}
 
@@ -789,7 +789,7 @@ export default function Home() {
                           </div>
 
                           {/* Central 3D Composition */}
-                          <div className="relative w-[340px] h-[340px] md:w-[420px] md:h-[420px] transform-style-preserve-3d flex items-center justify-center">
+                          <div className="relative w-[280px] sm:w-[340px] h-[340px] md:w-[420px] md:h-[420px] max-w-full transform-style-preserve-3d flex items-center justify-center">
 
                               {/* Card 1: Main Revenue (Center) */}
                               <div className="absolute z-20 w-72 md:w-80 animate-[float_6s_ease-in-out_infinite] hover:scale-105 transition-transform duration-500 cursor-default">
@@ -911,7 +911,7 @@ export default function Home() {
                               </div>
 
                               {/* Card 4: Review Pill (Floating Right) */}
-                              <div className="absolute top-1/2 -right-12 md:-right-20 z-20 animate-[float_8s_ease-in-out_1.5s_infinite] cursor-default hover:scale-105 transition-transform">
+                              <div className="hidden sm:block absolute top-1/2 -right-8 md:-right-20 z-20 animate-[float_8s_ease-in-out_1.5s_infinite] cursor-default hover:scale-105 transition-transform">
                                   <div className="rounded-full bg-white border border-[#ECEBF3] p-[1px] shadow-[0_12px_30px_-12px_rgba(20,19,43,0.18)]">
                                       <div className="bg-white/90 backdrop-blur-md rounded-full px-4 py-2 flex items-center gap-2">
                                           <div className="flex -space-x-1">
@@ -964,7 +964,7 @@ export default function Home() {
                           </div>
 
                           {/* Heading */}
-                          <h2 className="text-5xl lg:text-7xl text-[#14132B] tracking-tighter leading-[1.05] font-sans font-semibold">
+                          <h2 className="text-4xl sm:text-5xl lg:text-7xl text-[#14132B] tracking-tighter leading-[1.05] font-sans font-semibold">
                               Share one
                               link. <span className="relative inline-block text-blue-500">
                                   Get paid anywhere.
@@ -1022,7 +1022,7 @@ export default function Home() {
                           </div>
 
                           {/* Phone Frame */}
-                          <div className="border-[8px] overflow-hidden z-20 flex flex-col bg-[#050505] w-[320px] h-[640px] border-[#1A1A1A] ring-white/5 ring-1 rounded-[50px] relative shadow-2xl transform transition-all duration-500 group-hover:rotate-y-[-6deg] group-hover:rotate-x-[4deg] rotate-y-[-12deg] rotate-x-[8deg]">
+                          <div className="border-[8px] overflow-hidden z-20 flex flex-col bg-[#050505] w-[290px] sm:w-[320px] max-w-full h-[600px] sm:h-[640px] border-[#1A1A1A] ring-white/5 ring-1 rounded-[50px] relative shadow-2xl transform transition-all duration-500 group-hover:rotate-y-[-6deg] group-hover:rotate-x-[4deg] lg:rotate-y-[-12deg] lg:rotate-x-[8deg]">
 
                               {/* Dynamic Island */}
                               <div className="absolute top-0 w-full h-7 z-50 flex justify-center pt-2 pointer-events-none">
@@ -1198,7 +1198,7 @@ export default function Home() {
                           {/* Floating UI Elements behind/around phone */}
 
                           {/* Success Toast */}
-                          <div className="absolute top-24 -right-12 bg-white border border-[#ECEBF3] p-3 rounded-xl shadow-[0_14px_36px_-14px_rgba(20,19,43,0.2)] flex items-center gap-3 animate-bounce-slow" style={{ animationDuration: '5s' }}>
+                          <div className="hidden sm:flex absolute top-24 -right-12 bg-white border border-[#ECEBF3] p-3 rounded-xl shadow-[0_14px_36px_-14px_rgba(20,19,43,0.2)] items-center gap-3 animate-bounce-slow" style={{ animationDuration: '5s' }}>
                               <div className="w-8 h-8 bg-[#E7F8EF] rounded-full flex items-center justify-center text-[#0B7A4B]">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check">
                                       <path d="M20 6 9 17l-5-5" />
@@ -1211,7 +1211,7 @@ export default function Home() {
                           </div>
 
                           {/* Chart Card Bottom Left */}
-                          <div className="absolute bottom-20 -left-16 bg-white border border-[#ECEBF3] p-4 rounded-2xl shadow-[0_14px_36px_-14px_rgba(20,19,43,0.2)] transform -rotate-6 hover:rotate-0 transition-transform duration-500">
+                          <div className="hidden sm:block absolute bottom-20 -left-16 bg-white border border-[#ECEBF3] p-4 rounded-2xl shadow-[0_14px_36px_-14px_rgba(20,19,43,0.2)] transform -rotate-6 hover:rotate-0 transition-transform duration-500">
                               <div className="flex justify-between items-end mb-2 gap-8">
                                   <div>
                                       <div className="text-[10px] text-[#9A99A8] font-sans">This week</div>

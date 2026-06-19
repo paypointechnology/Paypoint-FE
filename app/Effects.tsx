@@ -34,7 +34,7 @@ export default function Effects() {
     };
     window.initInViewAnimations();
 
-    // --- UnicornStudio loader (ported from source IIFE) ---
+    // --- UnicornStudio loader (dotted aura background) ---
     if (!window.UnicornStudio) {
       window.UnicornStudio = { isInitialized: false };
       const i = document.createElement("script");
@@ -52,9 +52,7 @@ export default function Effects() {
 
   return (
     <>
-      {/* Aura Background */}
-
-      {/* Background (component) added by Aura */}
+      {/* Background (component) added by Aura — the dotted halftone field */}
       <div
         className="aura-background-component top-0 w-full -z-20 saturate-[0.4] fixed brightness-150 opacity-25 h-[1200px]"
         data-alpha-mask="80"
