@@ -20,8 +20,8 @@ export default function Home() {
               </div>
 
               <div className="flex items-center gap-4">
-                  <a href="#" className="hidden md:inline-block text-xs font-medium text-[#33323F] px-3.5 py-2 rounded-full transition-all duration-200 hover:text-[#5F58F4] hover:bg-[#EEEDFE] hover:-translate-y-0.5 font-sans">Log in</a>
-                  <button className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(95,88,244,0.35)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center">
+                  <a href="/login" className="hidden md:inline-block text-xs font-medium text-[#33323F] px-3.5 py-2 rounded-full transition-all duration-200 hover:text-[#5F58F4] hover:bg-[#EEEDFE] hover:-translate-y-0.5 font-sans">Log in</a>
+                  <a href="/signup" className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(95,88,244,0.35)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center">
                       {/* Spinning Border Beam (Visible on Hover) */}
                       <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
 
@@ -36,7 +36,7 @@ export default function Home() {
                               <path d="m12 5 7 7-7 7" className="" />
                           </svg>
                       </span>
-                  </button>
+                  </a>
               </div>
           </div>
       </nav>
@@ -75,7 +75,7 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row gap-6 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate mb-16 gap-x-6 gap-y-6 items-stretch sm:items-center">
 
                       {/* Animated Gradient Start Free Button */}
-                      <button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(95,88,244,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{ position: 'relative', ['--border-gradient' as any]: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', ['--border-radius-before' as any]: '9999px' }}>
+                      <a href="/signup" className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(95,88,244,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{ position: 'relative', ['--border-gradient' as any]: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', ['--border-radius-before' as any]: '9999px' }}>
 
                           {/* Full Border Beam (White-on-indigo Line) */}
                           <div className="absolute inset-0 -z-20 rounded-full overflow-hidden p-[1px]">
@@ -105,11 +105,11 @@ export default function Home() {
                               <path d="M5 12h14" className="" />
                               <path d="m12 5 7 7-7 7" className="" />
                           </svg>
-                      </button>
+                      </a>
 
                       {/* Play CTA Button with Gradient Hover */}
                       <div className="inline-block group relative w-full sm:w-auto text-center sm:text-left">
-                          <button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:text-[#5F58F4] text-sm font-medium text-[#14132B] tracking-tight bg-white border border-[#ECEBF3] h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center shadow-sm">
+                          <a href="#features" className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:text-[#5F58F4] text-sm font-medium text-[#14132B] tracking-tight bg-white border border-[#ECEBF3] h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center shadow-sm">
                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style={{ color: 'rgb(95, 88, 244)', width: '20px', height: '20px' }} className="lucide lucide-play-circle w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" data-solar="play-circle-bold-duotone" data-icon-set="solar" data-icon-replaced="true" strokeWidth="2">
                                   <path fill="#5F58F4" fillRule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10" clipRule="evenodd" opacity=".5" className="" />
                                   <path fill="#5F58F4" d="m15.414 13.059l-4.72 2.787C9.934 16.294 9 15.71 9 14.786V9.214c0-.924.934-1.507 1.694-1.059l4.72 2.787c.781.462.781 1.656 0 2.118" />
@@ -117,7 +117,7 @@ export default function Home() {
                               </svg>
                               <span className="uppercase text-sm relative">See how it works</span>
                               <span aria-hidden="true" className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" style={{ background: 'linear-gradient(90deg,rgba(95,88,244,0) 0%,rgba(95,88,244,1) 50%,rgba(95,88,244,0) 100%)' }}></span>
-                          </button>
+                          </a>
                           <span className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{ background: 'radial-gradient(60% 100% at 50% 50%, rgba(95,88,244,.55), rgba(95,88,244,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)' }} aria-hidden="true"></span>
                       </div>
                   </div>
@@ -761,14 +761,14 @@ export default function Home() {
 
                               {/* Play CTA Button with Gradient Hover */}
                               <div className="inline-block group relative w-full sm:w-auto text-center sm:text-left">
-                                  <button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:text-[#5F58F4] text-sm font-medium text-[#14132B] tracking-tight bg-white h-[54px] border-[#ECEBF3] border rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center shadow-sm">
+                                  <a href="#features" className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:text-[#5F58F4] text-sm font-medium text-[#14132B] tracking-tight bg-white h-[54px] border-[#ECEBF3] border rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center shadow-sm">
                                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5F58F4" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-play-circle h-5 w-5" style={{ strokeWidth: '1.5' }}>
                                           <circle cx="12" cy="12" r="10" />
                                           <polygon points="10 8 16 12 10 16 10 8" />
                                       </svg>
                                       <span className="relative text-base font-sans">See how it works</span>
                                       <span aria-hidden="true" className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" style={{ background: 'linear-gradient(90deg,rgba(95,88,244,0) 0%,rgba(95,88,244,1) 50%,rgba(95,88,244,0) 100%)' }}></span>
-                                  </button>
+                                  </a>
                                   <span className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{ background: 'radial-gradient(60% 100% at 50% 50%, rgba(95,88,244,.55), rgba(95,88,244,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)' }} aria-hidden="true"></span>
                               </div>
                           </div>
@@ -997,17 +997,17 @@ export default function Home() {
 
                           {/* Buttons */}
                           <div className="flex flex-wrap gap-4 items-center pt-2 w-full sm:w-auto">
-                              <button className="h-12 px-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-all shadow-[0_0_20px_-5px_rgba(74,67,214,0.5)] hover:shadow-[0_0_30px_-5px_rgba(74,67,214,0.6)] flex items-center gap-2 group">
+                              <a href="/signup" className="h-12 px-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-all shadow-[0_0_20px_-5px_rgba(74,67,214,0.5)] hover:shadow-[0_0_30px_-5px_rgba(74,67,214,0.6)] flex items-center gap-2 group">
                                   <span>Start free</span>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right transition-transform group-hover:translate-x-1">
                                       <path d="M5 12h14" />
                                       <path d="m12 5 7 7-7 7" />
                                   </svg>
-                              </button>
+                              </a>
 
-                              <button className="h-12 px-8 rounded-full bg-white border border-[#ECEBF3] hover:bg-[#FAFAFE] text-[#14132B] text-sm font-semibold transition-all flex items-center gap-2 shadow-sm">
+                              <a href="#features" className="h-12 px-8 rounded-full bg-white border border-[#ECEBF3] hover:bg-[#FAFAFE] text-[#14132B] text-sm font-semibold transition-all flex items-center gap-2 shadow-sm">
                                   <span className="">See how it works</span>
-                              </button>
+                              </a>
                           </div>
 
                           {/* Partner Logos */}
@@ -1477,16 +1477,16 @@ export default function Home() {
                               anywhere.
                           </p>
                           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                              <button className="group inline-flex items-center justify-center gap-2 h-[54px] px-8 rounded-full bg-white text-[#5F58F4] text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] w-full sm:w-auto font-sans">
+                              <a href="/signup" className="group inline-flex items-center justify-center gap-2 h-[54px] px-8 rounded-full bg-white text-[#5F58F4] text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] w-full sm:w-auto font-sans">
                                   <span>Start Free</span>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1">
                                       <path d="M5 12h14" />
                                       <path d="m12 5 7 7-7 7" />
                                   </svg>
-                              </button>
-                              <button className="inline-flex items-center justify-center gap-2 h-[54px] px-8 rounded-full bg-white/10 border border-white/30 text-white text-sm font-semibold transition-all duration-300 hover:bg-white/20 w-full sm:w-auto backdrop-blur-sm font-sans">
+                              </a>
+                              <a href="#features" className="inline-flex items-center justify-center gap-2 h-[54px] px-8 rounded-full bg-white/10 border border-white/30 text-white text-sm font-semibold transition-all duration-300 hover:bg-white/20 w-full sm:w-auto backdrop-blur-sm font-sans">
                                   <span>See How It Works</span>
-                              </button>
+                              </a>
                           </div>
                       </div>
                   </div>

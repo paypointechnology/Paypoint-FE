@@ -232,3 +232,26 @@ body {
 .animate-bounce-slow {
     animation: bounce-slow 3s infinite;
 }
+
+/* Onboarding wizard step transition — gentle fade + slight rise (no blur, see fadeSlideIn note). */
+@keyframes onboard-fade {
+    0% {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-onboard-fade {
+    animation: onboard-fade 0.28s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-onboard-fade {
+        animation: none;
+    }
+}
