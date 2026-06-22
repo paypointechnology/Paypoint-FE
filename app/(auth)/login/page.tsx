@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import AuthShell from "../_components/AuthShell";
 import Field from "../../_components/Field";
 import GoogleButton from "../_components/GoogleButton";
 import Divider from "../_components/Divider";
 
 export default function LoginPage() {
+  const router = useRouter();
+  // Frontend-only: returning sellers land on the dashboard. Real auth wires in with the backend.
+  const goDashboard = () => router.push("/dashboard");
+
   return (
     <AuthShell
       heading="Welcome back"
@@ -15,9 +20,14 @@ export default function LoginPage() {
       altLinkText="Create an account"
       altHref="/signup"
     >
-      <GoogleButton label="Continue with Google" />
+      <GoogleButton label="Continue with Google" onClick={goDashboard} />
       <Divider />
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          goDashboard();
+        }}
+      >
         <Field
           label="Email"
           name="email"

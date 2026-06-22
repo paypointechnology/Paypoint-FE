@@ -1,8 +1,15 @@
-/** Google sign-in button (UI only for now — wiring comes with Supabase auth). */
-export default function GoogleButton({ label }: { label: string }) {
+/** Google sign-in button (UI only for now — real OAuth wiring comes with the backend). */
+export default function GoogleButton({
+  label,
+  onClick,
+}: {
+  label: string;
+  onClick?: () => void;
+}) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-[#E3E2EE] bg-white text-sm font-medium text-[#33323F] transition hover:bg-[#FAFAFE]"
     >
       <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>

@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import AuthShell from "../_components/AuthShell";
 import Field from "../../_components/Field";
 import GoogleButton from "../_components/GoogleButton";
 import Divider from "../_components/Divider";
 
 export default function SignupPage() {
+  const router = useRouter();
+  // Frontend-only: take new sellers into onboarding. Real auth wires in with the backend.
+  const goOnboarding = () => router.push("/onboarding");
+
   return (
     <AuthShell
       heading="Create your account"
@@ -15,9 +20,14 @@ export default function SignupPage() {
       altLinkText="Log in"
       altHref="/login"
     >
-      <GoogleButton label="Sign up with Google" />
+      <GoogleButton label="Sign up with Google" onClick={goOnboarding} />
       <Divider />
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          goOnboarding();
+        }}
+      >
         <Field
           label="Business name"
           name="business"
