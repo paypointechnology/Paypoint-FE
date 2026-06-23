@@ -20,8 +20,8 @@ export default function Home() {
               </div>
 
               <div className="flex items-center gap-4">
-                  <a href="/login" className="hidden md:inline-block text-xs font-medium text-[#33323F] px-3.5 py-2 rounded-full transition-all duration-200 hover:text-[#5F58F4] hover:bg-[#EEEDFE] hover:-translate-y-0.5 font-sans">Log in</a>
-                  <a href="/signup" className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(95,88,244,0.35)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center">
+                  <a href="/coming-soon" className="hidden md:inline-block text-xs font-medium text-[#33323F] px-3.5 py-2 rounded-full transition-all duration-200 hover:text-[#5F58F4] hover:bg-[#EEEDFE] hover:-translate-y-0.5 font-sans">Log in</a>
+                  <a href="/coming-soon" className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(95,88,244,0.35)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center">
                       {/* Spinning Border Beam (Visible on Hover) */}
                       <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
 
@@ -75,7 +75,7 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row gap-6 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate mb-16 gap-x-6 gap-y-6 items-stretch sm:items-center">
 
                       {/* Animated Gradient Start Free Button */}
-                      <a href="/signup" className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(95,88,244,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{ position: 'relative', ['--border-gradient' as any]: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', ['--border-radius-before' as any]: '9999px' }}>
+                      <a href="/coming-soon" className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(95,88,244,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{ position: 'relative', ['--border-gradient' as any]: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', ['--border-radius-before' as any]: '9999px' }}>
 
                           {/* Full Border Beam (White-on-indigo Line) */}
                           <div className="absolute inset-0 -z-20 rounded-full overflow-hidden p-[1px]">
@@ -997,7 +997,7 @@ export default function Home() {
 
                           {/* Buttons */}
                           <div className="flex flex-wrap gap-4 items-center pt-2 w-full sm:w-auto">
-                              <a href="/signup" className="h-12 px-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-all shadow-[0_0_20px_-5px_rgba(74,67,214,0.5)] hover:shadow-[0_0_30px_-5px_rgba(74,67,214,0.6)] flex items-center gap-2 group">
+                              <a href="/coming-soon" className="h-12 px-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-all shadow-[0_0_20px_-5px_rgba(74,67,214,0.5)] hover:shadow-[0_0_30px_-5px_rgba(74,67,214,0.6)] flex items-center gap-2 group">
                                   <span>Start free</span>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right transition-transform group-hover:translate-x-1">
                                       <path d="M5 12h14" />
@@ -1477,7 +1477,7 @@ export default function Home() {
                               anywhere.
                           </p>
                           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                              <a href="/signup" className="group inline-flex items-center justify-center gap-2 h-[54px] px-8 rounded-full bg-white text-[#5F58F4] text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] w-full sm:w-auto font-sans">
+                              <a href="/coming-soon" className="group inline-flex items-center justify-center gap-2 h-[54px] px-8 rounded-full bg-white text-[#5F58F4] text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] w-full sm:w-auto font-sans">
                                   <span>Start Free</span>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1">
                                       <path d="M5 12h14" />
