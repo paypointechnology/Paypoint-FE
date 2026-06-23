@@ -1,22 +1,620 @@
-import PageHeading from "../_components/PageHeading";
-import EmptyState from "../_components/EmptyState";
+"use client";
+
+import { useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { QRCodeSVG } from "qrcode.react";
+import CheckoutCard, {
+  type BuyerFields,
+  type CheckoutData,
+} from "../../p/_components/CheckoutCard";
+import { SAMPLE } from "../../p/_components/sampleCheckout";
+import { slugify, digitsOnly, nairaLabel } from "../../_lib/format";
+
+type PageType = "product" | "service";
+
+const SLUG_FALLBACK = "your-page";
+const LINK_HOST = "paypoint.link";
 
 export default function CreatePage() {
+  // ── Form state (single source of truth for the live preview) ──────────────
+  const [type, setType] = useState<PageType>("product");
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState(""); // digit string only
+  const [description, setDescription] = useState("");
+  const [photoUrl, setPhotoUrl] = useState(""); // object URL or ""
+  const [delivery, setDelivery] = useState("");
+  const [fields, setFields] = useState<BuyerFields>({
+    phone: false,
+    email: false,
+    address: false,
+  });
+  const [published, setPublished] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // ── Derived values ────────────────────────────────────────────────────────
+  const slug = slugify(title) || SLUG_FALLBACK;
+  const fullUrl = `https://${LINK_HOST}/${slug}`;
+  const canPublish = title.trim().length > 0 && price.length > 0;
+
+  // The exact object the preview card binds to. Memoized so the preview only
+  // re-derives when form inputs change.
+  const previewData: Partial<CheckoutData> = useMemo(
+    () => ({
+      // Seller identity stays the signed-in business (sample stand-in).
+      business: SAMPLE.business,
+      sellerLogo: SAMPLE.sellerLogo,
+      contacts: SAMPLE.contacts,
+      productImage: photoUrl,
+      title: title.trim(),
+      description: description.trim(),
+      priceLabel: nairaLabel(price),
+      delivery: delivery.trim(),
+      paidCount: 0, // brand-new page → social proof hidden
+      buyerFields: fields,
+    }),
+    [photoUrl, title, description, price, delivery, fields],
+  );
+
+  // ── Handlers ──────────────────────────────────────────────────────────────
+  function onPickPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (photoUrl) URL.revokeObjectURL(photoUrl);
+    setPhotoUrl(URL.createObjectURL(file));
+  }
+
+  function removePhoto() {
+    if (photoUrl) URL.revokeObjectURL(photoUrl);
+    setPhotoUrl("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  function toggleField(key: keyof BuyerFields) {
+    setFields((f) => ({ ...f, [key]: !f[key] }));
+  }
+
+  function publish() {
+    if (!canPublish) return;
+    setPublished(true);
+  }
+
+  function resetForm() {
+    if (photoUrl) URL.revokeObjectURL(photoUrl);
+    setType("product");
+    setTitle("");
+    setPrice("");
+    setDescription("");
+    setPhotoUrl("");
+    setDelivery("");
+    setFields({ phone: false, email: false, address: false });
+    setPublished(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
   return (
-    <div>
-      <PageHeading
-        title="Create a Paypoint"
-        subtitle="Turn any product or service into a payment page."
-      />
-      <EmptyState
-        title="The page builder is coming soon"
-        description="Soon you'll name your item, set a price, and get a shareable link in seconds — no code, no website."
-        icon={
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        }
-      />
+    <div className="flex flex-col gap-7">
+      {/* Header ─────────────────────────────────────────────────────────── */}
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-[-0.02em] text-[#14132B]">
+            Create a payment page
+          </h1>
+          <p className="mt-1 text-sm text-[#6C6B7B]">
+            Name it, price it, share the link. No website, no code.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={publish}
+          disabled={!canPublish}
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#5F58F4] px-5 text-sm font-semibold text-white shadow-[0_1px_2px_rgba(95,88,244,0.25)] transition hover:bg-[#4A43D6] disabled:cursor-not-allowed disabled:bg-[#C7C4F7] disabled:shadow-none"
+        >
+          <RocketIcon size={16} />
+          Publish
+        </button>
+      </header>
+
+      {/* Two-pane builder ───────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-start lg:gap-8">
+        {/* ── LEFT: form ─────────────────────────────────────────────── */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            publish();
+          }}
+          className="rounded-[20px] border border-[#ECEBF3] bg-white p-5 shadow-[0_1px_3px_rgba(20,19,43,0.04)] sm:p-6"
+        >
+          {/* Type toggle */}
+          <Label>What are you selling?</Label>
+          <div className="mb-5 inline-flex w-full rounded-full border border-[#ECEBF3] bg-[#FAFAFE] p-1 sm:w-auto">
+            {(["product", "service"] as PageType[]).map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => setType(opt)}
+                className={`h-9 flex-1 rounded-full px-5 text-sm font-semibold capitalize transition sm:flex-none ${
+                  type === opt
+                    ? "bg-[#5F58F4] text-white shadow-[0_1px_2px_rgba(95,88,244,0.25)]"
+                    : "text-[#6C6B7B] hover:text-[#33323F]"
+                }`}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+
+          {/* Title */}
+          <div className="mb-5">
+            <Label htmlFor="title">Title</Label>
+            <input
+              id="title"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder={
+                type === "product" ? "e.g. Aso Oke Dress" : "e.g. Bridal Makeup"
+              }
+              className={inputCls}
+            />
+          </div>
+
+          {/* Price */}
+          <div className="mb-5">
+            <Label htmlFor="price">Price</Label>
+            <div className="relative">
+              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-[#6C6B7B]">
+                ₦
+              </span>
+              <input
+                id="price"
+                type="text"
+                inputMode="numeric"
+                value={price ? Number(price).toLocaleString("en-NG") : ""}
+                onChange={(e) => setPrice(digitsOnly(e.target.value))}
+                placeholder="0"
+                className={`${inputCls} pl-8`}
+              />
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="mb-5">
+            <Label htmlFor="description" optional>
+              Description
+            </Label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              placeholder="A short, honest description buyers will see."
+              className="w-full resize-none rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 py-3 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
+            />
+          </div>
+
+          {/* Photo */}
+          <div className="mb-5">
+            <Label optional>Photo</Label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={onPickPhoto}
+              className="hidden"
+            />
+            {photoUrl ? (
+              <div className="relative overflow-hidden rounded-[14px] border border-[#ECEBF3]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photoUrl}
+                  alt="Selected"
+                  className="aspect-[5/3] w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={removePhoto}
+                  className="absolute right-2.5 top-2.5 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#33323F] shadow-sm backdrop-blur transition hover:bg-white"
+                >
+                  <XIcon size={13} />
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex w-full flex-col items-center justify-center gap-2 rounded-[14px] border border-dashed border-[#C7C4F7] bg-[#F5F4FF] px-4 py-7 text-center transition hover:border-[#5F58F4] hover:bg-[#EEEDFE]"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#5F58F4] shadow-sm">
+                  <ImageIcon size={18} />
+                </span>
+                <span className="text-sm font-semibold text-[#33323F]">
+                  Add a photo
+                </span>
+                <span className="text-xs text-[#9A99A8]">
+                  A clear photo gets more buyers
+                </span>
+              </button>
+            )}
+          </div>
+
+          {/* Delivery */}
+          <div className="mb-6">
+            <Label htmlFor="delivery" optional>
+              Delivery info
+            </Label>
+            <input
+              id="delivery"
+              type="text"
+              value={delivery}
+              onChange={(e) => setDelivery(e.target.value)}
+              placeholder="e.g. Nationwide · 3 days"
+              className={inputCls}
+            />
+          </div>
+
+          {/* Buyer fields */}
+          <div className="mb-6">
+            <Label>Details to collect from buyer</Label>
+            <div className="flex flex-wrap gap-2">
+              <FieldPill label="Name" checked locked />
+              <FieldPill
+                label="Phone"
+                checked={fields.phone}
+                onClick={() => toggleField("phone")}
+              />
+              <FieldPill
+                label="Email"
+                checked={fields.email}
+                onClick={() => toggleField("email")}
+              />
+              <FieldPill
+                label="Address"
+                checked={fields.address}
+                onClick={() => toggleField("address")}
+              />
+            </div>
+          </div>
+
+          {/* Your link */}
+          <div>
+            <Label>Your link</Label>
+            <div className="flex items-center gap-2 rounded-[10px] border border-[#ECEBF3] bg-[#FAFAFE] px-3.5 py-3">
+              <LinkIcon size={15} className="shrink-0 text-[#9A99A8]" />
+              <span className="min-w-0 truncate text-sm text-[#33323F]">
+                <span className="text-[#9A99A8]">{LINK_HOST}/</span>
+                <span className="font-semibold text-[#5F58F4]">{slug}</span>
+              </span>
+            </div>
+            <p className="mt-1.5 text-xs text-[#9A99A8]">
+              Built from your title — updates as you type.
+            </p>
+          </div>
+        </form>
+
+        {/* ── RIGHT: live preview ────────────────────────────────────── */}
+        <div className="lg:sticky lg:top-8">
+          <div className="mb-3 flex items-center gap-2">
+            <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-[#0B7A4B]" />
+            <span className="text-xs font-semibold uppercase tracking-wide text-[#6C6B7B]">
+              Live preview
+            </span>
+          </div>
+          <div className="flex justify-center rounded-[20px] border border-[#ECEBF3] bg-[#FAFAFE] p-5 sm:p-6">
+            <CheckoutCard data={previewData} preview />
+          </div>
+        </div>
+      </div>
+
+      {/* Success panel ──────────────────────────────────────────────────── */}
+      {published && (
+        <SuccessPanel
+          slug={slug}
+          url={fullUrl}
+          onClose={() => setPublished(false)}
+          onReset={resetForm}
+        />
+      )}
     </div>
+  );
+}
+
+/* ── Success / Publish panel ───────────────────────────────────────────── */
+function SuccessPanel({
+  slug,
+  url,
+  onClose,
+  onReset,
+}: {
+  slug: string;
+  url: string;
+  onClose: () => void;
+  onReset: () => void;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard blocked (insecure context / permissions) — no-op.
+    }
+  }
+
+  async function share() {
+    const payload = {
+      title: "My Paypoint",
+      text: "Pay me securely here:",
+      url,
+    };
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share(payload);
+        return;
+      } catch {
+        // user cancelled or share failed — fall through to copy
+      }
+    }
+    copy();
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-[#14132B]/45 p-4 backdrop-blur-sm sm:items-center"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Your payment page is live"
+      onClick={onClose}
+    >
+      <div
+        className="animate-onboard-fade w-full max-w-md overflow-hidden rounded-[20px] border border-[#ECEBF3] bg-white shadow-[0_20px_60px_rgba(20,19,43,0.25)]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="p-6 text-center sm:p-7">
+          {/* Celebratory mark */}
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#E7F8EF] text-[#0B7A4B]">
+            <CheckCircleIcon size={28} />
+          </div>
+          <h2 className="text-xl font-bold tracking-[-0.02em] text-[#14132B]">
+            Your Paypoint is live!
+          </h2>
+          <p className="mt-1.5 text-sm text-[#6C6B7B]">
+            Share this link anywhere — WhatsApp, Instagram, your bio. Money goes
+            straight to your bank.
+          </p>
+
+          {/* QR code */}
+          <div className="mx-auto mt-5 inline-flex items-center justify-center rounded-[16px] border border-[#ECEBF3] bg-white p-4 shadow-[0_1px_3px_rgba(20,19,43,0.05)]">
+            <QRCodeSVG
+              value={url}
+              size={144}
+              level="M"
+              bgColor="#FFFFFF"
+              fgColor="#5F58F4"
+            />
+          </div>
+
+          {/* Link + copy */}
+          <div className="mt-5 flex items-center gap-2 rounded-[10px] border border-[#E3E2EE] bg-[#FAFAFE] py-2 pl-3.5 pr-2">
+            <span className="min-w-0 flex-1 truncate text-left text-sm text-[#33323F]">
+              {url}
+            </span>
+            <button
+              type="button"
+              onClick={copy}
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                copied
+                  ? "bg-[#E7F8EF] text-[#0B7A4B]"
+                  : "bg-[#5F58F4] text-white hover:bg-[#4A43D6]"
+              }`}
+            >
+              {copied ? (
+                <>
+                  <CheckIcon size={13} />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <CopyIcon size={13} />
+                  Copy
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Share */}
+          <button
+            type="button"
+            onClick={share}
+            className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#5F58F4] text-sm font-semibold text-white transition hover:bg-[#4A43D6]"
+          >
+            <ShareIcon size={16} />
+            Share link
+          </button>
+
+          {/* Secondary actions */}
+          <div className="mt-3 flex items-center justify-center gap-5 text-sm">
+            <Link
+              href={`/p/${slug}`}
+              className="font-semibold text-[#5F58F4] transition hover:text-[#4A43D6]"
+            >
+              View page
+            </Link>
+            <span className="text-[#E3E2EE]">|</span>
+            <button
+              type="button"
+              onClick={onReset}
+              className="font-semibold text-[#6C6B7B] transition hover:text-[#33323F]"
+            >
+              Create another
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Small local building blocks ───────────────────────────────────────── */
+const inputCls =
+  "h-11 w-full rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]";
+
+function Label({
+  children,
+  htmlFor,
+  optional,
+}: {
+  children: React.ReactNode;
+  htmlFor?: string;
+  optional?: boolean;
+}) {
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="mb-1.5 block text-xs font-semibold text-[#6C6B7B]"
+    >
+      {children}
+      {optional && (
+        <span className="ml-1.5 font-normal text-[#9A99A8]">Optional</span>
+      )}
+    </label>
+  );
+}
+
+function FieldPill({
+  label,
+  checked,
+  locked,
+  onClick,
+}: {
+  label: string;
+  checked: boolean;
+  locked?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={locked}
+      aria-pressed={checked}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-medium transition ${
+        checked
+          ? "border-[#5F58F4] bg-[#EEEDFE] text-[#5F58F4]"
+          : "border-[#E3E2EE] bg-white text-[#6C6B7B] hover:border-[#C7C4F7] hover:bg-[#F5F4FF]"
+      } ${locked ? "cursor-default opacity-90" : ""}`}
+    >
+      <span
+        className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+          checked
+            ? "border-[#5F58F4] bg-[#5F58F4] text-white"
+            : "border-[#C7C4F7] bg-white"
+        }`}
+      >
+        {checked && <CheckIcon size={10} />}
+      </span>
+      {label}
+      {locked && (
+        <span className="ml-0.5 text-[#9A99A8]">
+          <LockIcon size={11} />
+        </span>
+      )}
+    </button>
+  );
+}
+
+/* ── Local inline icons (builder-only; buyer-flow icons stay in pay/) ──── */
+type IconProps = { size?: number; className?: string };
+const svgBase = {
+  fill: "none" as const,
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+};
+
+function ImageIcon({ size = 18, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} className={className} aria-hidden>
+      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+      <circle cx="9" cy="9" r="2" />
+      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+    </svg>
+  );
+}
+
+function LinkIcon({ size = 15, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} className={className} aria-hidden>
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </svg>
+  );
+}
+
+function XIcon({ size = 13, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} className={className} aria-hidden>
+      <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+function CopyIcon({ size = 13, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} className={className} aria-hidden>
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </svg>
+  );
+}
+
+function CheckIcon({ size = 13, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} strokeWidth={3} className={className} aria-hidden>
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+function CheckCircleIcon({ size = 28, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} className={className} aria-hidden>
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+      <path d="m9 11 3 3L22 4" />
+    </svg>
+  );
+}
+
+function ShareIcon({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} className={className} aria-hidden>
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+      <polyline points="16 6 12 2 8 6" />
+      <line x1="12" x2="12" y1="2" y2="15" />
+    </svg>
+  );
+}
+
+function RocketIcon({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} className={className} aria-hidden>
+      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+    </svg>
+  );
+}
+
+function LockIcon({ size = 11, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} className={className} aria-hidden>
+      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
   );
 }
