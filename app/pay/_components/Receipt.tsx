@@ -1,20 +1,34 @@
 "use client";
 
-import { CheckIcon } from "./icons";
+import { CheckIcon, ChatIcon, ShieldIcon } from "./icons";
 import SecureFooter from "./SecureFooter";
 import { SAMPLE } from "../../p/_components/sampleCheckout";
 
 /**
- * The successful-payment receipt — a single shared visual reused by:
- *   - /pay/callback (status=success)
- *   - /pay/receipt/[reference]  (stable, retrievable copy)
+ * The completed-payment receipt — one shared visual, two variants:
+ *   - variant="success"  → /pay/callback?status=success  (fresh confirmation)
+ *   - variant="stable"   → /pay/receipt/[reference]       (retrievable copy)
  *
- * `reference` is passed in so each route can show its own URL/query reference;
+ * Both share the green check, big amount, details box, and a "Message {business}"
+ * WhatsApp link. They differ only in heading/subtitle, the secondary action
+ * (Message seller vs Share receipt), and the footer line.
+ *
+ * `reference` is passed in so each route shows its own URL/query reference;
  * everything else comes from the fixed sample data.
  */
-export default function Receipt({ reference }: { reference: string }) {
-  // Frontend prototype — Download is window.print() and Share uses the Web
-  // Share API when available, falling back to copying the link.
+export default function Receipt({
+  reference,
+  variant = "success",
+}: {
+  reference: string;
+  variant?: "success" | "stable";
+}) {
+  // WhatsApp is the seller's contact channel (reused from the sample contacts).
+  const sellerWhatsApp =
+    SAMPLE.contacts.find((c) => c.type === "whatsapp")?.href ?? "#";
+
+  // Frontend prototype — Download is window.print(); Share uses the Web Share
+  // API when available, falling back to copying the link.
   function handleDownload() {
     if (typeof window !== "undefined") window.print();
   }
@@ -45,6 +59,8 @@ export default function Receipt({ reference }: { reference: string }) {
     { label: "Date", value: SAMPLE.dateLabel },
   ];
 
+  const isStable = variant === "stable";
+
   return (
     <div className="relative w-full max-w-[420px] animate-onboard-fade">
       {/* Logo */}
@@ -67,14 +83,26 @@ export default function Receipt({ reference }: { reference: string }) {
           </div>
 
           <h1 className="mt-4 text-[20px] font-semibold tracking-[-0.01em] text-[#14132B]">
-            Payment successful
+            {isStable ? "Payment receipt" : "Payment successful"}
           </h1>
           <p className="mt-1 text-sm text-[#6C6B7B]">
-            Your payment to{" "}
-            <span className="font-medium text-[#33323F]">
-              {SAMPLE.business}
-            </span>{" "}
-            is complete
+            {isStable ? (
+              <>
+                Your payment to{" "}
+                <span className="font-medium text-[#33323F]">
+                  {SAMPLE.business}
+                </span>{" "}
+                was completed on 22 Jun 2026.
+              </>
+            ) : (
+              <>
+                Your payment to{" "}
+                <span className="font-medium text-[#33323F]">
+                  {SAMPLE.business}
+                </span>{" "}
+                is complete
+              </>
+            )}
           </p>
 
           {/* Big amount */}
@@ -110,63 +138,87 @@ export default function Receipt({ reference }: { reference: string }) {
           </dl>
         </div>
 
+        {/* Success-only: seller-notified line */}
+        {!isStable && (
+          <p className="px-6 pt-5 text-center text-sm text-[#33323F] sm:px-8">
+            <span className="font-medium text-[#14132B]">{SAMPLE.business}</span>{" "}
+            has been notified
+          </p>
+        )}
+
         {/* Actions */}
-        <div className="flex gap-3 px-6 pb-6 pt-6 sm:px-8">
+        <div className="flex gap-3 px-6 pb-6 pt-4 sm:px-8">
           <button
             type="button"
             onClick={handleDownload}
             className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#5F58F4] text-sm font-semibold text-white transition hover:bg-[#4A43D6]"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
-            >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" x2="12" y1="15" y2="3" />
             </svg>
             Download receipt
           </button>
-          <button
-            type="button"
-            onClick={handleShare}
-            className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-[#E3E2EE] bg-white text-sm font-semibold text-[#33323F] transition hover:bg-[#FAFAFE]"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
+
+          {isStable ? (
+            <button
+              type="button"
+              onClick={handleShare}
+              className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-[#E3E2EE] bg-white text-sm font-semibold text-[#33323F] transition hover:bg-[#FAFAFE]"
             >
-              <circle cx="18" cy="5" r="3" />
-              <circle cx="6" cy="12" r="3" />
-              <circle cx="18" cy="19" r="3" />
-              <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
-              <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
-            </svg>
-            Share
-          </button>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+                <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
+              </svg>
+              Share receipt
+            </button>
+          ) : (
+            <a
+              href={sellerWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-[#E3E2EE] bg-white text-sm font-semibold text-[#33323F] transition hover:bg-[#FAFAFE]"
+            >
+              <ChatIcon size={16} />
+              Message seller
+            </a>
+          )}
         </div>
       </div>
 
-      {/* Saved-copy reassurance */}
-      <p className="mt-4 text-center text-xs text-[#9A99A8]">
-        A copy is saved at your Paypoint link — you can find it anytime.
-      </p>
+      {/* Stable-only: help line with a Message {business} link */}
+      {isStable && (
+        <p className="mt-4 text-center text-sm text-[#6C6B7B]">
+          Need help with your order?{" "}
+          <a
+            href={sellerWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-[#5F58F4] transition hover:text-[#4A43D6]"
+          >
+            Message {SAMPLE.business}
+          </a>
+        </p>
+      )}
 
-      <SecureFooter />
+      {/* Footer line */}
+      {isStable ? (
+        <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-[#9A99A8]">
+          <ShieldIcon size={13} />
+          Verified receipt · powered by paypoint
+        </p>
+      ) : (
+        <>
+          <p className="mt-4 text-center text-xs text-[#9A99A8]">
+            A copy has been sent to your phone.
+          </p>
+          <SecureFooter />
+        </>
+      )}
     </div>
   );
 }

@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Paypoint — Get paid with one link",
+  title: "Paypoint, get paid with one link",
   description:
-    "Turn any product or service into a clean payment page. Share the link, get paid — money settles straight to your bank. No website, no code.",
+    "Turn any product or service into a clean payment page. Share the link, get paid, money settles straight to your bank. No website, no code.",
   icons: {
     icon: "/icon.png",
     apple: "/apple-icon.png",

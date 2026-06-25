@@ -98,10 +98,10 @@ export default function CreatePage() {
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-[-0.02em] text-[#14132B]">
-            Create a payment page
+            Sell anything in minutes
           </h1>
           <p className="mt-1 text-sm text-[#6C6B7B]">
-            Name it, price it, share the link. No website, no code.
+            Create a payment page, share your link, and get paid online.
           </p>
         </div>
         <button
@@ -146,7 +146,7 @@ export default function CreatePage() {
 
           {/* Title */}
           <div className="mb-5">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">What would you like to sell?</Label>
             <input
               id="title"
               type="text"
@@ -191,11 +191,17 @@ export default function CreatePage() {
               placeholder="A short, honest description buyers will see."
               className="w-full resize-none rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 py-3 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
             />
+            <p className="mt-1.5 text-xs text-[#9A99A8]">
+              Help customers understand what they&rsquo;re paying for.
+            </p>
           </div>
 
           {/* Photo */}
           <div className="mb-5">
-            <Label optional>Photo</Label>
+            <Label optional>Upload a photo</Label>
+            <p className="-mt-0.5 mb-2 text-xs text-[#9A99A8]">
+              Clear images help buyers trust your product.
+            </p>
             <input
               ref={fileInputRef}
               type="file"
@@ -242,21 +248,24 @@ export default function CreatePage() {
           {/* Delivery */}
           <div className="mb-6">
             <Label htmlFor="delivery" optional>
-              Delivery info
+              Delivery details
             </Label>
             <input
               id="delivery"
               type="text"
               value={delivery}
               onChange={(e) => setDelivery(e.target.value)}
-              placeholder="e.g. Nationwide · 3 days"
+              placeholder="e.g. Nationwide delivery in 3 days"
               className={inputCls}
             />
+            <p className="mt-1.5 text-xs text-[#9A99A8]">
+              Let buyers know what to expect.
+            </p>
           </div>
 
           {/* Buyer fields */}
           <div className="mb-6">
-            <Label>Details to collect from buyer</Label>
+            <Label>Information to collect from buyers</Label>
             <div className="flex flex-wrap gap-2">
               <FieldPill label="Name" checked locked />
               <FieldPill
@@ -279,7 +288,7 @@ export default function CreatePage() {
 
           {/* Your link */}
           <div>
-            <Label>Your link</Label>
+            <Label>Your payment link</Label>
             <div className="flex items-center gap-2 rounded-[10px] border border-[#ECEBF3] bg-[#FAFAFE] px-3.5 py-3">
               <LinkIcon size={15} className="shrink-0 text-[#9A99A8]" />
               <span className="min-w-0 truncate text-sm text-[#33323F]">
@@ -288,7 +297,7 @@ export default function CreatePage() {
               </span>
             </div>
             <p className="mt-1.5 text-xs text-[#9A99A8]">
-              Built from your title — updates as you type.
+              This is what your customers will click to pay.
             </p>
           </div>
         </form>

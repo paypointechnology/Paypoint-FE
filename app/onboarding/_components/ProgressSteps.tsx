@@ -1,5 +1,5 @@
-/** Top progress indicator for the onboarding wizard: 3 labelled steps. */
-const STEPS = ["Business", "Get paid", "Done"];
+/** Top progress indicator for the onboarding wizard: 4 labelled steps. */
+const STEPS = ["Business", "Verify", "Get paid", "Done"];
 
 function Check() {
   return (

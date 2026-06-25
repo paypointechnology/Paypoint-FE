@@ -13,6 +13,9 @@ export default function Field({
   type = "text",
   placeholder,
   autoComplete,
+  inputMode,
+  value,
+  onChange,
   rightSlot,
   helper,
   optional,
@@ -22,6 +25,9 @@ export default function Field({
   type?: string;
   placeholder?: string;
   autoComplete?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   rightSlot?: React.ReactNode;
   helper?: string;
   optional?: boolean;
@@ -48,6 +54,9 @@ export default function Field({
           type={inputType}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          inputMode={inputMode}
+          value={value}
+          onChange={onChange}
           className="h-11 w-full rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 pr-10 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
         />
         {isPassword && (

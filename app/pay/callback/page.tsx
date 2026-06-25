@@ -19,6 +19,9 @@ function CallbackContent() {
   const ref = params.get("ref") ?? SAMPLE.reference;
 
   if (status === "failed") {
+    const sellerWhatsApp =
+      SAMPLE.contacts.find((c) => c.type === "whatsapp")?.href ?? "#";
+
     return (
       <div className="relative w-full max-w-[420px] animate-onboard-fade">
         <div className="mb-7 flex justify-center">
@@ -62,14 +65,36 @@ function CallbackContent() {
           >
             Try again
           </Link>
+          <Link
+            href="/p/aso-oke-dress"
+            className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-xl border border-[#E3E2EE] bg-white text-sm font-semibold text-[#33323F] transition hover:bg-[#FAFAFE]"
+          >
+            Use another method
+          </Link>
+
+          <p className="mt-5 text-sm text-[#6C6B7B]">
+            Still having trouble?{" "}
+            <a
+              href={sellerWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[#5F58F4] transition hover:text-[#4A43D6]"
+            >
+              Message {SAMPLE.business}
+            </a>
+          </p>
         </div>
+
+        <p className="mt-4 text-center text-xs text-[#9A99A8]">
+          Ref: PP-ERR-3421 · 22 Jun 2026, 2:14 PM
+        </p>
 
         <SecureFooter />
       </div>
     );
   }
 
-  return <Receipt reference={ref} />;
+  return <Receipt reference={ref} variant="success" />;
 }
 
 export default function CallbackPage() {

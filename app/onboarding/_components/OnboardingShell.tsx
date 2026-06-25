@@ -4,7 +4,7 @@ import ProgressSteps from "./ProgressSteps";
 /**
  * Shared frame for the onboarding wizard.
  * Mirrors AuthShell (light, clean, centered card on a soft canvas) but a
- * touch wider and topped with a 3-step progress indicator.
+ * touch wider and topped with a 4-step progress indicator.
  */
 export default function OnboardingShell({
   current,

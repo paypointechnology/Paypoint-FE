@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AuthShell from "../_components/AuthShell";
@@ -9,8 +10,19 @@ import Divider from "../_components/Divider";
 
 export default function SignupPage() {
   const router = useRouter();
-  // Frontend-only: take new sellers into onboarding. Real auth wires in with the backend.
+  // Frontend-only: email/password sign-up goes to verification; Google is already
+  // verified, so it goes straight to onboarding. Real auth wires in with the backend.
+  const goVerify = () => router.push("/verify");
   const goOnboarding = () => router.push("/onboarding");
+
+  // Controlled so we can require all fields (incl. the WhatsApp Business number).
+  // Business name is captured in onboarding, not here.
+  const [whatsapp, setWhatsapp] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const canSubmit =
+    whatsapp.trim() !== "" && email.trim() !== "" && password.trim() !== "";
 
   return (
     <AuthShell
@@ -25,14 +37,19 @@ export default function SignupPage() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          goOnboarding();
+          if (!canSubmit) return;
+          goVerify();
         }}
       >
         <Field
-          label="Business name"
-          name="business"
-          placeholder="e.g. Adaeze Couture"
-          autoComplete="organization"
+          label="WhatsApp Business Number"
+          name="whatsapp"
+          type="tel"
+          inputMode="numeric"
+          placeholder="0801 234 5678"
+          autoComplete="tel"
+          value={whatsapp}
+          onChange={(e) => setWhatsapp(e.target.value)}
         />
         <Field
           label="Email"
@@ -40,6 +57,8 @@ export default function SignupPage() {
           type="email"
           placeholder="you@business.com"
           autoComplete="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <Field
           label="Password"
@@ -47,10 +66,13 @@ export default function SignupPage() {
           type="password"
           placeholder="Create a password"
           autoComplete="new-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <button
           type="submit"
-          className="mt-2 h-11 w-full rounded-xl bg-[#5F58F4] text-sm font-semibold text-white transition hover:bg-[#4A43D6]"
+          disabled={!canSubmit}
+          className="mt-2 h-11 w-full rounded-xl bg-[#5F58F4] text-sm font-semibold text-white transition hover:bg-[#4A43D6] disabled:cursor-not-allowed disabled:bg-[#C7C4F7] disabled:hover:bg-[#C7C4F7]"
         >
           Create account
         </button>

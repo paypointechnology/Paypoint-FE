@@ -2,7 +2,7 @@ import Link from "next/link";
 
 /**
  * Shared frame for the auth screens (login / signup).
- * Centered, light, Stripe-clean card on a soft canvas — responsive on all sizes.
+ * Centered, light, clean card on a soft canvas — responsive on all sizes.
  */
 export default function AuthShell({
   heading,

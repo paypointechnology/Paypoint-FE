@@ -10,10 +10,10 @@ export default function DashboardHome() {
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-[-0.02em] text-[#14132B]">
-            Good morning, Adaeze
+            Good morning, Adaeze 👋
           </h1>
           <p className="mt-1 text-sm text-[#6C6B7B]">
-            Here&rsquo;s how today is going.
+            Here&rsquo;s a quick look at your business today.
           </p>
         </div>
         <Link

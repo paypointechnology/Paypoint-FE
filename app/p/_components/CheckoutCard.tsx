@@ -277,36 +277,49 @@ export default function CheckoutCard({
             Pay {priceLabel || (preview ? "₦0" : priceLabel)}
           </button>
 
-          {/* Trust block */}
-          <p className="mt-4 text-center text-xs leading-relaxed text-[#6C6B7B]">
-            After payment you&rsquo;ll get an instant receipt with a reference
-            number. Money goes straight to {business}&rsquo;s bank — we never
-            hold it.
-          </p>
+          {/* Trust + contact block — context-aware.
+              preview (builder): seller-reassurance, no buyer-contact section.
+              public  (buyer):   buyer-reassurance + "ask before paying" chips. */}
+          {preview ? (
+            <p className="mt-4 text-center text-xs leading-relaxed text-[#6C6B7B]">
+              Instant receipt after payment. Funds go straight to your bank — we
+              never hold your money.
+            </p>
+          ) : (
+            <>
+              <p className="mt-4 text-center text-xs leading-relaxed text-[#6C6B7B]">
+                Your payment is secure. You&rsquo;ll get an instant receipt, and{" "}
+                {business} will contact you to confirm your order.
+              </p>
 
-          {/* Seller contact chips */}
-          {contacts.length > 0 && (
-            <div className="mt-4 flex items-center justify-center gap-2.5">
-              {contacts.map((c) => (
-                <a
-                  key={c.type}
-                  href={c.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  tabIndex={preview ? -1 : undefined}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#E3E2EE] bg-white px-3 py-1.5 text-xs font-medium text-[#33323F] transition hover:border-[#C7C4F7] hover:bg-[#F5F4FF]"
-                >
-                  <span className="text-[#5F58F4]">
-                    {c.type === "whatsapp" ? (
-                      <WhatsAppIcon size={14} />
-                    ) : (
-                      <InstagramIcon size={14} />
-                    )}
-                  </span>
-                  {c.label}
-                </a>
-              ))}
-            </div>
+              {contacts.length > 0 && (
+                <div className="mt-5 border-t border-[#ECEBF3] pt-4">
+                  <p className="mb-2.5 text-center text-xs font-semibold text-[#6C6B7B]">
+                    Have a question before paying?
+                  </p>
+                  <div className="flex items-center justify-center gap-2.5">
+                    {contacts.map((c) => (
+                      <a
+                        key={c.type}
+                        href={c.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-[#E3E2EE] bg-white px-3 py-1.5 text-xs font-medium text-[#33323F] transition hover:border-[#C7C4F7] hover:bg-[#F5F4FF]"
+                      >
+                        <span className="text-[#5F58F4]">
+                          {c.type === "whatsapp" ? (
+                            <WhatsAppIcon size={14} />
+                          ) : (
+                            <InstagramIcon size={14} />
+                          )}
+                        </span>
+                        {c.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

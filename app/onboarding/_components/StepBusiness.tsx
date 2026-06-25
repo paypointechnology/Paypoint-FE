@@ -21,20 +21,25 @@ export default function StepBusiness({ onContinue }: { onContinue: () => void })
           onContinue();
         }}
       >
+        <div className="grid gap-x-3 sm:grid-cols-2">
+          <Field
+            label="First name"
+            name="firstName"
+            placeholder="Adaeze"
+            autoComplete="given-name"
+          />
+          <Field
+            label="Last name"
+            name="lastName"
+            placeholder="Okeke"
+            autoComplete="family-name"
+          />
+        </div>
         <Field
           label="Business name"
           name="business"
           placeholder="e.g. Adaeze Couture"
           autoComplete="organization"
-        />
-        <Field
-          label="Phone number"
-          name="phone"
-          type="tel"
-          placeholder="e.g. 0801 234 5678"
-          autoComplete="tel"
-          optional
-          helper="For buyer support and receipts."
         />
 
         <button
