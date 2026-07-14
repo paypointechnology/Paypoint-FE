@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * Settings — client-side form. Frontend only: nothing is persisted.
@@ -36,9 +37,19 @@ function SectionHeader({
 
 export default function SettingsForm() {
   const router = useRouter();
+  const supabase = createClient();
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  async function onSignOut() {
+    if (signingOut) return;
+    setSigningOut(true);
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  }
 
   function onLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -193,7 +204,7 @@ export default function SettingsForm() {
 
         <button
           type="button"
-          onClick={() => router.push("/onboarding")}
+          onClick={() => router.push("/dashboard/setup/bank")}
           className="mt-4 inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#E3E2EE] bg-white px-4 text-sm font-semibold text-[#33323F] transition-colors hover:border-[#C7C4F7] hover:bg-[#F5F4FF] hover:text-[#5F58F4]"
         >
           Change bank
@@ -215,8 +226,9 @@ export default function SettingsForm() {
 
         <button
           type="button"
-          onClick={() => router.push("/login")}
-          className="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#E3E2EE] bg-white px-4 text-sm font-semibold text-[#B42318] transition-colors hover:border-[#F3C6C2] hover:bg-[#FEECEB]"
+          onClick={onSignOut}
+          disabled={signingOut}
+          className="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-[#E3E2EE] bg-white px-4 text-sm font-semibold text-[#B42318] transition-colors hover:border-[#F3C6C2] hover:bg-[#FEECEB] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />

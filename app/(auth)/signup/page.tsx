@@ -7,22 +7,55 @@ import AuthShell from "../_components/AuthShell";
 import Field from "../../_components/Field";
 import GoogleButton from "../_components/GoogleButton";
 import Divider from "../_components/Divider";
+import { createClient } from "@/lib/supabase/client";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default function SignupPage() {
   const router = useRouter();
-  // Frontend-only: email/password sign-up goes to verification; Google is already
-  // verified, so it goes straight to onboarding. Real auth wires in with the backend.
-  const goVerify = () => router.push("/verify");
-  const goOnboarding = () => router.push("/onboarding");
+  const supabase = createClient();
 
-  // Controlled so we can require all fields (incl. the WhatsApp Business number).
-  // Business name is captured in onboarding, not here.
-  const [whatsapp, setWhatsapp] = useState("");
+  // Frictionless signup: email + password only. Business details, WhatsApp,
+  // KYB and bank move into the dashboard setup checklist after login.
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const canSubmit =
-    whatsapp.trim() !== "" && email.trim() !== "" && password.trim() !== "";
+  const canSubmit = email.trim() !== "" && password.trim() !== "";
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!canSubmit || submitting) return;
+    setSubmitting(true);
+    setError(null);
+
+    const { error: signUpError } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: {
+        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
+      },
+    });
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setSubmitting(false);
+      return;
+    }
+
+    // Email confirmation is ON, so there's no session yet. Send the user to the
+    // "check your inbox" screen; the confirmation link lands on /auth/callback.
+    router.push(`/verify?email=${encodeURIComponent(email.trim())}`);
+  }
+
+  async function handleGoogle() {
+    setError(null);
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${getSiteUrl()}/auth/callback` },
+    });
+    if (oauthError) setError(oauthError.message);
+  }
 
   return (
     <AuthShell
@@ -32,25 +65,9 @@ export default function SignupPage() {
       altLinkText="Log in"
       altHref="/login"
     >
-      <GoogleButton label="Sign up with Google" onClick={goOnboarding} />
+      <GoogleButton label="Sign up with Google" onClick={handleGoogle} />
       <Divider />
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!canSubmit) return;
-          goVerify();
-        }}
-      >
-        <Field
-          label="WhatsApp Business Number"
-          name="whatsapp"
-          type="tel"
-          inputMode="numeric"
-          placeholder="0801 234 5678"
-          autoComplete="tel"
-          value={whatsapp}
-          onChange={(e) => setWhatsapp(e.target.value)}
-        />
+      <form onSubmit={handleSubmit}>
         <Field
           label="Email"
           name="email"
@@ -69,12 +86,17 @@ export default function SignupPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        {error && (
+          <p className="mb-3 text-sm text-[#B42318]" role="alert">
+            {error}
+          </p>
+        )}
         <button
           type="submit"
-          disabled={!canSubmit}
+          disabled={!canSubmit || submitting}
           className="mt-2 h-11 w-full rounded-xl bg-[#5F58F4] text-sm font-semibold text-white transition hover:bg-[#4A43D6] disabled:cursor-not-allowed disabled:bg-[#C7C4F7] disabled:hover:bg-[#C7C4F7]"
         >
-          Create account
+          {submitting ? "Creating account…" : "Create account"}
         </button>
         <p className="mt-4 text-center text-xs leading-relaxed text-[#9A99A8]">
           By creating an account, you agree to our{" "}

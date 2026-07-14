@@ -61,13 +61,20 @@ const BANKS = [
 
 type Status = "idle" | "checking" | "verified";
 
+/** Resolved bank details emitted on a successful connect. */
+export type BankDetails = {
+  bankName: string;
+  accountLast4: string;
+  accountName: string;
+};
+
 /** Step 2 — connect a bank account: trust intro, then the bank-details form. */
 export default function StepBank({
   onConnect,
   onSkip,
   onBack,
 }: {
-  onConnect: () => void;
+  onConnect: (details?: BankDetails) => void;
   onSkip: () => void;
   onBack: () => void;
 }) {
@@ -142,7 +149,7 @@ function BankForm({
   onVerified,
   onBack,
 }: {
-  onVerified: () => void;
+  onVerified: (details: BankDetails) => void;
   onBack: () => void;
 }) {
   const [bank, setBank] = useState("");
@@ -252,7 +259,13 @@ function BankForm({
       <button
         type="button"
         disabled={status !== "verified"}
-        onClick={onVerified}
+        onClick={() =>
+          onVerified({
+            bankName: bank,
+            accountLast4: acct.slice(-4),
+            accountName: name,
+          })
+        }
         className="mt-2 h-11 w-full rounded-xl bg-[#5F58F4] text-sm font-semibold text-white transition hover:bg-[#4A43D6] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-[#5F58F4]"
       >
         Confirm &amp; connect
