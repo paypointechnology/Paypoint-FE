@@ -1,12 +1,30 @@
 import Link from "next/link";
 import { navItems } from "./navItems";
 import NavLink from "./NavLink";
+import { getProfile } from "@/lib/data";
+
+/** Two-letter initials from name, business, or a safe fallback. */
+function initials(first: string, last: string, business: string): string {
+  if (first || last) return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase() || "PP";
+  if (business) return business.trim().slice(0, 2).toUpperCase();
+  return "PP";
+}
 
 /**
  * Desktop sidebar — fixed, ~240px, visible md:+ only.
  * Brand mark + wordmark, primary "Create Paypoint" CTA, nav, account row.
  */
-export default function Sidebar() {
+export default async function Sidebar() {
+  const profile = await getProfile();
+  const displayName =
+    profile?.firstName || profile?.businessName || "Your account";
+  const subLabel = profile?.businessName || profile?.email || "";
+  const monogram = initials(
+    profile?.firstName ?? "",
+    profile?.lastName ?? "",
+    profile?.businessName ?? "",
+  );
+
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-[#ECEBF3] bg-[#FAFAFE] px-4 py-5 md:flex">
       {/* Brand */}
@@ -40,15 +58,22 @@ export default function Sidebar() {
       </nav>
 
       {/* Account row */}
-      <div className="mt-4 flex items-center gap-3 rounded-xl border border-[#ECEBF3] bg-white px-3 py-2.5">
+      <Link
+        href="/dashboard/settings"
+        className="mt-4 flex items-center gap-3 rounded-xl border border-[#ECEBF3] bg-white px-3 py-2.5 transition-colors hover:border-[#C7C4F7] hover:bg-[#F5F4FF]"
+      >
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EEEDFE] text-sm font-semibold text-[#5F58F4]">
-          AC
+          {monogram}
         </span>
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-[#14132B]">Adaeze</p>
-          <p className="truncate text-xs text-[#9A99A8]">Adaeze Couture</p>
+          <p className="truncate text-sm font-semibold text-[#14132B]">
+            {displayName}
+          </p>
+          {subLabel && (
+            <p className="truncate text-xs text-[#9A99A8]">{subLabel}</p>
+          )}
         </div>
-      </div>
+      </Link>
     </aside>
   );
 }

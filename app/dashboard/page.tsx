@@ -1,20 +1,36 @@
 import Link from "next/link";
 import { getSetupStatus } from "@/lib/setup";
+import { getProfile, getUserPayments, getDashboardMetrics } from "@/lib/data";
 import MetricCard from "./_components/MetricCard";
 import RecentPayments from "./_components/RecentPayments";
 import SetupChecklist from "./_components/SetupChecklist";
 
+/** Time-of-day greeting from the server clock. */
+function greeting(): string {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
+}
+
 /** Dashboard home — setup checklist (until complete), greeting, metrics, recent payments. */
 export default async function DashboardHome() {
-  const status = await getSetupStatus();
+  const [status, profile, metrics, recent] = await Promise.all([
+    getSetupStatus(),
+    getProfile(),
+    getDashboardMetrics(),
+    getUserPayments(5),
+  ]);
+
+  const name = profile?.firstName || profile?.businessName || "there";
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Header */}
-      <header className="flex flex-wrap items-start justify-between gap-4">
+      {/* Page heading */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-[-0.02em] text-[#14132B]">
-            Good morning, Adaeze 👋
+            {greeting()}, {name} 👋
           </h1>
           <p className="mt-1 text-sm text-[#6C6B7B]">
             Here&rsquo;s a quick look at your business today.
@@ -36,7 +52,7 @@ export default async function DashboardHome() {
           )}
           Create Paypoint
         </Link>
-      </header>
+      </div>
 
       {/* Setup checklist — shown until all four steps are done */}
       {!status.complete && <SetupChecklist status={status} />}
@@ -46,15 +62,23 @@ export default async function DashboardHome() {
         <MetricCard
           variant="hero"
           label="Total collected"
-          value="₦1,240,000"
+          value={metrics.totalLabel}
           hint="All time"
         />
-        <MetricCard label="This month" value="₦320,000" hint="June 2026" />
-        <MetricCard label="Active pages" value="8" hint="Live right now" />
+        <MetricCard
+          label="This month"
+          value={metrics.monthLabel}
+          hint={metrics.monthName}
+        />
+        <MetricCard
+          label="Active pages"
+          value={String(metrics.activePages)}
+          hint="Live right now"
+        />
       </section>
 
       {/* Recent payments */}
-      <RecentPayments />
+      <RecentPayments rows={recent} />
     </div>
   );
 }

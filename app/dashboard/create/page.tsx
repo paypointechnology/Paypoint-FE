@@ -1,4 +1,5 @@
 import { getSetupStatus } from "@/lib/setup";
+import { getProfile } from "@/lib/data";
 import SetupGate from "../_components/SetupGate";
 import CreateBuilder from "./CreateBuilder";
 
@@ -8,11 +9,19 @@ import CreateBuilder from "./CreateBuilder";
  * routes the seller back to the dashboard checklist.
  */
 export default async function CreatePage() {
-  const status = await getSetupStatus();
+  const [status, profile] = await Promise.all([
+    getSetupStatus(),
+    getProfile(),
+  ]);
 
   if (!status.complete) {
     return <SetupGate status={status} />;
   }
 
-  return <CreateBuilder />;
+  return (
+    <CreateBuilder
+      businessName={profile?.businessName ?? "Your business"}
+      sellerLogo={profile?.logoUrl || "/assets/paypoint-icon.png"}
+    />
+  );
 }

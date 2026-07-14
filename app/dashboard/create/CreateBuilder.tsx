@@ -9,13 +9,20 @@ import CheckoutCard, {
 } from "../../p/_components/CheckoutCard";
 import { SAMPLE } from "../../p/_components/sampleCheckout";
 import { slugify, digitsOnly, nairaLabel } from "../../_lib/format";
+import { getSiteUrl } from "@/lib/site-url";
+import { createPage } from "./actions";
 
 type PageType = "product" | "service";
 
 const SLUG_FALLBACK = "your-page";
-const LINK_HOST = "paypoint.link";
 
-export default function CreateBuilder() {
+export default function CreateBuilder({
+  businessName,
+  sellerLogo,
+}: {
+  businessName: string;
+  sellerLogo: string;
+}) {
   // ── Form state (single source of truth for the live preview) ──────────────
   const [type, setType] = useState<PageType>("product");
   const [title, setTitle] = useState("");
@@ -28,22 +35,26 @@ export default function CreateBuilder() {
     email: false,
     address: false,
   });
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [published, setPublished] = useState(false);
+  const [publishedSlug, setPublishedSlug] = useState("");
+  const [publishing, setPublishing] = useState(false);
+  const [publishError, setPublishError] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ── Derived values ────────────────────────────────────────────────────────
   const slug = slugify(title) || SLUG_FALLBACK;
-  const fullUrl = `https://${LINK_HOST}/${slug}`;
+  const linkHost = getSiteUrl().replace(/^https?:\/\//, "");
   const canPublish = title.trim().length > 0 && price.length > 0;
 
   // The exact object the preview card binds to. Memoized so the preview only
   // re-derives when form inputs change.
   const previewData: Partial<CheckoutData> = useMemo(
     () => ({
-      // Seller identity stays the signed-in business (sample stand-in).
-      business: SAMPLE.business,
-      sellerLogo: SAMPLE.sellerLogo,
+      // Seller identity comes from the signed-in seller's real profile.
+      business: businessName,
+      sellerLogo: sellerLogo,
       contacts: SAMPLE.contacts,
       productImage: photoUrl,
       title: title.trim(),
@@ -53,7 +64,7 @@ export default function CreateBuilder() {
       paidCount: 0, // brand-new page → social proof hidden
       buyerFields: fields,
     }),
-    [photoUrl, title, description, price, delivery, fields],
+    [photoUrl, title, description, price, delivery, fields, businessName, sellerLogo],
   );
 
   // ── Handlers ──────────────────────────────────────────────────────────────
@@ -61,11 +72,13 @@ export default function CreateBuilder() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (photoUrl) URL.revokeObjectURL(photoUrl);
+    setPhotoFile(file);
     setPhotoUrl(URL.createObjectURL(file));
   }
 
   function removePhoto() {
     if (photoUrl) URL.revokeObjectURL(photoUrl);
+    setPhotoFile(null);
     setPhotoUrl("");
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
@@ -74,8 +87,27 @@ export default function CreateBuilder() {
     setFields((f) => ({ ...f, [key]: !f[key] }));
   }
 
-  function publish() {
-    if (!canPublish) return;
+  async function publish() {
+    if (!canPublish || publishing) return;
+    setPublishing(true);
+    setPublishError(null);
+
+    const fd = new FormData();
+    fd.set("type", type);
+    fd.set("title", title.trim());
+    fd.set("price", price);
+    fd.set("description", description.trim());
+    fd.set("delivery", delivery.trim());
+    fd.set("collect_fields", JSON.stringify(fields));
+    if (photoFile) fd.set("photo", photoFile);
+
+    const res = await createPage(fd);
+    setPublishing(false);
+    if (!res.ok) {
+      setPublishError(res.error);
+      return;
+    }
+    setPublishedSlug(res.slug);
     setPublished(true);
   }
 
@@ -85,10 +117,13 @@ export default function CreateBuilder() {
     setTitle("");
     setPrice("");
     setDescription("");
+    setPhotoFile(null);
     setPhotoUrl("");
     setDelivery("");
     setFields({ phone: false, email: false, address: false });
     setPublished(false);
+    setPublishedSlug("");
+    setPublishError(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
@@ -107,13 +142,22 @@ export default function CreateBuilder() {
         <button
           type="button"
           onClick={publish}
-          disabled={!canPublish}
+          disabled={!canPublish || publishing}
           className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#5F58F4] px-5 text-sm font-semibold text-white shadow-[0_1px_2px_rgba(95,88,244,0.25)] transition hover:bg-[#4A43D6] disabled:cursor-not-allowed disabled:bg-[#C7C4F7] disabled:shadow-none"
         >
           <RocketIcon size={16} />
-          Publish
+          {publishing ? "Publishing…" : "Publish"}
         </button>
       </header>
+
+      {publishError && (
+        <p
+          role="alert"
+          className="rounded-xl border border-[#F3C6C2] bg-[#FEECEB] px-4 py-3 text-sm font-medium text-[#B42318]"
+        >
+          {publishError}
+        </p>
+      )}
 
       {/* Two-pane builder ───────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-start lg:gap-8">
@@ -292,7 +336,7 @@ export default function CreateBuilder() {
             <div className="flex items-center gap-2 rounded-[10px] border border-[#ECEBF3] bg-[#FAFAFE] px-3.5 py-3">
               <LinkIcon size={15} className="shrink-0 text-[#9A99A8]" />
               <span className="min-w-0 truncate text-sm text-[#33323F]">
-                <span className="text-[#9A99A8]">{LINK_HOST}/</span>
+                <span className="text-[#9A99A8]">{linkHost}/p/</span>
                 <span className="font-semibold text-[#5F58F4]">{slug}</span>
               </span>
             </div>
@@ -319,8 +363,8 @@ export default function CreateBuilder() {
       {/* Success panel ──────────────────────────────────────────────────── */}
       {published && (
         <SuccessPanel
-          slug={slug}
-          url={fullUrl}
+          slug={publishedSlug}
+          url={`${getSiteUrl()}/p/${publishedSlug}`}
           onClose={() => setPublished(false)}
           onReset={resetForm}
         />

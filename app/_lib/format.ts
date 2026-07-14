@@ -44,3 +44,28 @@ export function nairaLabel(digits: string): string {
   const grouped = groupThousands(digits);
   return grouped ? `₦${grouped}` : "";
 }
+
+/**
+ * NGN label from a kobo amount (the DB stores prices in kobo).
+ * 3_500_000 → "₦35,000". Null/undefined → "₦0".
+ */
+export function nairaFromKobo(kobo: number | null | undefined): string {
+  const naira = Math.round((kobo ?? 0) / 100);
+  return `₦${naira.toLocaleString("en-NG")}`;
+}
+
+/**
+ * Human day label for a payment timestamp: "Today" / "Yesterday" /
+ * "12 Jun". Empty/invalid → "".
+ */
+export function relativeDay(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const startOf = (x: Date) =>
+    new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const days = Math.round((startOf(new Date()) - startOf(d)) / 86_400_000);
+  if (days <= 0) return "Today";
+  if (days === 1) return "Yesterday";
+  return d.toLocaleDateString("en-NG", { day: "numeric", month: "short" });
+}

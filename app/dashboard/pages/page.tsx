@@ -1,22 +1,22 @@
 import Link from "next/link";
 import PageCard from "../_components/PageCard";
 import EmptyState from "../_components/EmptyState";
-import { sellerPages } from "../_components/pagesData";
+import { getUserPages } from "@/lib/data";
 
 /**
  * Pages grid — every payment page the seller has created.
  * Responsive card grid (1 / 2 / 3 cols). Each card carries its own active
  * toggle + Copy/QR/Share actions (PageCard). Falls back to a friendly empty
- * state when the list is empty (kept as a code path).
+ * state when the seller hasn't created any pages yet.
  */
-export default function PagesPage() {
-  const pages = sellerPages;
+export default async function PagesPage() {
+  const pages = await getUserPages();
   const activeCount = pages.filter((p) => p.active).length;
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Header */}
-      <header className="flex flex-wrap items-start justify-between gap-4">
+      {/* Page heading */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-[-0.02em] text-[#14132B]">
             Your pages
@@ -34,14 +34,13 @@ export default function PagesPage() {
           </svg>
           New page
         </Link>
-      </header>
+      </div>
 
       {pages.length === 0 ? (
-        // Empty-state code path (won't trigger with sample data, but kept).
         <div className="flex flex-col items-center gap-5">
           <EmptyState
             title="No pages yet"
-            description="Create your first Paypoint to start collecting payments — share the link and get paid straight to your bank."
+            description="Create your first Paypoint to start collecting payments. Share the link and get paid straight to your bank."
             icon={
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <rect x="4" y="3" width="16" height="18" rx="2.5" />

@@ -239,7 +239,7 @@ export default function PageCard({ page }: { page: SellerPage }) {
                 />
               </div>
               <p className="mt-3 break-all text-xs font-medium text-[#6C6B7B]">
-                {link.replace("https://", "")}
+                {link.replace(/^https?:\/\//, "")}
               </p>
               <button
                 type="button"
