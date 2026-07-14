@@ -217,15 +217,15 @@ export default function Waitlist() {
       </section>
 
       {/* ══════════════════ WHY ══════════════════ */}
-      <section className="bg-[#14132B] py-24">
+      <section className="bg-[#F5F4FF] py-24">
         <div className="mx-auto max-w-6xl px-6">
-          <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/40">
+          <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#5F58F4]">
             Why we built Paypoint
           </span>
-          <h2 className="mt-3 max-w-[560px] text-[clamp(26px,3.6vw,40px)] font-extrabold leading-[1.1] tracking-[-0.025em] text-white">
+          <h2 className="mt-3 max-w-[560px] text-[clamp(26px,3.6vw,40px)] font-extrabold leading-[1.1] tracking-[-0.025em] text-[#14132B]">
             Every day, businesses lose customers for one simple reason.
           </h2>
-          <p className="mt-3 text-base text-white/50">
+          <p className="mt-3 text-base text-[#6C6B7B]">
             Buying online still feels harder than it should.
           </p>
 
@@ -241,11 +241,11 @@ export default function Waitlist() {
               ].map((row, idx, arr) => (
                 <li
                   key={row.t}
-                  className={`flex items-center gap-4 py-3.5 text-[15px] text-white/60 ${
-                    idx < arr.length - 1 ? "border-b border-white/[0.07]" : ""
+                  className={`flex items-center gap-4 py-3.5 text-[15px] text-[#33323F] ${
+                    idx < arr.length - 1 ? "border-b border-[#ECEBF3]" : ""
                   }`}
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-sm">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EEEDFE] text-sm">
                     {row.i}
                   </span>
                   {row.t}
@@ -255,16 +255,16 @@ export default function Waitlist() {
 
             <div
               data-reveal
-              className="reveal rounded-2xl border border-[#5F58F4]/30 bg-[#5F58F4]/[0.14] p-7"
+              className="reveal rounded-2xl border border-[#5F58F4]/20 bg-[#EEEDFE] p-7"
             >
-              <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#C7C4F7]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#5F58F4]">
                 Our belief
               </p>
-              <p className="mt-4 text-[21px] font-bold leading-[1.45] tracking-[-0.01em] text-white">
+              <p className="mt-4 text-[21px] font-bold leading-[1.45] tracking-[-0.01em] text-[#14132B]">
                 We think selling should be as easy as{" "}
-                <span className="text-[#C7C4F7]">posting.</span>
+                <span className="text-[#5F58F4]">posting.</span>
               </p>
-              <p className="mt-4 text-[15px] leading-relaxed text-white/55">
+              <p className="mt-4 text-[15px] leading-relaxed text-[#6C6B7B]">
                 No account numbers. No screenshots. No chasing. Just a link your
                 customers tap, and money that lands straight in your bank.
               </p>
@@ -365,24 +365,24 @@ export default function Waitlist() {
       </section>
 
       {/* ══════════════════ TODAY vs PAYPOINT ══════════════════ */}
-      <section className="bg-[#14132B] py-24">
+      <section className="bg-white py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="text-center">
-            <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/40">
+            <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#5F58F4]">
               The future of selling
             </span>
-            <h2 className="mt-3 text-[clamp(26px,3.6vw,40px)] font-extrabold tracking-[-0.025em] text-white">
+            <h2 className="mt-3 text-[clamp(26px,3.6vw,40px)] font-extrabold tracking-[-0.025em] text-[#14132B]">
               The journey is about to get much shorter.
             </h2>
           </div>
 
           <div className="mt-12 grid gap-5 md:grid-cols-2">
             {/* Today */}
-            <div data-reveal className="reveal overflow-hidden rounded-2xl">
-              <div className="bg-white/[0.04] px-6 py-4 text-[13px] font-bold uppercase tracking-[0.06em] text-white/35">
+            <div data-reveal className="reveal overflow-hidden rounded-2xl border border-[#ECEBF3]">
+              <div className="bg-[#F1F0F7] px-6 py-4 text-[13px] font-bold uppercase tracking-[0.06em] text-[#9A99A8]">
                 Today
               </div>
-              <div className="bg-white/[0.02] px-6 pb-6 pt-2">
+              <div className="bg-[#FAFAFE] px-6 pb-6 pt-2">
                 {[
                   { i: "📝", t: "Customer sees your post", s: "Interested, but doesn't know how to buy" },
                   { i: "💬", t: "Sends you a DM", s: "“Is this available? How much?”" },
@@ -394,15 +394,15 @@ export default function Waitlist() {
                   <div
                     key={row.t}
                     className={`flex items-start gap-3.5 py-3 ${
-                      idx < arr.length - 1 ? "border-b border-white/[0.05]" : ""
+                      idx < arr.length - 1 ? "border-b border-[#ECEBF3]" : ""
                     }`}
                   >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/[0.05] text-xs">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#F1F0F7] text-xs">
                       {row.i}
                     </span>
                     <div>
-                      <div className="text-sm font-semibold text-white/45">{row.t}</div>
-                      <div className="mt-0.5 text-xs text-white/25">{row.s}</div>
+                      <div className="text-sm font-semibold text-[#6C6B7B]">{row.t}</div>
+                      <div className="mt-0.5 text-xs text-[#9A99A8]">{row.s}</div>
                     </div>
                   </div>
                 ))}
@@ -412,13 +412,13 @@ export default function Waitlist() {
             {/* With Paypoint */}
             <div
               data-reveal
-              className="reveal overflow-hidden rounded-2xl"
+              className="reveal overflow-hidden rounded-2xl border border-[#E3E2EE]"
               style={{ transitionDelay: "90ms" }}
             >
-              <div className="bg-[#5F58F4]/25 px-6 py-4 text-[13px] font-bold uppercase tracking-[0.06em] text-[#C7C4F7]">
+              <div className="bg-[#EEEDFE] px-6 py-4 text-[13px] font-bold uppercase tracking-[0.06em] text-[#5F58F4]">
                 Now · with Paypoint
               </div>
-              <div className="bg-[#5F58F4]/[0.08] px-6 pb-6 pt-2">
+              <div className="bg-[#F5F4FF] px-6 pb-6 pt-2">
                 {[
                   { i: "🔗", t: "Customer taps your link", s: "In your bio, status, or any post" },
                   { i: "🛒", t: "Opens your checkout", s: "A professional page, no DMs needed" },
@@ -428,21 +428,21 @@ export default function Waitlist() {
                   <div
                     key={row.t}
                     className={`flex items-start gap-3.5 py-3 ${
-                      idx < arr.length - 1 ? "border-b border-white/[0.05]" : ""
+                      idx < arr.length - 1 ? "border-b border-[#E3E2EE]" : ""
                     }`}
                   >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#5F58F4]/50 bg-[#5F58F4]/30 text-xs">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#5F58F4] bg-[#EEEDFE] text-xs">
                       {row.i}
                     </span>
                     <div>
-                      <div className="text-sm font-semibold text-white">{row.t}</div>
-                      <div className="mt-0.5 text-xs text-white/45">{row.s}</div>
+                      <div className="text-sm font-semibold text-[#14132B]">{row.t}</div>
+                      <div className="mt-0.5 text-xs text-[#6C6B7B]">{row.s}</div>
                     </div>
                   </div>
                 ))}
-                <div className="mt-4 flex items-center gap-2.5 rounded-xl border border-[#12B76A]/30 bg-[#12B76A]/[0.14] px-4 py-3">
+                <div className="mt-4 flex items-center gap-2.5 rounded-xl border border-[#12B76A]/30 bg-[#E7F8EF] px-4 py-3">
                   <span className="text-lg">🎉</span>
-                  <span className="text-sm font-bold text-[#12B76A]">
+                  <span className="text-sm font-bold text-[#0B7A4B]">
                     More sales. Less chasing. Every day.
                   </span>
                 </div>
@@ -531,12 +531,12 @@ export default function Waitlist() {
       </section>
 
       {/* ══════════════════ CLOSING BAND ══════════════════ */}
-      <section className="bg-[#14132B] py-16 text-center">
+      <section className="bg-[#5F58F4] py-16 text-center">
         <div className="mx-auto max-w-3xl px-6">
           <p className="text-[clamp(22px,3vw,32px)] font-extrabold leading-tight tracking-[-0.02em] text-white">
             Attention is everywhere. Revenue isn&rsquo;t.
           </p>
-          <p className="mt-2 text-[15px] text-white/45">
+          <p className="mt-2 text-[15px] text-white/70">
             Let&rsquo;s fix that together.
           </p>
         </div>
@@ -611,16 +611,16 @@ function HeroPipeline() {
       <Connector />
 
       {/* Step 3: bank alert */}
-      <div className="flex items-center gap-3 rounded-xl bg-[#12111F] px-4 py-3">
+      <div className="flex items-center gap-3 rounded-xl border border-[#D4F3E2] bg-[#E7F8EF] px-4 py-3">
         <span className="text-xl">🏦</span>
         <div>
-          <div className="text-[10px] font-semibold text-[#8B8B99]">
+          <div className="text-[10px] font-semibold text-[#6C6B7B]">
             GTBank · Credit alert
           </div>
-          <div className="mt-0.5 text-[15px] font-extrabold tracking-[-0.01em] text-[#12B76A]">
+          <div className="mt-0.5 text-[15px] font-extrabold tracking-[-0.01em] text-[#0B7A4B]">
             ₦35,000.00 received
           </div>
-          <div className="mt-0.5 text-[10px] text-[#5B5B6B]">
+          <div className="mt-0.5 text-[10px] text-[#9A99A8]">
             From CHIDINMA OKEKE
           </div>
         </div>
@@ -686,7 +686,7 @@ function SurveyModal({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-[#14132B]/60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-[#27272B]/60 p-4 backdrop-blur-sm"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

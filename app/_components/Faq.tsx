@@ -7,44 +7,32 @@ type FaqItem = { q: string; a: string };
 
 const ITEMS: FaqItem[] = [
   {
-    q: "Is Paypoint really free?",
-    a: "Yes. Creating payment pages, sharing links, and using your dashboard is completely free. We only charge a small transaction fee when a customer pays you.",
+    q: "Is it free to get started?",
+    a: "Yes. Creating your account and your first checkout is free. Paypoint charges a small fee only when a customer successfully pays you, so you only pay when you earn. There are no monthly subscriptions and no setup fees.",
   },
   {
-    q: "How do I receive my money?",
-    a: "Directly into your bank account. Paypoint is not a wallet, every payment settles straight to the bank account you connect during setup.",
+    q: "How does my money get to me?",
+    a: "You connect your bank account when you set up Paypoint. Every time a customer pays, the money settles directly into that account. Paypoint never holds your funds, we are not a bank, and your money is never in a Paypoint wallet. It goes straight to your bank.",
   },
   {
-    q: "Do my customers need to download an app?",
-    a: "No. Your customers just open your payment link in their browser, enter their details, and pay. No downloads, no sign-ups.",
+    q: "Do my customers need an account to pay?",
+    a: "No. Your customer clicks the link, sees your checkout, and pays. That's it. They don't need to sign up, create an account, or download anything. The checkout works in any browser, including inside Instagram, WhatsApp, and TikTok.",
   },
   {
-    q: "What can I sell on Paypoint?",
-    a: "Anything legal. Products, services, digital downloads, event tickets, deposits, bookings, if you can price it, you can sell it.",
+    q: "What payment methods do customers use?",
+    a: "Customers can pay with debit cards, bank transfers, and USSD, all the methods they already use daily. Payments are processed securely and support all major Nigerian banks and card networks.",
   },
   {
-    q: "How fast do payments settle?",
-    a: "Payments are processed in real time. Settlement to your bank account typically happens within a few hours.",
+    q: "Do I need a website or any technical skills?",
+    a: "No website. No code. No developer. If you can fill in a form and upload a photo, you can create a Paypoint checkout. The whole setup takes under a minute. You share the link the same way you'd share any link, in your bio, in a chat, in a post.",
   },
   {
     q: "Is it safe for my customers to pay?",
-    a: "Absolutely. Every payment is encrypted, and customers receive an instant receipt with a reference number. We're built on trusted payment infrastructure.",
+    a: "Yes. All payments are secured with bank-grade encryption. Your customer's card details never touch Paypoint servers. Every successful payment generates an instant receipt.",
   },
   {
-    q: "Can I create more than one payment page?",
-    a: "Yes. Create as many pages as you need, one for each product, service, or event.",
-  },
-  {
-    q: "What if a payment fails?",
-    a: "No money leaves the customer's account if a payment fails. They can safely try again or use a different payment method.",
-  },
-  {
-    q: "How do I share my payment page?",
-    a: "You get a unique link (like paypoint.link/aso-oke-dress) that you can share on WhatsApp, Instagram, Twitter, TikTok, SMS, email, anywhere.",
-  },
-  {
-    q: "Can I see who has paid me?",
-    a: "Yes. Your dashboard shows every payment in real time: customer name, item, amount, status, and date.",
+    q: "What can I sell with Paypoint?",
+    a: "Anything. Physical products, services, event tickets, deposits, digital downloads, consultations, courses, subscriptions, if you can price it, you can create a Paypoint checkout for it. You can have as many checkouts as you need, one for each product or service.",
   },
 ];
 

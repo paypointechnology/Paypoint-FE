@@ -200,7 +200,7 @@ export default function AboutPage() {
             Join thousands of sellers across Nigeria already using Paypoint.
           </p>
           <Link
-            href="/coming-soon"
+            href="/early-access"
             className="relative mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-[#5F58F4] transition hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]"
           >
             Start free

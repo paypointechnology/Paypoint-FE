@@ -276,3 +276,56 @@ body {
         transition: none;
     }
 }
+
+/* =============================================================================
+   JOURNEY BAR — the animated "attention → click → payment → bank alert → growth"
+   metaphor. A travelling dot fills an indigo line while each node lights up in
+   sequence via negatively-delayed keyframes.
+   ============================================================================= */
+.jb-track { position: relative; padding: 20px 0 32px; }
+.jb-line-bg { position: absolute; top: 50%; left: 6px; right: 6px; height: 2px; background: #ECEBF3; transform: translateY(-50%); }
+.jb-line-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #EEEDFE 0%, #5F58F4 100%); opacity: .6; animation: jbLineFill 4s cubic-bezier(.4,0,.6,1) infinite; }
+@keyframes jbLineFill { 0% { width: 0%; } 95% { width: 100%; opacity: .6; } 99% { width: 100%; opacity: 0; } 100% { width: 0%; opacity: 0; } }
+.jb-dot { position: absolute; top: 50%; left: 0; width: 14px; height: 14px; border-radius: 50%; background: #5F58F4; transform: translateY(-50%); box-shadow: 0 0 0 4px rgba(95,88,244,.2), 0 0 20px rgba(95,88,244,.7); animation: jbDotMove 4s cubic-bezier(.4,0,.6,1) infinite; z-index: 3; }
+@keyframes jbDotMove { 0% { left: 0%; opacity: 0; } 2% { opacity: 1; } 96% { opacity: 1; } 100% { left: calc(100% - 14px); opacity: 0; } }
+.jb-nodes { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; }
+.jb-node { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; }
+.jb-node-icon { font-size: 26px; line-height: 1; filter: grayscale(.4); animation: jbIconActivate 4s linear infinite; }
+.jb-node-pip { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2px solid #E3E2EE; position: relative; z-index: 4; animation: jbPipActive 4s linear infinite; }
+.jb-node-lbl { font-size: 11px; font-weight: 700; color: #9A99A8; letter-spacing: .08em; text-transform: uppercase; text-align: center; animation: jbLblActivate 4s linear infinite; }
+@keyframes jbPipActive { 0% { background: #5F58F4; border-color: #5F58F4; box-shadow: 0 0 0 5px rgba(95,88,244,.2), 0 0 16px rgba(95,88,244,.8); transform: scale(1.6); } 20% { background: #fff; border-color: #E3E2EE; box-shadow: none; transform: scale(1); } 100% { background: #fff; border-color: #E3E2EE; box-shadow: none; transform: scale(1); } }
+@keyframes jbIconActivate { 0% { filter: grayscale(0); transform: translateY(-4px) scale(1.2); } 20% { filter: grayscale(.4); transform: translateY(0) scale(1); } 100% { filter: grayscale(.4); transform: translateY(0) scale(1); } }
+@keyframes jbLblActivate { 0% { color: #5F58F4; font-weight: 800; } 20% { color: #9A99A8; font-weight: 700; } 100% { color: #9A99A8; font-weight: 700; } }
+.jb-n1 .jb-node-pip, .jb-n1 .jb-node-icon, .jb-n1 .jb-node-lbl { animation-delay: 0s; }
+.jb-n2 .jb-node-pip, .jb-n2 .jb-node-icon, .jb-n2 .jb-node-lbl { animation-delay: -3s; }
+.jb-n3 .jb-node-pip, .jb-n3 .jb-node-icon, .jb-n3 .jb-node-lbl { animation-delay: -2s; }
+.jb-n4 .jb-node-pip, .jb-n4 .jb-node-icon, .jb-n4 .jb-node-lbl { animation-delay: -1s; }
+.jb-n5 .jb-node-pip, .jb-n5 .jb-node-icon, .jb-n5 .jb-node-lbl { animation-delay: 0s; }
+
+/* Mini journey bar (inside the indigo final-CTA band) */
+.jb-mini { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.jb-mini-node { font-size: 18px; opacity: .5; animation: jbMiniPulse 4s linear infinite; }
+.jb-mini-line { flex: 1; max-width: 48px; height: 1px; background: rgba(255,255,255,.25); position: relative; overflow: hidden; }
+.jb-mini-line::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: rgba(255,255,255,.9); animation: jbMiniTrail 4s linear infinite; }
+@keyframes jbMiniTrail { 0% { left: -100%; } 100% { left: 100%; } }
+@keyframes jbMiniPulse { 0% { opacity: 1; transform: scale(1.15); } 15% { opacity: .5; transform: scale(1); } 100% { opacity: .5; transform: scale(1); } }
+.jb-mini .jb-mini-node:nth-child(1) { animation-delay: 0s; }
+.jb-mini .jb-mini-node:nth-child(3) { animation-delay: -3s; }
+.jb-mini .jb-mini-node:nth-child(5) { animation-delay: -2s; }
+.jb-mini .jb-mini-node:nth-child(7) { animation-delay: -1s; }
+.jb-mini .jb-mini-node:nth-child(9) { animation-delay: 0s; }
+.jb-mini-line:nth-child(2)::after { animation-delay: 0s; }
+.jb-mini-line:nth-child(4)::after { animation-delay: -3s; }
+.jb-mini-line:nth-child(6)::after { animation-delay: -2s; }
+.jb-mini-line:nth-child(8)::after { animation-delay: -1s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .jb-dot, .jb-line-fill, .jb-node-pip, .jb-node-icon, .jb-node-lbl, .jb-mini-node, .jb-mini-line::after { animation: none; }
+    .jb-node-pip { background: #EEEDFE; border-color: #5F58F4; }
+    .jb-node-lbl { color: #33323F; }
+}
+
+@media (max-width: 600px) {
+    .jb-node-icon { font-size: 20px; }
+    .jb-node-lbl { font-size: 9px; letter-spacing: .04em; }
+}

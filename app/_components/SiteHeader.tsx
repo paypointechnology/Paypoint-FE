@@ -1,18 +1,10 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-
-/** Shared marketing header (floating pill nav) — reused across landing, about, features.
- *  Highlights the active nav link based on the current route. */
+/** Shared marketing header (floating pill nav). Nav links anchor to sections on
+ *  the single-page landing. */
 export default function SiteHeader() {
-  const pathname = usePathname() || "/";
-  const isFeatures = pathname.startsWith("/features");
-  const isAbout = pathname.startsWith("/about");
-
-  const link = (active: boolean) =>
-    `text-xs font-medium transition-colors font-sans ${
-      active ? "text-[#5F58F4]" : "text-[#33323F] hover:text-[#14132B]"
-    }`;
+  const link =
+    "text-xs font-medium text-[#33323F] transition-colors hover:text-[#5F58F4] font-sans";
 
   return (
     <nav
@@ -29,20 +21,20 @@ export default function SiteHeader() {
         </a>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="/#how-it-works" className={link(false)}>How it works</a>
-          <a href="/features" className={link(isFeatures)}>Features</a>
-          <a href="/about" className={link(isAbout)}>About</a>
+          <a href="/#why-paypoint" className={link}>Why Paypoint</a>
+          <a href="/#how-it-works" className={link}>Features</a>
+          <a href="/#who-its-for" className={link}>Who it&rsquo;s for</a>
         </div>
 
         <div className="flex items-center gap-4">
           <a
-            href="/coming-soon"
+            href="/early-access"
             className="hidden md:inline-block text-xs font-medium text-[#33323F] px-3.5 py-2 rounded-full transition-all duration-200 hover:text-[#5F58F4] hover:bg-[#EEEDFE] hover:-translate-y-0.5 font-sans"
           >
             Log in
           </a>
           <a
-            href="/coming-soon"
+            href="/early-access"
             className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(95,88,244,0.35)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center"
           >
             {/* Spinning Border Beam (Visible on Hover) */}
