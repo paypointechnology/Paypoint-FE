@@ -1,224 +1,200 @@
 "use client";
 
-import { CheckIcon, ChatIcon, ShieldIcon } from "./icons";
-import SecureFooter from "./SecureFooter";
 import { SAMPLE } from "../../p/_components/sampleCheckout";
 
 /**
- * The completed-payment receipt — one shared visual, two variants:
- *   - variant="success"  → /pay/callback?status=success  (fresh confirmation)
- *   - variant="stable"   → /pay/receipt/[reference]       (retrievable copy)
- *
- * Both share the green check, big amount, details box, and a "Message {business}"
- * WhatsApp link. They differ only in heading/subtitle, the secondary action
- * (Message seller vs Share receipt), and the footer line.
- *
- * `reference` is passed in so each route shows its own URL/query reference;
- * everything else comes from the fixed sample data.
+ * Official payment receipt — /pay/receipt/[reference].
+ * Designed to screenshot, forward, and print. Frontend prototype: everything
+ * except the reference comes from the fixed sample data. Brand-only colours,
+ * no processor names, no navy.
  */
-export default function Receipt({
-  reference,
-  variant = "success",
-}: {
-  reference: string;
-  variant?: "success" | "stable";
-}) {
-  // WhatsApp is the seller's contact channel (reused from the sample contacts).
-  const sellerWhatsApp =
-    SAMPLE.contacts.find((c) => c.type === "whatsapp")?.href ?? "#";
 
-  // Frontend prototype — Download is window.print(); Share uses the Web Share
-  // API when available, falling back to copying the link.
-  function handleDownload() {
+// Prototype buyer contact (sample only).
+const BUYER = {
+  email: "chidinma@email.com",
+  phone: "0801 234 5678",
+  delivery: "12 Admiralty Way, Lekki, Lagos",
+};
+
+export default function Receipt({ reference }: { reference: string }) {
+  function handlePrint() {
     if (typeof window !== "undefined") window.print();
   }
-
-  async function handleShare() {
+  async function copyLink() {
+    if (typeof window === "undefined") return;
+    const url = `${window.location.origin}/pay/receipt/${reference}`;
+    try {
+      await navigator.clipboard?.writeText(url);
+    } catch {
+      /* clipboard blocked — no-op */
+    }
+  }
+  async function share() {
     if (typeof navigator === "undefined") return;
     const url = `${window.location.origin}/pay/receipt/${reference}`;
-    const data = {
-      title: "Paypoint receipt",
-      text: `Receipt for your payment to ${SAMPLE.business}`,
-      url,
-    };
     try {
-      if (navigator.share) {
-        await navigator.share(data);
-      } else if (navigator.clipboard) {
-        await navigator.clipboard.writeText(url);
-      }
+      if (navigator.share) await navigator.share({ title: "Paypoint receipt", url });
+      else await navigator.clipboard?.writeText(url);
     } catch {
-      /* user dismissed share sheet — no-op */
+      /* dismissed — no-op */
     }
   }
 
-  const details: { label: string; value: string }[] = [
-    { label: "Item", value: SAMPLE.title },
-    { label: "Paid by", value: SAMPLE.buyerName },
-    { label: "Reference", value: reference },
-    { label: "Date", value: SAMPLE.dateLabel },
-  ];
-
-  const isStable = variant === "stable";
-
   return (
-    <div className="relative w-full max-w-[420px] animate-onboard-fade">
-      {/* Logo */}
-      <div className="mb-7 flex justify-center">
-        <img
-          src="/assets/paypoint-wordmark-indigo.png"
-          alt="Paypoint"
-          className="h-7 w-auto"
-        />
+    <div className="w-full max-w-[440px] overflow-hidden rounded-[24px] border border-[#ECEBF3] bg-[#F4F4F8] shadow-[0_20px_60px_-30px_rgba(95,88,244,0.35)]">
+      {/* Header (brand indigo) */}
+      <div className="bg-[#5F58F4] px-6 py-5">
+        <p className="text-[16px] font-extrabold tracking-[0.06em] text-white">PAYPOINT</p>
+        <p className="text-[11px] uppercase tracking-[0.08em] text-white/60">Official payment receipt</p>
       </div>
 
-      {/* Card */}
-      <div className="overflow-hidden rounded-[20px] border border-[#ECEBF3] bg-white shadow-[0_4px_24px_rgba(20,19,43,0.06)]">
-        <div className="px-6 pb-6 pt-8 text-center sm:px-8">
-          {/* Green check */}
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#E7F8EF]">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0B7A4B] text-white">
-              <CheckIcon size={18} />
-            </span>
-          </div>
+      {/* Status + amount */}
+      <div className="border-b border-[#ECEBF3] bg-white px-6 py-6 text-center">
+        <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[#12B76A]/25 bg-[#E7F8EF] px-5 py-1.5 text-[13px] font-extrabold tracking-[0.04em] text-[#0B7A4B]">
+          ✓ PAID
+        </span>
+        <p className="text-xs font-medium text-[#6C6B7B]">Amount paid</p>
+        <p className="text-[40px] font-extrabold leading-tight tracking-[-0.04em] text-[#14132B]">
+          {SAMPLE.priceLabel}
+        </p>
+      </div>
 
-          <h1 className="mt-4 text-[20px] font-semibold tracking-[-0.01em] text-[#14132B]">
-            {isStable ? "Payment receipt" : "Payment successful"}
-          </h1>
-          <p className="mt-1 text-sm text-[#6C6B7B]">
-            {isStable ? (
-              <>
-                Your payment to{" "}
-                <span className="font-medium text-[#33323F]">
-                  {SAMPLE.business}
-                </span>{" "}
-                was completed on 22 Jun 2026.
-              </>
-            ) : (
-              <>
-                Your payment to{" "}
-                <span className="font-medium text-[#33323F]">
-                  {SAMPLE.business}
-                </span>{" "}
-                is complete
-              </>
-            )}
-          </p>
+      {/* Transaction */}
+      <Section label="Transaction">
+        <Row label="Reference" value={reference} mono />
+        <Row label="Date" value={SAMPLE.dateLabel} />
+        <Row label="Payment method" value="Debit card" />
+        <Row label="Status" value="✓ Successful" ok />
+      </Section>
 
-          {/* Big amount */}
-          <p className="mt-5 text-[34px] font-bold leading-none tracking-[-0.02em] text-[#14132B]">
-            {SAMPLE.priceLabel}
-          </p>
+      {/* Parties */}
+      <Section label="Parties">
+        <Row label="Merchant" value={SAMPLE.business} />
+        <Row label="Customer" value={SAMPLE.buyerName} />
+        <Row label="Email" value={BUYER.email} />
+        <Row label="Phone" value={BUYER.phone} />
+        <Row label="Delivery" value={BUYER.delivery} />
+      </Section>
+
+      {/* Items */}
+      <div className="mt-2 border-y border-[#ECEBF3] bg-white">
+        <span className="block px-[18px] pb-1.5 pt-2.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#9A99A8]">
+          Items purchased
+        </span>
+        <div className="flex justify-between border-b border-[#ECEBF3] bg-[#FAFAFE] px-[18px] py-2">
+          <span className="flex-1 text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#9A99A8]">Item</span>
+          <span className="w-10 text-center text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#9A99A8]">Qty</span>
+          <span className="w-20 text-right text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#9A99A8]">Price</span>
         </div>
-
-        {/* Details list */}
-        <div className="mx-6 rounded-[14px] border border-[#ECEBF3] bg-[#FAFAFE] px-4 py-1 sm:mx-8">
-          <dl>
-            {details.map((d, i) => (
-              <div
-                key={d.label}
-                className={`flex items-center justify-between gap-4 py-3 ${
-                  i !== details.length - 1 ? "border-b border-[#ECEBF3]" : ""
-                }`}
-              >
-                <dt className="shrink-0 text-xs font-medium text-[#9A99A8]">
-                  {d.label}
-                </dt>
-                <dd
-                  className={`truncate text-right text-sm font-medium text-[#33323F] ${
-                    d.label === "Reference"
-                      ? "font-mono tracking-tight text-[#14132B]"
-                      : ""
-                  }`}
-                >
-                  {d.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        {/* Success-only: seller-notified line */}
-        {!isStable && (
-          <p className="px-6 pt-5 text-center text-sm text-[#33323F] sm:px-8">
-            <span className="font-medium text-[#14132B]">{SAMPLE.business}</span>{" "}
-            has been notified
-          </p>
-        )}
-
-        {/* Actions */}
-        <div className="flex gap-3 px-6 pb-6 pt-4 sm:px-8">
-          <button
-            type="button"
-            onClick={handleDownload}
-            className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#5F58F4] text-sm font-semibold text-white transition hover:bg-[#4A43D6]"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" x2="12" y1="15" y2="3" />
-            </svg>
-            Download receipt
-          </button>
-
-          {isStable ? (
-            <button
-              type="button"
-              onClick={handleShare}
-              className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-[#E3E2EE] bg-white text-sm font-semibold text-[#33323F] transition hover:bg-[#FAFAFE]"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <circle cx="18" cy="5" r="3" />
-                <circle cx="6" cy="12" r="3" />
-                <circle cx="18" cy="19" r="3" />
-                <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
-                <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
-              </svg>
-              Share receipt
-            </button>
-          ) : (
-            <a
-              href={sellerWhatsApp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-[#E3E2EE] bg-white text-sm font-semibold text-[#33323F] transition hover:bg-[#FAFAFE]"
-            >
-              <ChatIcon size={16} />
-              Message seller
-            </a>
-          )}
+        <div className="flex items-center justify-between px-[18px] py-3">
+          <span className="flex-1 text-[13px] font-semibold text-[#14132B]">{SAMPLE.title}</span>
+          <span className="w-10 text-center text-[12px] text-[#6C6B7B]">1</span>
+          <span className="w-20 text-right text-[13px] font-bold text-[#14132B]">{SAMPLE.priceLabel}</span>
         </div>
       </div>
 
-      {/* Stable-only: help line with a Message {business} link */}
-      {isStable && (
-        <p className="mt-4 text-center text-sm text-[#6C6B7B]">
-          Need help with your order?{" "}
-          <a
-            href={sellerWhatsApp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-[#5F58F4] transition hover:text-[#4A43D6]"
-          >
-            Message {SAMPLE.business}
-          </a>
-        </p>
-      )}
+      {/* Totals */}
+      <div className="mt-2 border-y border-[#ECEBF3] bg-white">
+        <div className="flex justify-between border-b border-[#ECEBF3] px-[18px] py-2.5">
+          <span className="text-[13px] text-[#6C6B7B]">Subtotal</span>
+          <span className="text-[13px] font-semibold text-[#14132B]">{SAMPLE.priceLabel}</span>
+        </div>
+        <div className="flex justify-between border-b border-[#ECEBF3] px-[18px] py-2.5">
+          <span className="text-[13px] text-[#6C6B7B]">Delivery</span>
+          <span className="text-[13px] font-semibold text-[#0B7A4B]">Free</span>
+        </div>
+        <div className="flex justify-between bg-[#FAFAFE] px-[18px] py-3">
+          <span className="text-[15px] font-extrabold text-[#14132B]">Total paid</span>
+          <span className="text-[17px] font-extrabold text-[#14132B]">{SAMPLE.priceLabel}</span>
+        </div>
+      </div>
 
-      {/* Footer line */}
-      {isStable ? (
-        <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-[#9A99A8]">
-          <ShieldIcon size={13} />
-          Verified receipt · powered by paypoint
+      {/* Security */}
+      <div className="mt-2 border-y border-[#ECEBF3] bg-white px-[18px] py-5 text-center">
+        <div className="mb-2 text-2xl">🔒</div>
+        <p className="text-xs font-bold text-[#6C6B7B]">Official Paypoint receipt</p>
+        <p className="my-1.5 inline-block rounded-lg bg-[#F5F4FF] px-3 py-1.5 font-mono text-[13px] font-extrabold tracking-[0.06em] text-[#5F58F4]">
+          {reference}
         </p>
-      ) : (
-        <>
-          <p className="mt-4 text-center text-xs text-[#9A99A8]">
-            A copy has been sent to your phone.
-          </p>
-          <SecureFooter />
-        </>
-      )}
+        <p className="text-[11px] leading-relaxed text-[#9A99A8]">
+          Every Paypoint receipt carries a unique transaction reference that
+          buyers and sellers can use to verify payment. Funds are transferred
+          directly to the seller&rsquo;s verified bank account.
+        </p>
+      </div>
+
+      {/* Actions */}
+      <div className="mt-2 border-y border-[#ECEBF3] bg-white">
+        <ActionBtn icon="⬇" bg="#FEECEB" onClick={handlePrint}>Download PDF</ActionBtn>
+        <ActionBtn icon="🖨" bg="#FAFAFE" onClick={handlePrint}>Print receipt</ActionBtn>
+        <ActionBtn icon="🔗" bg="#F5F4FF" onClick={copyLink}>Copy receipt link</ActionBtn>
+        <ActionBtn icon="💬" bg="#E7F8EF" onClick={share} last>Share receipt</ActionBtn>
+      </div>
+
+      {/* Footer */}
+      <div className="px-[18px] py-6 text-center">
+        <p className="text-[14px] font-extrabold tracking-[-0.02em] text-[#5F58F4]">Paypoint.</p>
+        <p className="mt-1 text-[11px] leading-relaxed text-[#9A99A8]">
+          Need help with your order? Contact the seller directly.
+          <br />
+          <span className="font-mono text-[11px] font-bold text-[#5F58F4]">
+            paypoint.co/pay/receipt/{reference}
+          </span>
+        </p>
+      </div>
     </div>
+  );
+}
+
+function Section({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="mt-2 border-y border-[#ECEBF3] bg-white">
+      <span className="block px-[18px] pb-1.5 pt-2.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#9A99A8]">
+        {label}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+function Row({ label, value, mono, ok }: { label: string; value: string; mono?: boolean; ok?: boolean }) {
+  return (
+    <div className="flex items-start justify-between gap-4 border-b border-[#ECEBF3] px-[18px] py-2.5 last:border-b-0">
+      <span className="shrink-0 text-[13px] text-[#6C6B7B]">{label}</span>
+      <span
+        className={`text-right text-[13px] font-bold ${
+          mono ? "font-mono tracking-[0.04em] text-[#5F58F4]" : ok ? "text-[#0B7A4B]" : "text-[#14132B]"
+        }`}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function ActionBtn({
+  icon,
+  bg,
+  children,
+  onClick,
+  last,
+}: {
+  icon: string;
+  bg: string;
+  children: React.ReactNode;
+  onClick: () => void;
+  last?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex w-full items-center gap-3 px-[18px] py-3.5 text-left text-sm font-semibold text-[#33323F] transition-colors hover:bg-[#FAFAFE] ${last ? "" : "border-b border-[#ECEBF3]"}`}
+    >
+      <span className="flex h-8 w-8 items-center justify-center rounded-[9px] text-[15px]" style={{ background: bg }}>
+        {icon}
+      </span>
+      {children}
+    </button>
   );
 }

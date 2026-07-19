@@ -11,11 +11,8 @@ export default function ReceiptPage({
   params: { reference: string };
 }) {
   return (
-    <main className="flex min-h-[100dvh] w-full flex-col items-center justify-center bg-[#FAFAFE] px-5 py-8 sm:py-12">
-      <Receipt
-        reference={decodeURIComponent(params.reference)}
-        variant="stable"
-      />
+    <main className="flex min-h-[100dvh] w-full justify-center bg-[#F5F4FF] px-4 py-6 sm:py-10">
+      <Receipt reference={decodeURIComponent(params.reference)} />
     </main>
   );
 }

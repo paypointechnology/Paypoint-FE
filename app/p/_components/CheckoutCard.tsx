@@ -5,7 +5,6 @@ import { useState } from "react";
 import { SAMPLE } from "./sampleCheckout";
 import {
   LockIcon,
-  ShieldIcon,
   TruckIcon,
   StarIcon,
   WhatsAppIcon,
@@ -13,16 +12,11 @@ import {
 } from "../../pay/_components/icons";
 
 /**
- * The buyer checkout — the conversion spine. ONE card, two callers:
- *   1. Public buyer page (/p/[slug]) — no props → renders the fixed SAMPLE.
- *   2. The create-page builder's "Live preview" — passes `data` + `preview`
- *      so the same card mirrors the seller's form in real time (DRY).
- *
- * UNAVAILABLE-STATE PATTERN (for later, when a page can be inactive):
- *   if (!page.active) render a calm centered card — Paypoint wordmark on
- *   #F5F4FF, a muted "This payment page is currently unavailable" line, and a
- *   seller-contact chip — NOT an error/404. Default below renders the active
- *   checkout.
+ * The buyer checkout — the conversion spine. ONE component, two callers:
+ *   1. Public buyer page (/p/[slug]) — interactive, pays → /pay/redirect.
+ *   2. The create-page builder's "Live preview" — passes `preview` so the same
+ *      layout mirrors the seller's form in real time (non-interactive).
+ * Brand-only colours, no processor names, no em dashes.
  */
 
 /** Which buyer fields the checkout collects. Name is always on. */
@@ -37,39 +31,43 @@ export type CheckoutData = {
   business: string;
   sellerLogo: string;
   contacts: typeof SAMPLE.contacts;
-  /** Real photo URL/object-URL, or "" for the branded neutral state. */
   productImage: string;
   title: string;
   description: string;
-  /** Pre-formatted NGN string, e.g. "₦35,000". */
   priceLabel: string;
   delivery: string;
   paidCount: number;
   buyerFields: BuyerFields;
 };
 
-const DEFAULT_FIELDS: BuyerFields = {
-  phone: true,
-  email: false,
-  address: false,
-};
+const DEFAULT_FIELDS: BuyerFields = { phone: true, email: false, address: false };
+
+const NG_STATES = ["Lagos", "Abuja", "Rivers", "Kano", "Oyo", "Delta", "Enugu", "Kaduna"];
+
+const FAQS = [
+  {
+    q: "Is my payment secure?",
+    a: "Yes. Your payment is protected with bank-grade encryption, and your card details are never shared with the seller.",
+  },
+  {
+    q: "When will I receive my order?",
+    a: "After payment, the seller reaches out to confirm your order and delivery details. Delivery timing depends on the seller.",
+  },
+  {
+    q: "Can I get a refund?",
+    a: "Refunds are subject to the seller's policy. If you have concerns, contact the seller before completing payment.",
+  },
+];
 
 export default function CheckoutCard({
   data,
   preview = false,
 }: {
   data?: Partial<CheckoutData>;
-  /** Preview = no navigation on Pay, render as a non-interactive showcase. */
   preview?: boolean;
 } = {}) {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  // photoOk toggles the real-photo vs. branded-neutral fallback when an <img>
-  // fails to load. The explicit empty-string check below handles "no photo".
-  const [photoOk, setPhotoOk] = useState(true);
 
-  // Resolve content: builder overrides win; otherwise the fixed SAMPLE.
   const business = data?.business ?? SAMPLE.business;
   const sellerLogo = data?.sellerLogo ?? SAMPLE.sellerLogo;
   const contacts = data?.contacts ?? SAMPLE.contacts;
@@ -81,254 +79,357 @@ export default function CheckoutCard({
   const paidCount = data?.paidCount ?? SAMPLE.paidCount;
   const fields = data?.buyerFields ?? DEFAULT_FIELDS;
 
-  // In preview, the seller hasn't typed anything yet — show muted placeholders
-  // rather than blank space so the card never looks broken.
-  const titleText = title || (preview ? "Your product title" : title);
+  const displayTitle = title || (preview ? "Your product title" : title);
   const titleMuted = preview && !title;
+  const displayPrice = priceLabel || (preview ? "₦0" : priceLabel);
+  const initials = (business || "P").trim().slice(0, 2).toUpperCase();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [photoOk, setPhotoOk] = useState(true);
+  const [errors, setErrors] = useState<{ name?: boolean; email?: boolean; phone?: boolean }>({});
+  const [showFormErr, setShowFormErr] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
   const showPhoto = Boolean(productImage) && photoOk;
 
   function handlePay() {
-    if (preview) return; // builder preview is non-interactive
+    if (preview) return;
+    const next: typeof errors = {};
+    if (!name.trim()) next.name = true;
+    if (fields.email && !/\S+@\S+\.\S+/.test(email)) next.email = true;
+    if (fields.phone && !phone.trim()) next.phone = true;
+    setErrors(next);
+    if (Object.keys(next).length > 0) {
+      setShowFormErr(true);
+      return;
+    }
+    setShowFormErr(false);
+    setSubmitting(true);
     router.push("/pay/redirect");
   }
 
   return (
-    <div className="relative w-full max-w-[420px] animate-onboard-fade">
-      {/* Seller header row */}
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex min-w-0 items-center gap-2.5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#ECEBF3] bg-white">
-            <img
-              src={sellerLogo}
-              alt=""
-              className="h-6 w-6 object-contain"
-            />
-          </span>
-          <span className="truncate text-sm font-semibold text-[#14132B]">
-            {business}
-          </span>
+    <div className="w-full max-w-[440px] overflow-hidden rounded-[24px] border border-[#ECEBF3] bg-white shadow-[0_20px_60px_-30px_rgba(95,88,244,0.35)]">
+      {/* Product image */}
+      {showPhoto ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={productImage}
+          alt={titleMuted ? "" : displayTitle}
+          onError={() => setPhotoOk(false)}
+          className="h-56 w-full object-cover"
+        />
+      ) : (
+        <div className="flex h-44 w-full items-center justify-center bg-[#F5F4FF]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/assets/paypoint-wordmark-indigo.png" alt="Paypoint" className="h-7 w-auto opacity-80" />
         </div>
-        <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#EEEDFE] px-2.5 py-1 text-[11px] font-semibold text-[#5F58F4]">
-          <LockIcon size={11} />
-          Secure
+      )}
+
+      {/* Seller row */}
+      <div className="flex items-center justify-between px-5 pt-4">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#EEEDFE] text-xs font-bold text-[#5F58F4]">
+            {sellerLogo && sellerLogo !== SAMPLE.sellerLogo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={sellerLogo} alt="" className="h-full w-full object-cover" />
+            ) : (
+              initials
+            )}
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-[13px] font-bold text-[#14132B]">{business}</p>
+            <p className="text-[11px] text-[#6C6B7B]">Paypoint seller</p>
+          </div>
+        </div>
+        <span className="inline-flex shrink-0 items-center gap-1 text-[11px] font-semibold text-[#6C6B7B]">
+          <LockIcon size={12} /> Secure
         </span>
       </div>
 
-      {/* Card */}
-      <div className="overflow-hidden rounded-[20px] border border-[#ECEBF3] bg-white shadow-[0_4px_24px_rgba(20,19,43,0.06)]">
-        {/* Product image — real photo, with branded neutral fallback */}
-        {showPhoto ? (
-          <img
-            src={productImage}
-            alt={titleMuted ? "" : titleText}
-            onError={() => setPhotoOk(false)}
-            className="aspect-[5/4] w-full object-cover"
-          />
-        ) : (
-          <div className="flex aspect-[5/4] w-full items-center justify-center bg-[#F5F4FF]">
-            <img
-              src="/assets/paypoint-wordmark-indigo.png"
-              alt="Paypoint"
-              className="h-7 w-auto opacity-80"
-            />
+      {/* Product info */}
+      <div className="px-5 pt-3.5">
+        <h1 className={`text-[22px] font-extrabold leading-tight tracking-[-0.02em] ${titleMuted ? "text-[#9A99A8]" : "text-[#14132B]"}`}>
+          {displayTitle}
+        </h1>
+        <p className="mt-2 text-[30px] font-extrabold leading-none tracking-[-0.03em] text-[#14132B]">
+          {displayPrice}
+        </p>
+        {(delivery || paidCount > 0) && (
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+            {delivery && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[#6C6B7B]">
+                <TruckIcon size={14} /> {delivery}
+              </span>
+            )}
+            {paidCount > 0 && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[#6C6B7B]">
+                <span className="text-[#F5A623]"><StarIcon size={13} /></span> {paidCount} paid
+              </span>
+            )}
+          </div>
+        )}
+        {description && (
+          <p className="mt-3 border-b border-[#ECEBF3] pb-4 text-sm leading-relaxed text-[#33323F]">
+            {description}
+          </p>
+        )}
+      </div>
+
+      {/* Your details */}
+      <div className="px-5 pt-4">
+        <span className="mb-3 block text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#9A99A8]">
+          Your details
+        </span>
+
+        {showFormErr && (
+          <div className="mb-3 rounded-[10px] border border-[#F3C6C2] bg-[#FEECEB] px-3 py-2.5 text-[13px] font-semibold text-[#B42318]">
+            Please fill in the required fields below.
           </div>
         )}
 
-        <div className="p-5 sm:p-6">
-          {/* Title + description + price */}
-          <h1
-            className={`text-lg font-semibold tracking-[-0.01em] ${
-              titleMuted ? "text-[#9A99A8]" : "text-[#14132B]"
-            }`}
-          >
-            {titleText}
-          </h1>
-          {description && (
-            <p className="mt-1.5 text-sm leading-relaxed text-[#6C6B7B]">
-              {description}
-            </p>
-          )}
-          <p className="mt-3 text-[28px] font-bold leading-none tracking-[-0.02em] text-[#14132B]">
-            {priceLabel || (preview ? "₦0" : priceLabel)}
-          </p>
+        <BuyerField
+          label="Full name"
+          placeholder="Enter your full name"
+          type="text"
+          autoComplete="name"
+          value={name}
+          onChange={setName}
+          error={errors.name}
+          errorText="Please enter your full name so the seller knows who to prepare for."
+          preview={preview}
+        />
+        {fields.email && (
+          <BuyerField
+            label="Email address"
+            placeholder="your@email.com"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={setEmail}
+            error={errors.email}
+            errorText="Please enter your email address to receive your payment receipt."
+            preview={preview}
+          />
+        )}
+        {fields.phone && (
+          <BuyerField
+            label="Phone number"
+            placeholder="080 0000 0000"
+            type="tel"
+            autoComplete="tel"
+            value={phone}
+            onChange={setPhone}
+            error={errors.phone}
+            errorText="Please enter your phone number so the seller can contact you."
+            preview={preview}
+          />
+        )}
+      </div>
 
-          {/* Meta row: delivery + social proof.
-              Social proof is hidden entirely when paidCount === 0 —
-              never render "0 paid". Delivery hidden when empty. */}
-          {(delivery || paidCount > 0) && (
-            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[#ECEBF3] pt-4 text-sm">
-              {delivery && (
-                <span className="inline-flex items-center gap-1.5 text-[#33323F]">
-                  <span className="text-[#9A99A8]">
-                    <TruckIcon size={15} />
-                  </span>
-                  {delivery}
-                </span>
-              )}
-              {paidCount > 0 && (
-                <span className="inline-flex items-center gap-1.5 text-[#33323F]">
-                  <span className="text-[#F5A623]">
-                    <StarIcon size={13} />
-                  </span>
-                  {paidCount} paid
-                </span>
-              )}
-            </div>
-          )}
-
-          {/* Buyer fields — Name is always collected. The rest are toggled
-              by the seller in the builder. */}
-          <div className="mt-5 space-y-4">
-            <div>
-              <label
-                htmlFor="buyer-name"
-                className="mb-1.5 block text-xs font-semibold text-[#6C6B7B]"
-              >
-                Your name
-              </label>
-              <input
-                id="buyer-name"
-                name="buyer-name"
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Chidinma Okeke"
-                autoComplete="name"
+      {/* Delivery address */}
+      {fields.address && (
+        <div className="px-5 pt-3">
+          <span className="mb-3 block text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#9A99A8]">
+            Delivery address
+          </span>
+          <BuyerField label="Street address" placeholder="Enter your delivery address" type="text" autoComplete="street-address" preview={preview} />
+          <div className="grid grid-cols-2 gap-2.5">
+            <BuyerField label="City" placeholder="City" type="text" preview={preview} />
+            <div className="mb-3">
+              <label className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.06em] text-[#6C6B7B]">State</label>
+              <select
                 tabIndex={preview ? -1 : undefined}
-                className="h-11 w-full rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
-              />
+                defaultValue=""
+                className="h-11 w-full appearance-none rounded-[11px] border border-[#E3E2EE] bg-white px-3 text-sm text-[#14132B] outline-none transition focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
+              >
+                <option value="" disabled>State</option>
+                {NG_STATES.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
             </div>
-            {fields.phone && (
-              <div>
-                <label
-                  htmlFor="buyer-phone"
-                  className="mb-1.5 block text-xs font-semibold text-[#6C6B7B]"
-                >
-                  Phone number
-                </label>
-                <input
-                  id="buyer-phone"
-                  name="buyer-phone"
-                  type="tel"
-                  inputMode="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="0801 234 5678"
-                  autoComplete="tel"
-                  tabIndex={preview ? -1 : undefined}
-                  className="h-11 w-full rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
-                />
-              </div>
-            )}
-            {fields.email && (
-              <div>
-                <label
-                  htmlFor="buyer-email"
-                  className="mb-1.5 block text-xs font-semibold text-[#6C6B7B]"
-                >
-                  Email address
-                </label>
-                <input
-                  id="buyer-email"
-                  name="buyer-email"
-                  type="email"
-                  inputMode="email"
-                  placeholder="you@email.com"
-                  autoComplete="email"
-                  tabIndex={preview ? -1 : undefined}
-                  readOnly={preview}
-                  className="h-11 w-full rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
-                />
-              </div>
-            )}
-            {fields.address && (
-              <div>
-                <label
-                  htmlFor="buyer-address"
-                  className="mb-1.5 block text-xs font-semibold text-[#6C6B7B]"
-                >
-                  Delivery address
-                </label>
-                <input
-                  id="buyer-address"
-                  name="buyer-address"
-                  type="text"
-                  placeholder="House, street, city"
-                  autoComplete="street-address"
-                  tabIndex={preview ? -1 : undefined}
-                  readOnly={preview}
-                  className="h-11 w-full rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
-                />
-              </div>
-            )}
           </div>
+        </div>
+      )}
 
-          {/* Pay button */}
-          <button
-            type="button"
-            onClick={handlePay}
-            tabIndex={preview ? -1 : undefined}
-            aria-disabled={preview || undefined}
-            className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#5F58F4] text-[15px] font-semibold text-white transition hover:bg-[#4A43D6]"
-          >
-            <LockIcon size={15} />
-            Pay {priceLabel || (preview ? "₦0" : priceLabel)}
-          </button>
-
-          {/* Trust + contact block — context-aware.
-              preview (builder): seller-reassurance, no buyer-contact section.
-              public  (buyer):   buyer-reassurance + "ask before paying" chips. */}
-          {preview ? (
-            <p className="mt-4 text-center text-xs leading-relaxed text-[#6C6B7B]">
-              Instant receipt after payment. Funds go straight to your bank — we
-              never hold your money.
-            </p>
-          ) : (
-            <>
-              <p className="mt-4 text-center text-xs leading-relaxed text-[#6C6B7B]">
-                Your payment is secure. You&rsquo;ll get an instant receipt, and{" "}
-                {business} will contact you to confirm your order.
-              </p>
-
-              {contacts.length > 0 && (
-                <div className="mt-5 border-t border-[#ECEBF3] pt-4">
-                  <p className="mb-2.5 text-center text-xs font-semibold text-[#6C6B7B]">
-                    Have a question before paying?
-                  </p>
-                  <div className="flex items-center justify-center gap-2.5">
-                    {contacts.map((c) => (
-                      <a
-                        key={c.type}
-                        href={c.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-full border border-[#E3E2EE] bg-white px-3 py-1.5 text-xs font-medium text-[#33323F] transition hover:border-[#C7C4F7] hover:bg-[#F5F4FF]"
-                      >
-                        <span className="text-[#5F58F4]">
-                          {c.type === "whatsapp" ? (
-                            <WhatsAppIcon size={14} />
-                          ) : (
-                            <InstagramIcon size={14} />
-                          )}
-                        </span>
-                        {c.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
+      {/* Order summary */}
+      <div className="px-5 pt-3">
+        <div className="rounded-[13px] border border-[#ECEBF3] bg-[#FAFAFE] p-3.5">
+          <div className="flex items-center justify-between border-b border-[#ECEBF3] py-1.5">
+            <span className="truncate pr-3 text-[13px] text-[#6C6B7B]">{displayTitle}</span>
+            <span className="text-[13px] font-semibold text-[#33323F]">{displayPrice}</span>
+          </div>
+          <div className="flex items-center justify-between border-b border-[#ECEBF3] py-1.5">
+            <span className="text-[13px] text-[#6C6B7B]">Delivery</span>
+            <span className="text-[13px] font-semibold text-[#0B7A4B]">Free</span>
+          </div>
+          <div className="flex items-center justify-between pt-2.5">
+            <span className="text-[15px] font-extrabold text-[#14132B]">Total</span>
+            <span className="text-[16px] font-extrabold text-[#14132B]">{displayPrice}</span>
+          </div>
         </div>
       </div>
 
-      {/* Footer secure line */}
-      <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-[#9A99A8]">
-        <ShieldIcon size={13} />
-        Secure checkout
-      </p>
+      {/* Trust line */}
+      <div className="px-5 pt-3">
+        <div className="rounded-[11px] border border-[#EEEDFE] bg-[#F5F4FF] px-4 py-3 text-center text-xs font-semibold leading-relaxed text-[#5F58F4]">
+          You&rsquo;re paying {business} directly.
+          <br />
+          Paypoint never holds your money.
+        </div>
+      </div>
+
+      {/* Pay button */}
+      <div className="px-5 pt-3.5">
+        <button
+          type="button"
+          onClick={handlePay}
+          disabled={submitting}
+          tabIndex={preview ? -1 : undefined}
+          className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[14px] bg-[#5F58F4] text-[16px] font-extrabold text-white transition hover:bg-[#4A43D6] disabled:opacity-70"
+        >
+          {submitting ? (
+            <>
+              <span className="h-4 w-4 animate-spin rounded-full border-[2.5px] border-white/40 border-t-white" />
+              Preparing secure payment…
+            </>
+          ) : (
+            <>
+              <LockIcon size={16} /> Pay {displayPrice}
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Trust badges */}
+      <div className="flex flex-col gap-2 px-5 pt-3.5">
+        <TrustRow icon="🔒">Bank-grade secure payment</TrustRow>
+        <TrustRow icon="🏦">Money goes directly to the seller</TrustRow>
+        <TrustRow icon="🧾">Instant payment confirmation</TrustRow>
+      </div>
+
+      {/* Seller contact */}
+      {contacts.length > 0 && (
+        <div className="px-5 pt-4">
+          <div className="rounded-[13px] border border-[#ECEBF3] bg-[#FAFAFE] p-3.5">
+            <p className="mb-2.5 text-center text-xs font-semibold text-[#6C6B7B]">
+              Have a question before paying?
+            </p>
+            <div className="flex items-center justify-center gap-2.5">
+              {contacts.map((c) => (
+                <a
+                  key={c.type}
+                  href={preview ? undefined : c.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  tabIndex={preview ? -1 : undefined}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#E3E2EE] bg-white px-3 py-1.5 text-xs font-medium text-[#33323F] transition hover:border-[#C7C4F7] hover:bg-[#F5F4FF]"
+                >
+                  <span className="text-[#5F58F4]">
+                    {c.type === "whatsapp" ? <WhatsAppIcon size={14} /> : <InstagramIcon size={14} />}
+                  </span>
+                  {c.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FAQ */}
+      <div className="px-5 pt-4">
+        <span className="mb-1 block text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#9A99A8]">
+          Questions
+        </span>
+        {FAQS.map((f, i) => {
+          const isOpen = openFaq === i;
+          return (
+            <div key={f.q} className="border-b border-[#ECEBF3] last:border-b-0">
+              <button
+                type="button"
+                onClick={() => setOpenFaq(isOpen ? null : i)}
+                tabIndex={preview ? -1 : undefined}
+                className="flex w-full items-center justify-between gap-3 py-3.5 text-left text-sm font-semibold text-[#14132B] transition-colors hover:text-[#5F58F4]"
+              >
+                {f.q}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={`shrink-0 text-[#9A99A8] transition-transform ${isOpen ? "rotate-180" : ""}`} aria-hidden>
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <div className={`grid transition-all duration-200 ${isOpen ? "grid-rows-[1fr] pb-3.5" : "grid-rows-[0fr]"}`}>
+                <p className="overflow-hidden text-[13px] leading-relaxed text-[#6C6B7B]">{f.a}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Powered by */}
+      <div className="px-5 pb-6 pt-5 text-center">
+        <p className="text-[11px] font-bold text-[#9A99A8]">Powered by</p>
+        <p className="mt-0.5 text-[15px] font-extrabold tracking-[-0.02em] text-[#5F58F4]">Paypoint.</p>
+        <p className="mt-0.5 text-[11px] text-[#9A99A8]">Get paid for anything you sell</p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Reusable buyer field ── */
+function BuyerField({
+  label,
+  placeholder,
+  type,
+  autoComplete,
+  value,
+  onChange,
+  error,
+  errorText,
+  preview,
+}: {
+  label: string;
+  placeholder: string;
+  type: string;
+  autoComplete?: string;
+  value?: string;
+  onChange?: (v: string) => void;
+  error?: boolean;
+  errorText?: string;
+  preview?: boolean;
+}) {
+  return (
+    <div className="mb-3">
+      <label className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.06em] text-[#6C6B7B]">
+        {label}
+      </label>
+      <input
+        type={type}
+        inputMode={type === "tel" ? "tel" : type === "email" ? "email" : undefined}
+        autoComplete={autoComplete}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
+        readOnly={preview && onChange === undefined}
+        tabIndex={preview ? -1 : undefined}
+        className={`h-11 w-full rounded-[11px] border bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:ring-2 focus:ring-[#EEEDFE] ${
+          error ? "border-[#B42318] focus:border-[#B42318]" : "border-[#E3E2EE] focus:border-[#5F58F4]"
+        }`}
+      />
+      {error && errorText && (
+        <p className="mt-1 text-xs leading-relaxed text-[#B42318]">{errorText}</p>
+      )}
+    </div>
+  );
+}
+
+function TrustRow({ icon, children }: { icon: string; children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-2.5 text-xs font-medium text-[#6C6B7B]">
+      <span className="text-[15px]">{icon}</span>
+      {children}
     </div>
   );
 }

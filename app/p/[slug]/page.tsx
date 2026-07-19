@@ -51,12 +51,8 @@ export default async function CheckoutPage({
   const page = await getPage(params.slug);
 
   return (
-    <main className="flex min-h-[100dvh] w-full flex-col items-center justify-center bg-[#FAFAFE] px-5 py-8 sm:py-12">
-      {page ? (
-        <CheckoutCard data={toCheckoutData(page)} />
-      ) : (
-        <Unavailable />
-      )}
+    <main className="flex min-h-[100dvh] w-full justify-center bg-[#F5F4FF] px-4 py-6 sm:py-10">
+      {page ? <CheckoutCard data={toCheckoutData(page)} /> : <Unavailable />}
     </main>
   );
 }
@@ -82,34 +78,36 @@ function toCheckoutData(page: PublicPage): CheckoutData {
   };
 }
 
-/** Calm, branded state for a missing or inactive page — not a 404. */
+/** Calm, branded state for a missing or inactive page (not a 404). */
 function Unavailable() {
   return (
-    <div className="w-full max-w-[420px] text-center">
-      <div className="overflow-hidden rounded-[20px] border border-[#ECEBF3] bg-white p-8 shadow-[0_4px_24px_rgba(20,19,43,0.06)]">
-        <div className="mb-5 flex justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/paypoint-wordmark-indigo.png"
-            alt="Paypoint"
-            className="h-6 w-auto opacity-80"
-          />
+    <div className="w-full max-w-[440px] self-center">
+      <div className="overflow-hidden rounded-[24px] border border-[#ECEBF3] bg-white p-8 text-center shadow-[0_20px_60px_-30px_rgba(95,88,244,0.35)]">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#F5F4FF] text-3xl">
+          🔒
         </div>
-        <h1 className="text-lg font-semibold tracking-[-0.01em] text-[#14132B]">
-          This payment page is unavailable
+        <h1 className="text-xl font-extrabold tracking-[-0.01em] text-[#14132B]">
+          This checkout isn&rsquo;t available anymore.
         </h1>
-        <p className="mt-2 text-sm leading-relaxed text-[#6C6B7B]">
-          The link may be inactive or no longer exist. Please check with the
+        <p className="mx-auto mt-2 max-w-[300px] text-sm leading-relaxed text-[#6C6B7B]">
+          It may have been paused or removed by the seller. Please check with the
           seller for an updated link.
         </p>
         <Link
           href="/"
-          className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-[#5F58F4] px-5 text-sm font-semibold text-white transition hover:bg-[#4A43D6]"
+          className="mt-6 inline-flex h-11 items-center justify-center rounded-xl border border-[#E3E2EE] bg-[#FAFAFE] px-5 text-sm font-semibold text-[#33323F] transition hover:border-[#C7C4F7] hover:text-[#5F58F4]"
         >
           Go to Paypoint
         </Link>
+
+        <div className="mt-7 border-t border-[#ECEBF3] pt-5 text-xs text-[#9A99A8]">
+          Looking to accept payments yourself?
+          <br />
+          <Link href="/early-access" className="font-bold text-[#5F58F4] hover:text-[#4A43D6]">
+            Try Paypoint free →
+          </Link>
+        </div>
       </div>
-      <p className="mt-6 text-xs text-[#9A99A8]">Secure checkout</p>
     </div>
   );
 }

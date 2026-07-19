@@ -17,6 +17,14 @@ export type SellerPage = {
   active: boolean;
   /** Real photo URL, or "" for the branded neutral state (never a grey box). */
   image: string;
+  /** Pre-formatted lifetime revenue, e.g. "₦210,000". */
+  revenueLabel: string;
+  /** Raw revenue in kobo (for sorting). */
+  revenueKobo: number;
+  /** Relative created label, e.g. "3 days ago". */
+  createdAgo: string;
+  /** Created timestamp in ms (for sorting). */
+  createdAtMs: number;
 };
 
 /** Build the public share link for a page from its slug. */

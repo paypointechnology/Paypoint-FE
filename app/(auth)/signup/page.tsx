@@ -64,12 +64,12 @@ export default function SignupPage() {
       altPrompt="Already have an account?"
       altLinkText="Log in"
       altHref="/login"
+      brandHeading="Start getting paid."
+      brandSub="Create a checkout, share your link, and money lands straight in your bank."
     >
-      <GoogleButton label="Sign up with Google" onClick={handleGoogle} />
-      <Divider />
       <form onSubmit={handleSubmit}>
         <Field
-          label="Email"
+          label="Email address"
           name="email"
           type="email"
           placeholder="you@business.com"
@@ -87,9 +87,12 @@ export default function SignupPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && (
-          <p className="mb-3 text-sm text-[#B42318]" role="alert">
-            {error}
-          </p>
+          <div className="mb-3 rounded-xl border border-[#F3C6C2] bg-[#FEECEB] p-3.5" role="alert">
+            <p className="text-[13px] font-bold text-[#B42318]">
+              We couldn&rsquo;t create your account.
+            </p>
+            <p className="mt-0.5 text-[13px] leading-relaxed text-[#B42318]">{error}</p>
+          </div>
         )}
         <button
           type="submit"
@@ -98,18 +101,22 @@ export default function SignupPage() {
         >
           {submitting ? "Creating account…" : "Create account"}
         </button>
-        <p className="mt-4 text-center text-xs leading-relaxed text-[#9A99A8]">
-          By creating an account, you agree to our{" "}
-          <Link href="#" className="text-[#6C6B7B] underline underline-offset-2 hover:text-[#14132B]">
-            Terms
-          </Link>{" "}
-          and{" "}
-          <Link href="#" className="text-[#6C6B7B] underline underline-offset-2 hover:text-[#14132B]">
-            Privacy Policy
-          </Link>
-          .
-        </p>
       </form>
+
+      <Divider />
+      <GoogleButton label="Continue with Google" onClick={handleGoogle} />
+
+      <p className="mt-5 text-center text-xs leading-relaxed text-[#9A99A8]">
+        By creating an account, you agree to our{" "}
+        <Link href="#" className="text-[#6C6B7B] underline underline-offset-2 hover:text-[#14132B]">
+          Terms
+        </Link>{" "}
+        and{" "}
+        <Link href="#" className="text-[#6C6B7B] underline underline-offset-2 hover:text-[#14132B]">
+          Privacy Policy
+        </Link>
+        .
+      </p>
     </AuthShell>
   );
 }

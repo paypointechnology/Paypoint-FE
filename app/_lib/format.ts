@@ -55,6 +55,24 @@ export function nairaFromKobo(kobo: number | null | undefined): string {
 }
 
 /**
+ * Compact "time since" label for created dates: "Today" / "3 days ago" /
+ * "2 weeks ago" / "1 month ago". Empty/invalid → "".
+ */
+export function agoLabel(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+  const days = Math.floor((Date.now() - then) / 86_400_000);
+  if (days <= 0) return "Today";
+  if (days === 1) return "Yesterday";
+  if (days < 7) return `${days} days ago`;
+  if (days < 14) return "1 week ago";
+  if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
+  if (days < 60) return "1 month ago";
+  return `${Math.floor(days / 30)} months ago`;
+}
+
+/**
  * Human day label for a payment timestamp: "Today" / "Yesterday" /
  * "12 Jun". Empty/invalid → "".
  */

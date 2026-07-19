@@ -329,3 +329,54 @@ body {
     .jb-node-icon { font-size: 20px; }
     .jb-node-lbl { font-size: 9px; letter-spacing: .04em; }
 }
+
+/* =============================================================================
+   VERTICAL JOURNEY — the auth brand-panel animation. A dot travels down an
+   indigo panel while each step icon lights up in sequence. Colours assume a
+   brand-indigo (#5F58F4) panel background, so accents are white/tint.
+   ============================================================================= */
+.jv { position: relative; padding-left: 22px; }
+.jv-track { position: absolute; left: 19px; top: 20px; bottom: 20px; width: 2px; background: rgba(255,255,255,.18); }
+.jv-fill { position: absolute; left: 0; top: 0; width: 100%; background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,.25)); animation: jvFill 3s ease-in-out infinite; }
+.jv-dot2 { position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: 0 0 16px rgba(255,255,255,.9), 0 0 28px rgba(255,255,255,.4); animation: jvDot 3s ease-in-out infinite; }
+@keyframes jvFill { 0% { height: 0%; } 90% { height: 100%; opacity: .7; } 100% { height: 100%; opacity: 0; } }
+@keyframes jvDot { 0% { top: 0%; opacity: 0; } 5% { opacity: 1; } 90% { opacity: 1; } 100% { top: calc(100% - 10px); opacity: 0; } }
+.jv-ico { border: 1.5px solid transparent; background: rgba(255,255,255,.12); animation: jvNode 3s ease-in-out infinite; }
+.jv-ico.d0 { animation-delay: 0s; }
+.jv-ico.d1 { animation-delay: .75s; }
+.jv-ico.d2 { animation-delay: 1.5s; }
+.jv-ico.d3 { animation-delay: 2.25s; }
+@keyframes jvNode {
+    0% { background: rgba(255,255,255,.35); border-color: rgba(255,255,255,.9); }
+    20% { background: rgba(255,255,255,.12); border-color: transparent; }
+    100% { background: rgba(255,255,255,.12); border-color: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .jv-fill, .jv-dot2, .jv-ico { animation: none; }
+    .jv-ico { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.5); }
+}
+
+/* =============================================================================
+   PAYMENT SUCCESS — animated draw-in checkmark + confetti burst.
+   ============================================================================= */
+.check-circle { stroke-dasharray: 226; stroke-dashoffset: 226; animation: drawCircle .5s ease forwards .1s; }
+.check-mark { stroke-dasharray: 46; stroke-dashoffset: 46; animation: drawMark .4s ease forwards .55s; }
+@keyframes drawCircle { to { stroke-dashoffset: 0; } }
+@keyframes drawMark { to { stroke-dashoffset: 0; } }
+
+.confetti-piece { position: absolute; left: 50%; top: 45%; opacity: 1; will-change: transform, opacity; }
+@keyframes cf0 { to { transform: translate(-130px,-100px) rotate(720deg); opacity: 0; } }
+@keyframes cf1 { to { transform: translate(130px,-100px) rotate(-720deg); opacity: 0; } }
+@keyframes cf2 { to { transform: translate(-70px,-150px) rotate(540deg); opacity: 0; } }
+@keyframes cf3 { to { transform: translate(70px,-150px) rotate(-540deg); opacity: 0; } }
+@keyframes cf4 { to { transform: translate(0,-160px) rotate(360deg); opacity: 0; } }
+@keyframes cf5 { to { transform: translate(-160px,-40px) rotate(480deg); opacity: 0; } }
+@keyframes cf6 { to { transform: translate(160px,-40px) rotate(-480deg); opacity: 0; } }
+@keyframes cf7 { to { transform: translate(-100px,-130px) rotate(600deg); opacity: 0; } }
+@keyframes cf8 { to { transform: translate(100px,-130px) rotate(-600deg); opacity: 0; } }
+@keyframes cf9 { to { transform: translate(30px,-170px) rotate(720deg); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .check-circle, .check-mark { animation: none; stroke-dashoffset: 0; }
+    .confetti-piece { display: none; }
+}
