@@ -243,6 +243,7 @@ export default function CheckoutCard({
               <label className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.06em] text-[#6C6B7B]">State</label>
               <select
                 tabIndex={preview ? -1 : undefined}
+                disabled={preview}
                 defaultValue=""
                 className="h-11 w-full appearance-none rounded-[11px] border border-[#E3E2EE] bg-white px-3 text-sm text-[#14132B] outline-none transition focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
               >
@@ -412,7 +413,7 @@ function BuyerField({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
-        readOnly={preview && onChange === undefined}
+        readOnly={preview}
         tabIndex={preview ? -1 : undefined}
         className={`h-11 w-full rounded-[11px] border bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:ring-2 focus:ring-[#EEEDFE] ${
           error ? "border-[#B42318] focus:border-[#B42318]" : "border-[#E3E2EE] focus:border-[#5F58F4]"

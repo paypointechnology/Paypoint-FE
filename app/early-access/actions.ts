@@ -1,6 +1,8 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendEmail } from "@/lib/email/brevo";
+import { waitlistWelcomeEmail } from "@/lib/email/templates";
 
 /**
  * Waitlist capture. All writes go through the service-role admin client so the
@@ -27,20 +29,42 @@ export async function joinWaitlist(
 
   try {
     const admin = createAdminClient();
-    // Upsert so a repeat signup is idempotent and still returns the row id
-    // (lets a returning visitor re-answer the survey).
+
+    // Already on the list? Return the row id without re-sending the welcome.
+    const { data: existing } = await admin
+      .from("waitlist")
+      .select("id")
+      .eq("email", clean)
+      .maybeSingle();
+    if (existing) return { ok: true, id: existing.id };
+
     const { data, error } = await admin
       .from("waitlist")
-      .upsert(
-        { email: clean, source: source || "hero" },
-        { onConflict: "email" },
-      )
+      .insert({ email: clean, source: source || "hero" })
       .select("id")
       .single();
 
+    // Lost a race to a concurrent signup — fetch and return the existing row.
+    if (error?.code === "23505") {
+      const { data: dup } = await admin
+        .from("waitlist")
+        .select("id")
+        .eq("email", clean)
+        .maybeSingle();
+      if (dup) return { ok: true, id: dup.id };
+    }
     if (error || !data) {
       return { ok: false, error: "Something went wrong. Please try again." };
     }
+
+    // Send the welcome email. Never block signup on email delivery.
+    try {
+      const mail = waitlistWelcomeEmail();
+      await sendEmail({ to: clean, subject: mail.subject, html: mail.html, text: mail.text, tags: ["waitlist-welcome"] });
+    } catch {
+      /* email failure must not fail the signup */
+    }
+
     return { ok: true, id: data.id };
   } catch {
     return { ok: false, error: "Something went wrong. Please try again." };
