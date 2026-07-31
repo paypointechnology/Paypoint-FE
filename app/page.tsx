@@ -133,8 +133,8 @@ export default function Home() {
             <div className="mt-14 grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
               {/* Before: chat phone */}
               <div className="[animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate flex flex-col items-center gap-5">
-                <span className="rounded-full border border-[#ECEBF3] bg-white px-4 py-1.5 text-xs font-semibold text-[#6C6B7B] font-sans">
-                  The typical conversation
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#ECEBF3] bg-white px-4 py-1.5 text-xs font-semibold text-[#6C6B7B] font-sans">
+                  <span className="text-[#E5484D]">✕</span> The typical conversation
                 </span>
                 <WhatsAppPhone />
               </div>
@@ -631,7 +631,7 @@ function CheckoutPhone() {
   );
 }
 
-/** WhatsApp-style chat with a payment link + "just paid" moment. */
+/** The typical WhatsApp back-and-forth before Paypoint: the friction, in brand colors. */
 function WhatsAppPhone() {
   return (
     <div className="animate-[float_6s_ease-in-out_infinite] border-[8px] overflow-hidden z-20 flex flex-col bg-[#050505] w-[290px] sm:w-[320px] max-w-full h-[600px] sm:h-[640px] border-[#1A1A1A] ring-white/10 ring-1 rounded-[48px] relative shadow-2xl shadow-[#5F58F4]/10">
@@ -640,66 +640,68 @@ function WhatsAppPhone() {
           <div className="w-1 h-1 rounded-full bg-[#1a1a1a] border border-[#333]"></div>
         </div>
       </div>
-      <div className="w-full flex-1 bg-[#F5F4FF] flex flex-col relative overflow-hidden font-sans">
-        <div className="pt-11 pb-3 px-4 flex items-center gap-3 bg-[#5F58F4] relative z-20">
+      <div className="w-full flex-1 bg-[#ECE5DD] flex flex-col relative overflow-hidden font-sans">
+        {/* Header — the seller you're messaging */}
+        <div className="pt-11 pb-3 px-4 flex items-center gap-3 bg-[#0A8F57] relative z-20">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="text-white/90" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg>
-          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold text-white">C</div>
+          <div className="w-9 h-9 rounded-full bg-white/25 flex items-center justify-center text-sm font-bold text-white">A</div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-white truncate">Chidinma</p>
-            <p className="text-[10px] text-white/70">online</p>
+            <p className="text-sm font-semibold text-white truncate">Adaeze Couture</p>
+            <p className="text-[10px] text-white/75">online</p>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="text-white/90" fill="currentColor">
             <path d="M7 12a2 2 0 1 1-4 0a2 2 0 0 1 4 0m14 0a2 2 0 1 1-4 0a2 2 0 0 1 4 0M14 12a2 2 0 1 1-4 0a2 2 0 0 1 4 0" />
           </svg>
         </div>
 
-        <div className="flex-1 px-4 py-5 flex flex-col gap-3 overflow-hidden">
-          <div className="self-start max-w-[80%] bg-white rounded-2xl rounded-tl-md px-3.5 py-2.5 shadow-sm">
-            <p className="text-[13px] text-[#14132B] leading-snug">Hi! Do you still have the Aso Oke dress? 😍</p>
-            <span className="block text-right text-[9px] text-[#9A99A8] mt-1">10:24</span>
+        {/* The endless back-and-forth */}
+        <div className="flex-1 px-4 py-5 flex flex-col gap-2.5 overflow-hidden">
+          <div className="self-end max-w-[80%] bg-[#DCF8C6] rounded-2xl rounded-tr-md px-3.5 py-2 shadow-sm">
+            <p className="text-[13px] text-[#14132B] leading-snug">Hi, is the Aso Oke available?</p>
+            <span className="block text-right text-[9px] text-[#6C6B7B] mt-1">2:04 PM <span className="text-[#4FA9F5]">✓✓</span></span>
           </div>
 
-          <div className="self-end max-w-[85%] bg-[#EEEDFE] rounded-2xl rounded-tr-md p-1.5 shadow-sm">
-            <div className="rounded-xl overflow-hidden bg-white border border-black/5">
-              <div className="h-24 w-full bg-[#EEEDFE] flex items-center justify-center border-b border-[#ECEBF3]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#5F58F4" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
-                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                  <circle cx="9" cy="9" r="2" />
-                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                </svg>
-              </div>
-              <div className="px-3 py-2.5">
-                <p className="text-[11px] font-semibold text-[#14132B] leading-tight">Aso Oke Dress</p>
-                <div className="mt-1 flex items-center justify-between">
-                  <span className="text-[13px] font-bold text-[#5F58F4]">₦35,000</span>
-                  <span className="text-[9px] text-[#9A99A8]">paypoint.link</span>
-                </div>
-              </div>
-            </div>
-            <p className="px-1.5 pt-1.5 pb-0.5 text-[12px] text-[#14132B] break-all">paypoint.link/aso-oke-dress</p>
-            <span className="block text-right text-[9px] text-[#5F58F4] pr-1.5 pb-0.5">10:25 ✓✓</span>
+          <div className="self-start max-w-[80%] bg-white rounded-2xl rounded-tl-md px-3.5 py-2 shadow-sm">
+            <p className="text-[13px] text-[#14132B] leading-snug">Yes it is! 😊</p>
+            <span className="block text-right text-[9px] text-[#9A99A8] mt-1">2:06 PM</span>
           </div>
 
-          <div className="self-start max-w-[80%] bg-white rounded-2xl rounded-tl-md px-3.5 py-2.5 shadow-sm">
-            <p className="text-[13px] text-[#14132B] leading-snug">Just paid! 🎉</p>
-            <span className="block text-right text-[9px] text-[#9A99A8] mt-1">10:26</span>
+          <div className="self-end max-w-[80%] bg-[#DCF8C6] rounded-2xl rounded-tr-md px-3.5 py-2 shadow-sm">
+            <p className="text-[13px] text-[#14132B] leading-snug">How much?</p>
+            <span className="block text-right text-[9px] text-[#6C6B7B] mt-1">2:06 PM <span className="text-[#4FA9F5]">✓✓</span></span>
           </div>
 
-          <div className="self-center mt-1 inline-flex items-center gap-2 rounded-full bg-white/90 backdrop-blur px-3 py-1.5 shadow-sm border border-black/5">
-            <span className="w-5 h-5 rounded-full bg-[#E7F8EF] flex items-center justify-center text-[#0B7A4B]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 6 9 17l-5-5" />
-              </svg>
-            </span>
-            <span className="text-[10px] font-semibold text-[#14132B]">You got paid ₦35,000</span>
+          <div className="self-start max-w-[80%] bg-white rounded-2xl rounded-tl-md px-3.5 py-2 shadow-sm">
+            <p className="text-[13px] text-[#14132B] leading-snug">₦35,000 darling 🙏</p>
+            <span className="block text-right text-[9px] text-[#9A99A8] mt-1">2:08 PM</span>
+          </div>
+
+          <div className="self-end max-w-[80%] bg-[#DCF8C6] rounded-2xl rounded-tr-md px-3.5 py-2 shadow-sm">
+            <p className="text-[13px] text-[#14132B] leading-snug">Ok. What&rsquo;s your account number?</p>
+            <span className="block text-right text-[9px] text-[#6C6B7B] mt-1">2:09 PM <span className="text-[#4FA9F5]">✓✓</span></span>
+          </div>
+
+          <div className="self-start max-w-[80%] bg-white rounded-2xl rounded-tl-md px-3.5 py-2 shadow-sm">
+            <p className="text-[13px] text-[#14132B] leading-snug">
+              GTBank<br />
+              <span className="font-semibold">0123456789</span><br />
+              Adaeze Couture
+            </p>
+            <span className="block text-right text-[9px] text-[#9A99A8] mt-1">2:11 PM</span>
+          </div>
+
+          <div className="self-end max-w-[80%] bg-[#DCF8C6] rounded-2xl rounded-tr-md px-3.5 py-2 shadow-sm">
+            <p className="text-[13px] text-[#14132B] leading-snug">Got it, sending now 🙏</p>
+            <span className="block text-right text-[9px] text-[#6C6B7B] mt-1">2:12 PM <span className="text-[#4FA9F5]">✓✓</span></span>
           </div>
         </div>
 
-        <div className="px-3 py-3 bg-[#F5F4FF] flex items-center gap-2">
+        {/* Input bar */}
+        <div className="px-3 py-3 bg-[#ECE5DD] flex items-center gap-2">
           <div className="flex-1 h-9 rounded-full bg-white flex items-center px-4 text-[11px] text-[#9A99A8]">Type a message</div>
-          <div className="w-9 h-9 rounded-full bg-[#5F58F4] flex items-center justify-center text-white">
+          <div className="w-9 h-9 rounded-full bg-[#0A8F57] flex items-center justify-center text-white">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
             </svg>
