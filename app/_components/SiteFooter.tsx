@@ -24,7 +24,6 @@ export default function SiteFooter() {
               <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#9A99A8]">Product</h4>
               <ul className="flex flex-col gap-3">
                 <li><a href="/features" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">Features</a></li>
-                <li><a href="#" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">Pricing</a></li>
                 <li><a href="/#how-it-works" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">How it works</a></li>
               </ul>
             </div>
@@ -51,11 +50,10 @@ export default function SiteFooter() {
             <div className="flex flex-col gap-4">
               <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#9A99A8]">Connect</h4>
               <ul className="flex flex-col gap-3">
-                <li><a href="#" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">X</a></li>
-                <li><a href="#" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">Instagram</a></li>
-                <li><a href="#" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">LinkedIn</a></li>
-                <li><a href="#" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">Facebook</a></li>
-                <li><a href="#" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">TikTok</a></li>
+                <li><a href="https://x.com/usepaypoint" target="_blank" rel="noopener noreferrer" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">X</a></li>
+                <li><a href="https://www.instagram.com/paypointng/" target="_blank" rel="noopener noreferrer" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">Instagram</a></li>
+                <li><a href="https://www.linkedin.com/company/paypointng/" target="_blank" rel="noopener noreferrer" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">LinkedIn</a></li>
+                <li><a href="https://www.facebook.com/share/19BWUnrKQN/" target="_blank" rel="noopener noreferrer" className="text-sm text-[#33323F] transition-colors hover:text-[#14132B]">Facebook</a></li>
               </ul>
             </div>
           </div>

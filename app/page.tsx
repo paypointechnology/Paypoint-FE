@@ -104,10 +104,10 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Visual: checkout phone */}
+            {/* Visual: customer journey */}
             <div className="[animation:fadeSlideIn_0.8s_ease-out_0.35s_both] animate-on-scroll animate relative flex justify-center">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] max-w-[90vw] bg-[#5F58F4]/10 rounded-full blur-[90px] -z-10 pointer-events-none"></div>
-              <CheckoutPhone />
+              <CustomerJourney />
             </div>
           </div>
         </section>
@@ -534,97 +534,79 @@ export default function Home() {
    PHONE MOCKUPS — reused across the page (updated content).
    ============================================================================ */
 
-/** Buyer-facing checkout page (hero visual). */
-function CheckoutPhone() {
+/** Dotted connector between customer-journey steps. */
+function JourneyConnector() {
   return (
-    <div className="animate-[float_6s_ease-in-out_infinite] border-[8px] overflow-hidden z-20 flex flex-col bg-[#050505] w-[290px] sm:w-[320px] max-w-full h-[600px] sm:h-[640px] border-[#1A1A1A] ring-white/10 ring-1 rounded-[48px] relative shadow-2xl shadow-[#5F58F4]/10">
-      <div className="absolute top-0 w-full h-7 z-50 flex justify-center pt-2 pointer-events-none">
-        <div className="w-24 h-6 bg-black rounded-full relative flex items-center justify-end px-2 gap-1.5 shadow-sm border border-white/5">
-          <div className="w-1 h-1 rounded-full bg-[#1a1a1a] border border-[#333]"></div>
+    <div className="flex flex-col items-center gap-1 py-1.5" aria-hidden>
+      <span className="h-[3px] w-[3px] rounded-full bg-[#E3E2EE]" />
+      <span className="h-[3px] w-[3px] rounded-full bg-[#E3E2EE]" />
+      <span className="h-[3px] w-[3px] rounded-full bg-[#E3E2EE]" />
+    </div>
+  );
+}
+
+/** Hero visual: the customer journey — from seeing your link to the bank alert. */
+function CustomerJourney() {
+  return (
+    <div className="animate-[float_6s_ease-in-out_infinite] w-full max-w-[400px] rounded-[20px] border border-[#E3E2EE] bg-white p-6 shadow-2xl shadow-[#5F58F4]/10 font-sans">
+      <p className="mb-5 text-center text-[11px] font-bold uppercase tracking-[0.1em] text-[#9A99A8]">
+        The customer journey
+      </p>
+
+      {/* Step 1 — sees your link */}
+      <div className="flex items-center gap-3.5 rounded-xl border border-[#ECEBF3] bg-[#FAFAFE] px-3.5 py-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-[#E7F8EF] text-lg">📸</span>
+        <div>
+          <p className="text-[13px] font-bold text-[#14132B]">Sees your link</p>
+          <p className="mt-px text-xs text-[#6C6B7B]">Instagram bio, WhatsApp status, TikTok</p>
         </div>
       </div>
-      <div className="w-full flex-1 bg-[#FAFAFE] flex flex-col relative overflow-hidden font-sans">
-        <div className="pt-12 pb-4 px-5 flex justify-between items-center relative z-20">
-          <button className="w-8 h-8 rounded-full bg-white border border-[#ECEBF3] flex items-center justify-center text-[#33323F]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M11.55 15.7L8.12 12.27a.77.77 0 0 1 0-1.06l3.43-3.44c.79-.79 2.2-.22 2.2.89v6.13c0 1.12-1.41 1.68-2.2.91" opacity=".5" />
-              <path fill="currentColor" d="M8.5 12c0-.41.34-.75.75-.75h9.5a.75.75 0 0 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75" />
-            </svg>
-          </button>
-          <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-[#ECEBF3] shadow-sm">
-            <span className="w-4 h-4 rounded-full bg-[#5F58F4] flex items-center justify-center text-[8px] font-bold text-white">A</span>
-            <span className="text-xs font-medium text-[#14132B] font-sans">Adaeze Couture</span>
-          </div>
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#EEEDFE] px-2.5 py-1 text-[10px] font-semibold text-[#5F58F4]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+
+      <JourneyConnector />
+
+      {/* Step 2 — taps the checkout */}
+      <div className="flex items-center gap-3.5 rounded-xl border border-[#ECEBF3] bg-[#FAFAFE] px-3.5 py-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-[#EEEDFE] text-lg">🔗</span>
+        <div>
+          <p className="text-[13px] font-bold text-[#14132B]">Taps your checkout</p>
+          <p className="mt-px text-xs text-[#6C6B7B]">paypoint.co/p/your-product</p>
+        </div>
+      </div>
+
+      <JourneyConnector />
+
+      {/* Step 3 — pays on the checkout */}
+      <div className="rounded-xl border border-[#ECEBF3] bg-white p-3.5 shadow-[0_8px_24px_-16px_rgba(20,19,43,0.25)]">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="flex items-center gap-1.5 text-[11px] font-bold text-[#14132B]">
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#5F58F4] text-[8px] font-bold text-white">A</span>
+            Adaeze Couture
+          </span>
+          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-[#6C6B7B]">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#5F58F4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
             Secure
           </span>
         </div>
-
-        <div className="px-6 mt-2 text-center relative z-10">
-          <p className="text-sm font-medium text-[#33323F] mb-1 font-sans">Aso Oke Dress</p>
-          <div className="inline-block relative">
-            <h3 className="text-4xl text-[#14132B] tracking-tighter mb-1 font-sans font-semibold">₦35,000</h3>
-          </div>
-          <div className="flex justify-center items-center gap-3 text-[#33323F] mt-1">
-            <span className="flex items-center gap-1 text-[11px] font-medium font-sans">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              Nationwide · 3 days
-            </span>
-            <span className="flex items-center gap-1 text-[11px] font-medium text-[#5F58F4] font-sans">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-              </svg>
-              24 paid
-            </span>
-          </div>
+        <p className="text-[11px] text-[#6C6B7B]">Aso Oke Dress</p>
+        <p className="text-xl font-bold tracking-tight text-[#14132B]">₦35,000</p>
+        <div className="mt-2 rounded-lg bg-[#5F58F4] py-2 text-center text-xs font-bold text-white">
+          Pay ₦35,000
         </div>
+        <p className="mt-1.5 text-center text-[10px] text-[#9A99A8]">Secure payment · Instant receipt</p>
+      </div>
 
-        <div className="h-44 w-full relative mt-5 mb-5 px-6">
-          <div className="w-full h-full rounded-3xl overflow-hidden relative bg-[#EEEDFE] border border-[#ECEBF3] flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#5F58F4" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 opacity-80">
-              <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-              <circle cx="9" cy="9" r="2" />
-              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-            </svg>
-          </div>
-        </div>
+      <JourneyConnector />
 
-        <div className="px-5 mb-5">
-          <button className="w-full flex items-center justify-center gap-2 bg-[#5F58F4] text-white rounded-2xl py-4 hover:bg-[#4A43D6] transition-all shadow-lg shadow-[#5F58F4]/30 animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            <span className="text-sm font-bold font-sans">Pay ₦35,000</span>
-          </button>
-        </div>
-
-        <div className="flex-1 bg-white rounded-t-[24px] p-6 border-t border-[#ECEBF3] shadow-[0_-8px_24px_-12px_rgba(20,19,43,0.08)]">
-          <div className="w-10 h-1 bg-[#ECEBF3] rounded-full mx-auto mb-5"></div>
-          <div className="flex items-center justify-center gap-3">
-            <span className="flex items-center gap-1 text-[10px] font-medium text-[#33323F] font-sans">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5F58F4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-              Secure payment
-            </span>
-            <span className="w-1 h-1 rounded-full bg-[#ECEBF3]"></span>
-            <span className="flex items-center gap-1 text-[10px] font-medium text-[#33323F] font-sans">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5F58F4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
-                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
-              </svg>
-              Instant receipt
-            </span>
-          </div>
+      {/* Step 4 — the bank alert */}
+      <div className="flex items-start gap-2.5 rounded-xl bg-[#5F58F4] px-3.5 py-3 shadow-[0_10px_30px_-12px_rgba(95,88,244,0.6)]">
+        <span className="text-lg" aria-hidden>🔔</span>
+        <div>
+          <p className="text-[11px] font-bold text-white/70">GTBank · Credit Alert</p>
+          <p className="mt-0.5 text-base font-bold tracking-tight text-white">₦35,000.00 received</p>
+          <p className="mt-0.5 text-[10px] text-white/60">From CHIDINMA OKEKE — Aso Oke Dress</p>
         </div>
       </div>
     </div>
@@ -674,7 +656,7 @@ function WhatsAppPhone() {
           </div>
 
           <div className="self-start max-w-[80%] bg-white rounded-2xl rounded-tl-md px-3.5 py-2 shadow-sm">
-            <p className="text-[13px] text-[#14132B] leading-snug">₦35,000 darling 🙏</p>
+            <p className="text-[13px] text-[#14132B] leading-snug">₦35,000 🙏</p>
             <span className="block text-right text-[9px] text-[#9A99A8] mt-1">2:08 PM</span>
           </div>
 
