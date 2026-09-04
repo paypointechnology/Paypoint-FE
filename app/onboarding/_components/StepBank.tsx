@@ -3,6 +3,14 @@
 import { useEffect, useState } from "react";
 import StepHeader from "./StepHeader";
 
+/**
+ * Step — connect the settlement bank account.
+ * Bank list and account-name resolution run through the caller-supplied
+ * actions (Kora bank verification; dev fallback simulates). The resolved name
+ * shown here is informational — connectBank re-resolves server-side before
+ * persisting, so the client can never forge it.
+ */
+
 const TRUST_ROWS = [
   {
     title: "Bank-grade security",
@@ -31,49 +39,31 @@ const TRUST_ROWS = [
   },
 ];
 
-const BANKS = [
-  "Access Bank",
-  "Citibank",
-  "Ecobank",
-  "Fidelity Bank",
-  "First Bank of Nigeria",
-  "First City Monument Bank (FCMB)",
-  "Globus Bank",
-  "Guaranty Trust Bank (GTBank)",
-  "Heritage Bank",
-  "Keystone Bank",
-  "Kuda Microfinance Bank",
-  "Moniepoint MFB",
-  "OPay",
-  "PalmPay",
-  "Polaris Bank",
-  "Providus Bank",
-  "Stanbic IBTC Bank",
-  "Standard Chartered",
-  "Sterling Bank",
-  "SunTrust Bank",
-  "Union Bank",
-  "United Bank for Africa (UBA)",
-  "Unity Bank",
-  "Wema Bank (ALAT)",
-  "Zenith Bank",
-];
+type Status = "idle" | "checking" | "verified" | "error";
 
-type Status = "idle" | "checking" | "verified";
+export type BankOption = { name: string; code: string };
 
 /** Resolved bank details emitted on a successful connect. */
 export type BankDetails = {
+  bankCode: string;
   bankName: string;
+  accountNumber: string;
   accountLast4: string;
   accountName: string;
 };
 
-/** Step 2 — connect a bank account: trust intro, then the bank-details form. */
 export default function StepBank({
+  loadBanks,
+  resolveAccount,
   onConnect,
   onSkip,
   onBack,
 }: {
+  loadBanks: () => Promise<{ ok: boolean; banks: BankOption[]; error?: string }>;
+  resolveAccount: (
+    bankCode: string,
+    accountNumber: string,
+  ) => Promise<{ ok: boolean; accountName?: string; error?: string; dev?: boolean }>;
   onConnect: (details?: BankDetails) => void;
   onSkip: () => void;
   onBack: () => void;
@@ -100,9 +90,9 @@ export default function StepBank({
             </span>
             <p className="text-sm leading-relaxed text-[#33323F]">
               <span className="font-semibold text-[#14132B]">
-                Paypoint never holds your money.
+                Your money settles automatically.
               </span>{" "}
-              Every payment settles directly into your own bank account.
+              Every payment is sent straight on to your own bank account.
             </p>
           </div>
 
@@ -141,38 +131,86 @@ export default function StepBank({
     );
   }
 
-  return <BankForm onVerified={onConnect} onBack={() => setMode("intro")} />;
+  return (
+    <BankForm
+      loadBanks={loadBanks}
+      resolveAccount={resolveAccount}
+      onVerified={onConnect}
+      onBack={() => setMode("intro")}
+    />
+  );
 }
 
-/** The bank-details form: select bank, enter account number, account name auto-verifies. */
+/** The bank-details form: select bank, enter account number, name auto-resolves. */
 function BankForm({
+  loadBanks,
+  resolveAccount,
   onVerified,
   onBack,
 }: {
+  loadBanks: () => Promise<{ ok: boolean; banks: BankOption[]; error?: string }>;
+  resolveAccount: (
+    bankCode: string,
+    accountNumber: string,
+  ) => Promise<{ ok: boolean; accountName?: string; error?: string; dev?: boolean }>;
   onVerified: (details: BankDetails) => void;
   onBack: () => void;
 }) {
-  const [bank, setBank] = useState("");
+  const [banks, setBanks] = useState<BankOption[]>([]);
+  const [banksError, setBanksError] = useState<string | null>(null);
+  const [bankCode, setBankCode] = useState("");
   const [acct, setAcct] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [name, setName] = useState("");
+  const [isDev, setIsDev] = useState(false);
+  const [resolveError, setResolveError] = useState<string | null>(null);
 
-  // Auto-resolve the account name once a bank + 10-digit number are entered.
-  // NOTE: simulated until the backend wires real account verification.
   useEffect(() => {
-    if (!bank || acct.length !== 10) {
+    let cancelled = false;
+    loadBanks().then((res) => {
+      if (cancelled) return;
+      if (!res.ok) setBanksError(res.error ?? "Could not load banks. Please try again.");
+      setBanks(res.banks);
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Auto-resolve once a bank + 10-digit number are entered (debounced — the
+  // lookup is billed per call).
+  useEffect(() => {
+    if (!bankCode || acct.length !== 10) {
       setStatus("idle");
       setName("");
+      setResolveError(null);
       return;
     }
+    let cancelled = false;
     setStatus("checking");
     setName("");
-    const t = setTimeout(() => {
+    setResolveError(null);
+    const t = setTimeout(async () => {
+      const res = await resolveAccount(bankCode, acct);
+      if (cancelled) return;
+      if (!res.ok || !res.accountName) {
+        setStatus("error");
+        setResolveError(res.error ?? "We couldn't confirm that account. Check the details.");
+        return;
+      }
       setStatus("verified");
-      setName("ADAEZE N. OKEKE");
-    }, 900);
-    return () => clearTimeout(t);
-  }, [bank, acct]);
+      setName(res.accountName);
+      setIsDev(Boolean(res.dev));
+    }, 600);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bankCode, acct]);
+
+  const bankName = banks.find((b) => b.code === bankCode)?.name ?? "";
 
   return (
     <div>
@@ -189,18 +227,18 @@ function BankForm({
         <div className="relative">
           <select
             id="bank"
-            value={bank}
-            onChange={(e) => setBank(e.target.value)}
+            value={bankCode}
+            onChange={(e) => setBankCode(e.target.value)}
             className={`h-11 w-full appearance-none rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 pr-10 text-sm outline-none transition focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE] ${
-              bank ? "text-[#14132B]" : "text-[#9A99A8]"
+              bankCode ? "text-[#14132B]" : "text-[#9A99A8]"
             }`}
           >
             <option value="" disabled>
-              Select your bank
+              {banks.length === 0 && !banksError ? "Loading banks…" : "Select your bank"}
             </option>
-            {BANKS.map((b) => (
-              <option key={b} value={b} className="text-[#14132B]">
-                {b}
+            {banks.map((b) => (
+              <option key={b.code} value={b.code} className="text-[#14132B]">
+                {b.name}
               </option>
             ))}
           </select>
@@ -211,6 +249,7 @@ function BankForm({
             <path d="m6 9 6 6 6-6" />
           </svg>
         </div>
+        {banksError && <p className="mt-1.5 text-xs text-[#B42318]">{banksError}</p>}
       </div>
 
       {/* Account number */}
@@ -231,7 +270,7 @@ function BankForm({
         />
       </div>
 
-      {/* Resolved account name */}
+      {/* Resolution states */}
       {status === "checking" && (
         <div className="mb-4 flex items-center gap-2 text-sm text-[#6C6B7B]">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="animate-spin" aria-hidden>
@@ -239,6 +278,11 @@ function BankForm({
           </svg>
           Checking account&hellip;
         </div>
+      )}
+      {status === "error" && resolveError && (
+        <p className="mb-4 text-sm text-[#B42318]" role="alert">
+          {resolveError}
+        </p>
       )}
       {status === "verified" && (
         <div className="mb-4 flex items-center gap-2.5 rounded-[10px] border border-[#D4F3E2] bg-[#E7F8EF] px-3.5 py-3">
@@ -249,7 +293,7 @@ function BankForm({
           </span>
           <div className="min-w-0">
             <p className="text-[11px] font-medium uppercase tracking-wide text-[#0B7A4B]">
-              Account verified
+              {isDev ? "Account verified (test mode)" : "Account verified"}
             </p>
             <p className="truncate text-sm font-semibold text-[#14132B]">{name}</p>
           </div>
@@ -261,7 +305,9 @@ function BankForm({
         disabled={status !== "verified"}
         onClick={() =>
           onVerified({
-            bankName: bank,
+            bankCode,
+            bankName,
+            accountNumber: acct,
             accountLast4: acct.slice(-4),
             accountName: name,
           })

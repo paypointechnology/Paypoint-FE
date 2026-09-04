@@ -3,13 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import StepBank, { type BankDetails } from "../../../onboarding/_components/StepBank";
-import { saveBank } from "../actions";
+import { connectBank, getBanks, resolveBank } from "../actions";
 
 /**
- * Bank connection — reuses the onboarding StepBank component.
- * Bank select + 10-digit account resolves a name (simulated); on confirm we
- * persist the resolved details plus a placeholder subaccount_code so the gate
- * unlocks. Real settlement account is a Paystack Subaccount (Phase 3).
+ * Bank connection — reuses the onboarding StepBank component, wired to real
+ * Kora bank verification. connectBank re-resolves the account server-side
+ * before persisting the settlement details used by the payout leg.
  */
 export default function BankSetup() {
   const router = useRouter();
@@ -21,7 +20,11 @@ export default function BankSetup() {
       router.push("/dashboard");
       return;
     }
-    const res = await saveBank(details);
+    const res = await connectBank({
+      bankCode: details.bankCode,
+      bankName: details.bankName,
+      accountNumber: details.accountNumber,
+    });
     if (!res.ok) {
       setError(res.error ?? "Something went wrong.");
       return;
@@ -33,6 +36,15 @@ export default function BankSetup() {
   return (
     <div>
       <StepBank
+        loadBanks={getBanks}
+        resolveAccount={(bankCode, accountNumber) =>
+          resolveBank({ bankCode, accountNumber }).then((r) => ({
+            ok: r.ok,
+            accountName: r.accountName,
+            error: r.error,
+            dev: r.dev,
+          }))
+        }
         onConnect={handleConnect}
         onSkip={() => router.push("/dashboard")}
         onBack={() => router.push("/dashboard")}

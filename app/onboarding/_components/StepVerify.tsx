@@ -6,10 +6,10 @@ import StepHeader from "./StepHeader";
 /**
  * Step 2 — Business Verification (KYB).
  *
- * FRONTEND SIMULATION ONLY. Real identity / business verification (CAC / RC-BN
- * lookup, document checks, liveness, sanctions screening) is performed by our
- * verification partner and is a backend/SDK task. Here we only mock the states:
- * idle → verifying (~1.2s spinner) → verified, then advance via onVerified().
+ * Collects the RC/BN number and runs it through the `verify` callback (the
+ * `verifyBusiness` server action → CAC lookup via Kora Identity). Without a
+ * real KORA_SECRET_KEY the action's dev fallback simulates success, flagged
+ * so we can label it "test mode" here.
  */
 
 const WHY_ROWS = [
@@ -20,25 +20,49 @@ const WHY_ROWS = [
 
 type Status = "idle" | "verifying" | "verified";
 
+export type VerifyResult = {
+  ok: boolean;
+  error?: string;
+  registeredName?: string;
+  dev?: boolean;
+};
+
 export default function StepVerify({
+  verify,
   onVerified,
   onBack,
 }: {
+  verify: (rcNumber: string) => Promise<VerifyResult>;
   onVerified: () => void;
   onBack: () => void;
 }) {
   const [rc, setRc] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [registeredName, setRegisteredName] = useState<string | null>(null);
+  const [isDev, setIsDev] = useState(false);
 
-  function handleVerify() {
+  async function handleVerify() {
     if (status !== "idle") return;
+    setError(null);
+    if (!rc.trim()) {
+      setError("Enter your RC or BN number.");
+      return;
+    }
+
     setStatus("verifying");
-    // Simulated partner check. Replace with real verification call (backend/SDK).
-    setTimeout(() => {
-      setStatus("verified");
-      // Brief pause on the success panel before advancing.
-      setTimeout(onVerified, 1100);
-    }, 1200);
+    const res = await verify(rc);
+    if (!res.ok) {
+      setStatus("idle");
+      setError(res.error ?? "Verification failed. Please try again.");
+      return;
+    }
+
+    setRegisteredName(res.registeredName ?? null);
+    setIsDev(Boolean(res.dev));
+    setStatus("verified");
+    // Brief pause on the success panel before advancing.
+    setTimeout(onVerified, 1400);
   }
 
   return (
@@ -89,10 +113,12 @@ export default function StepVerify({
           </span>
           <div className="min-w-0">
             <p className="text-sm font-semibold text-[#14132B]">
-              Business verified
+              {registeredName ? `Verified: ${registeredName}` : "Business verified"}
             </p>
             <p className="text-xs text-[#0B7A4B]">
-              You&rsquo;re all set — taking you to the next step&hellip;
+              {isDev
+                ? "Test mode — no registry lookup was made."
+                : "You’re all set — taking you to the next step…"}
             </p>
           </div>
         </div>
@@ -115,9 +141,15 @@ export default function StepVerify({
               className="h-11 w-full rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE] disabled:opacity-60"
             />
             <p className="mt-1.5 text-xs text-[#9A99A8]">
-              Your business registration number.
+              Your CAC registration number, as it appears on your certificate.
             </p>
           </div>
+
+          {error && (
+            <p className="-mt-2 mb-4 text-sm text-[#B42318]" role="alert">
+              {error}
+            </p>
+          )}
 
           {/* Verify */}
           <button

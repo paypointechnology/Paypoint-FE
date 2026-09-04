@@ -62,7 +62,7 @@ export async function getProfile(): Promise<SellerProfile | null> {
     const { data: p } = await supabase
       .from("profiles")
       .select(
-        "id, first_name, last_name, business_name, whatsapp, logo_url, bank_name, account_last4, account_name, subaccount_code",
+        "id, first_name, last_name, business_name, whatsapp, logo_url, bank_name, account_last4, account_name, bank_code, account_number",
       )
       .eq("id", user.id)
       .single();
@@ -78,7 +78,9 @@ export async function getProfile(): Promise<SellerProfile | null> {
       bankName: p?.bank_name ?? "",
       accountLast4: p?.account_last4 ?? "",
       accountName: p?.account_name ?? "",
-      hasBank: Boolean(p?.subaccount_code),
+      // Payout-ready means a verified bank code + full NUBAN — the same gate
+      // lib/setup.ts and startCheckout use, so Settings can never disagree.
+      hasBank: Boolean(p?.bank_code) && Boolean(p?.account_number),
     };
   } catch {
     return null;

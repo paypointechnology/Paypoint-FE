@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SAMPLE } from "./sampleCheckout";
+import { startCheckout } from "../actions";
 import {
   LockIcon,
   TruckIcon,
@@ -62,9 +63,12 @@ const FAQS = [
 export default function CheckoutCard({
   data,
   preview = false,
+  slug,
 }: {
   data?: Partial<CheckoutData>;
   preview?: boolean;
+  /** Live page slug — when present, Pay starts a real charge. */
+  slug?: string;
 } = {}) {
   const router = useRouter();
 
@@ -87,28 +91,58 @@ export default function CheckoutCard({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [stateVal, setStateVal] = useState("");
   const [photoOk, setPhotoOk] = useState(true);
-  const [errors, setErrors] = useState<{ name?: boolean; email?: boolean; phone?: boolean }>({});
+  const [errors, setErrors] = useState<{ name?: boolean; email?: boolean; phone?: boolean; address?: boolean }>({});
   const [showFormErr, setShowFormErr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const showPhoto = Boolean(productImage) && photoOk;
 
-  function handlePay() {
-    if (preview) return;
+  async function handlePay() {
+    if (preview || submitting) return;
     const next: typeof errors = {};
     if (!name.trim()) next.name = true;
     if (fields.email && !/\S+@\S+\.\S+/.test(email)) next.email = true;
     if (fields.phone && !phone.trim()) next.phone = true;
+    if (fields.address && !street.trim()) next.address = true;
     setErrors(next);
     if (Object.keys(next).length > 0) {
       setShowFormErr(true);
       return;
     }
     setShowFormErr(false);
+    setPayError(null);
     setSubmitting(true);
-    router.push("/pay/redirect");
+
+    // Sample/prototype checkout (no live slug): keep the demo flow.
+    if (!slug) {
+      router.push("/pay/redirect");
+      return;
+    }
+
+    const address = fields.address
+      ? [street.trim(), city.trim(), stateVal].filter(Boolean).join(", ")
+      : undefined;
+
+    try {
+      const res = await startCheckout({ slug, name, email, phone, address });
+      if (!res.ok || !res.checkoutUrl) {
+        setSubmitting(false);
+        setPayError(res.error ?? "Could not start your payment. Please try again.");
+        return;
+      }
+      // Kora's hosted checkout (or the dev-mode interstitial).
+      window.location.assign(res.checkoutUrl);
+    } catch {
+      // Network blip / rejected action — let the buyer retry, never wedge.
+      setSubmitting(false);
+      setPayError("We couldn't reach the payment service. Check your connection and try again.");
+    }
   }
 
   return (
@@ -236,15 +270,26 @@ export default function CheckoutCard({
           <span className="mb-3 block text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#9A99A8]">
             Delivery address
           </span>
-          <BuyerField label="Street address" placeholder="Enter your delivery address" type="text" autoComplete="street-address" preview={preview} />
+          <BuyerField
+            label="Street address"
+            placeholder="Enter your delivery address"
+            type="text"
+            autoComplete="street-address"
+            value={street}
+            onChange={setStreet}
+            error={errors.address}
+            errorText="Please enter your delivery address so the seller can ship your order."
+            preview={preview}
+          />
           <div className="grid grid-cols-2 gap-2.5">
-            <BuyerField label="City" placeholder="City" type="text" preview={preview} />
+            <BuyerField label="City" placeholder="City" type="text" value={city} onChange={setCity} preview={preview} />
             <div className="mb-3">
               <label className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.06em] text-[#6C6B7B]">State</label>
               <select
                 tabIndex={preview ? -1 : undefined}
                 disabled={preview}
-                defaultValue=""
+                value={stateVal}
+                onChange={(e) => setStateVal(e.target.value)}
                 className="h-11 w-full appearance-none rounded-[11px] border border-[#E3E2EE] bg-white px-3 text-sm text-[#14132B] outline-none transition focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE]"
               >
                 <option value="" disabled>State</option>
@@ -286,6 +331,11 @@ export default function CheckoutCard({
 
       {/* Pay button */}
       <div className="px-5 pt-3.5">
+        {payError && (
+          <div className="mb-3 rounded-[10px] border border-[#F3C6C2] bg-[#FEECEB] px-3 py-2.5 text-[13px] font-semibold text-[#B42318]" role="alert">
+            {payError}
+          </div>
+        )}
         <button
           type="button"
           onClick={handlePay}

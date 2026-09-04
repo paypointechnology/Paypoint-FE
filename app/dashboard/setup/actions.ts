@@ -6,14 +6,20 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeNgPhone } from "@/lib/phone";
 import { sendOtpTemplate } from "@/lib/whatsapp";
+import { verifyCac } from "@/lib/kora";
+import {
+  listBanks,
+  resolveBankAccount as resolveBankAccountKora,
+  type Bank,
+} from "@/lib/kora-payments";
 
 /**
  * Setup-step persistence.
  *
  * Each action writes the relevant flags to the signed-in user's `profiles` row
- * so `getSetupStatus()` reflects progress. The provider integrations these
- * steps stand in for arrive in later phases — for now the verification is
- * simulated client-side and only the resulting flag is persisted here.
+ * so `getSetupStatus()` reflects progress. WhatsApp OTP (Meta Cloud API) and
+ * KYB (Kora Identity) are real integrations with dev fallbacks; the bank step
+ * is still simulated until the settlement rail (subaccounts/splits) lands.
  *
  * Every action returns a plain `{ ok, error }` result so client wrappers can
  * show inline errors, then navigate on success.
@@ -179,22 +185,162 @@ export async function verifyWhatsappOtp(input: {
   return updateProfile({ whatsapp: phone.e164, phone_verified: true });
 }
 
-export async function saveKyb(): Promise<Result> {
-  // Real KYB (RC/BN lookup, document + liveness checks) runs via Dojah (Phase 3).
-  return updateProfile({ kyb_status: "verified" });
+// ── Business verification / KYB via Kora Identity (Phase 3) ──────────────────
+const KYB_MAX_LOOKUPS_PER_HOUR = 10;
+
+/** Normalize an RC/BN input: uppercase, strip spaces and separators. */
+function normalizeRcNumber(raw: string): string | null {
+  const v = raw.toUpperCase().replace(/[\s./-]/g, "");
+  return /^(RC|BN)?\d{4,10}$/.test(v) ? v : null;
 }
 
-export async function saveBank(input: {
-  bankName: string;
-  accountLast4: string;
-  accountName: string;
-}): Promise<Result> {
-  // Real settlement account is a Paystack Subaccount (Phase 3). We store the
-  // resolved bank details and a placeholder subaccount code to satisfy the gate.
-  return updateProfile({
-    subaccount_code: `PENDING_${Date.now()}`,
-    bank_name: input.bankName,
-    account_last4: input.accountLast4,
-    account_name: input.accountName,
+/**
+ * Verify the seller's business registration against CAC via Kora Identity.
+ * Every lookup (success or failure) is logged to kyb_verifications, which also
+ * backs the hourly rate limit — registry lookups are billed per call. In dev
+ * fallback (no KORA_SECRET_KEY) the lookup is simulated and flagged `dev`.
+ */
+export async function verifyBusiness(input: {
+  rcNumber: string;
+}): Promise<Result & { dev?: boolean; registeredName?: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "You need to be logged in." };
+
+  const rc = normalizeRcNumber(input.rcNumber);
+  if (!rc) return { ok: false, error: "Enter a valid RC or BN number, e.g. RC1234567." };
+
+  const admin = createAdminClient();
+
+  const { count } = await admin
+    .from("kyb_verifications")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("id_type", "cac")
+    .gte("created_at", new Date(Date.now() - 3_600_000).toISOString());
+  if ((count ?? 0) >= KYB_MAX_LOOKUPS_PER_HOUR) {
+    return { ok: false, error: "Too many verification attempts. Please try again later." };
+  }
+
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("business_name")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const result = await verifyCac(rc, profile?.business_name ?? undefined);
+
+  await admin.from("kyb_verifications").insert({
+    user_id: user.id,
+    id_type: "cac",
+    id_value: rc,
+    status: result.ok ? "verified" : "failed",
+    provider: result.dev ? "dev" : "kora",
+    response: result.raw ?? null,
   });
+
+  if (!result.ok) {
+    return { ok: false, error: result.error ?? "We couldn't verify that registration number." };
+  }
+
+  const save = await updateProfile({
+    kyb_status: "verified",
+    rc_number: rc,
+    kyb_registered_name: result.registeredName ?? null,
+    kyb_verified_at: new Date().toISOString(),
+  });
+  if (!save.ok) return save;
+
+  return { ok: true, dev: result.dev, registeredName: result.registeredName };
+}
+
+// ── Settlement account (bank) via Kora bank verification ─────────────────────
+const BANK_MAX_LOOKUPS_PER_HOUR = 15;
+
+export async function getBanks(): Promise<{ ok: boolean; banks: Bank[]; error?: string }> {
+  const res = await listBanks();
+  return { ok: res.ok, banks: res.banks, error: res.error };
+}
+
+async function rateLimitedResolve(
+  userId: string,
+  bankCode: string,
+  accountNumber: string,
+): Promise<ReturnType<typeof resolveBankAccountKora>> {
+  const admin = createAdminClient();
+  const { count } = await admin
+    .from("kyb_verifications")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .eq("id_type", "bank")
+    .gte("created_at", new Date(Date.now() - 3_600_000).toISOString());
+  if ((count ?? 0) >= BANK_MAX_LOOKUPS_PER_HOUR) {
+    return { ok: false, error: "Too many account checks. Please try again later." };
+  }
+
+  const result = await resolveBankAccountKora(bankCode, accountNumber);
+  await admin.from("kyb_verifications").insert({
+    user_id: userId,
+    id_type: "bank",
+    id_value: `${bankCode}/****${accountNumber.slice(-4)}`,
+    status: result.ok ? "verified" : "failed",
+    provider: result.dev ? "dev" : "kora",
+    response: result.raw ?? null,
+  });
+  return result;
+}
+
+/** Live account-name check while the seller types (billed — rate limited). */
+export async function resolveBank(input: {
+  bankCode: string;
+  accountNumber: string;
+}): Promise<Result & { accountName?: string; dev?: boolean }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "You need to be logged in." };
+  if (!/^\d{10}$/.test(input.accountNumber)) {
+    return { ok: false, error: "Enter a valid 10-digit account number." };
+  }
+
+  const result = await rateLimitedResolve(user.id, input.bankCode, input.accountNumber);
+  if (!result.ok) return { ok: false, error: result.error ?? "Could not confirm that account." };
+  return { ok: true, accountName: result.accountName, dev: result.dev };
+}
+
+/**
+ * Persist the settlement account. Re-resolves server-side so the stored name
+ * always comes from the registry, never from the client.
+ */
+export async function connectBank(input: {
+  bankCode: string;
+  bankName: string;
+  accountNumber: string;
+}): Promise<Result & { dev?: boolean }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "You need to be logged in." };
+  if (!/^\d{10}$/.test(input.accountNumber)) {
+    return { ok: false, error: "Enter a valid 10-digit account number." };
+  }
+
+  const result = await rateLimitedResolve(user.id, input.bankCode, input.accountNumber);
+  if (!result.ok || !result.accountName) {
+    return { ok: false, error: result.error ?? "Could not confirm that account." };
+  }
+
+  const save = await updateProfile({
+    bank_code: input.bankCode,
+    bank_name: result.bankName ?? input.bankName,
+    account_number: input.accountNumber,
+    account_last4: input.accountNumber.slice(-4),
+    account_name: result.accountName,
+  });
+  if (!save.ok) return save;
+  return { ok: true, dev: result.dev };
 }

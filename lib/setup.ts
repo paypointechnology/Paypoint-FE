@@ -42,7 +42,7 @@ export async function getSetupStatus(): Promise<SetupStatus> {
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("business_name, logo_url, phone_verified, kyb_status, subaccount_code")
+      .select("business_name, logo_url, phone_verified, kyb_status, bank_code, account_number")
       .eq("id", user.id)
       .single();
 
@@ -51,7 +51,8 @@ export async function getSetupStatus(): Promise<SetupStatus> {
     const brand = Boolean(profile.business_name) && Boolean(profile.logo_url);
     const whatsapp = profile.phone_verified === true;
     const kyb = profile.kyb_status === "verified";
-    const bank = Boolean(profile.subaccount_code);
+    // A payout-ready settlement account: verified bank code + full NUBAN.
+    const bank = Boolean(profile.bank_code) && Boolean(profile.account_number);
 
     const doneCount = [brand, whatsapp, kyb, bank].filter(Boolean).length;
     return {

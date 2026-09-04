@@ -52,7 +52,7 @@ export default async function CheckoutPage({
 
   return (
     <main className="flex min-h-[100dvh] w-full justify-center bg-[#F5F4FF] px-4 py-6 sm:py-10">
-      {page ? <CheckoutCard data={toCheckoutData(page)} /> : <Unavailable />}
+      {page ? <CheckoutCard data={toCheckoutData(page)} slug={page.slug} /> : <Unavailable />}
     </main>
   );
 }

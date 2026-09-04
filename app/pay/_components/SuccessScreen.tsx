@@ -12,7 +12,19 @@ import { SAMPLE } from "../../p/_components/sampleCheckout";
 
 const CONFETTI = ["#5F58F4", "#12B76A", "#F5A623", "#C7C4F7", "#EEEDFE"];
 
-export default function SuccessScreen({ reference }: { reference: string }) {
+export default function SuccessScreen({
+  reference,
+  amountLabel = SAMPLE.priceLabel,
+  business = SAMPLE.business,
+  title = SAMPLE.title,
+  dateLabel = SAMPLE.dateLabel,
+}: {
+  reference: string;
+  amountLabel?: string;
+  business?: string;
+  title?: string;
+  dateLabel?: string;
+}) {
   const burstRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,11 +51,11 @@ export default function SuccessScreen({ reference }: { reference: string }) {
   }, []);
 
   const summary: { label: string; value: string; accent?: "amount" | "ref" | "ok" }[] = [
-    { label: "Amount paid", value: SAMPLE.priceLabel, accent: "amount" },
+    { label: "Amount paid", value: amountLabel, accent: "amount" },
     { label: "Reference", value: reference, accent: "ref" },
-    { label: "Date", value: SAMPLE.dateLabel },
-    { label: "Merchant", value: SAMPLE.business },
-    { label: "Item", value: SAMPLE.title },
+    { label: "Date", value: dateLabel },
+    { label: "Merchant", value: business },
+    { label: "Item", value: title },
     { label: "Status", value: "Successful", accent: "ok" },
   ];
 
@@ -62,7 +74,7 @@ export default function SuccessScreen({ reference }: { reference: string }) {
         <h1 className="text-xl font-extrabold tracking-[-0.01em] text-[#0B7A4B]">Payment successful</h1>
         <p className="mx-auto mt-1.5 max-w-[300px] text-sm leading-relaxed text-[#6C6B7B]">
           Your order has been confirmed and sent to the seller. Thank you for
-          shopping with <span className="font-semibold text-[#33323F]">{SAMPLE.business}</span>.
+          shopping with <span className="font-semibold text-[#33323F]">{business}</span>.
         </p>
       </div>
 
@@ -100,7 +112,7 @@ export default function SuccessScreen({ reference }: { reference: string }) {
         </span>
         <div className="overflow-hidden rounded-[14px] border border-[#ECEBF3] bg-[#FAFAFE]">
           <TimelineRow state="done" label="Payment completed" sub="Just now" />
-          <TimelineRow state="done" label="Merchant notified" sub={`${SAMPLE.business} alerted`} />
+          <TimelineRow state="done" label="Merchant notified" sub={`${business} alerted`} />
           <TimelineRow state="active" label="Order processing" sub="Expected response within 24 hrs" />
           <TimelineRow state="future" label="Shipped" sub="Updated by the seller" />
           <TimelineRow state="future" label="Delivered" sub="Per the seller's timeline" last />
