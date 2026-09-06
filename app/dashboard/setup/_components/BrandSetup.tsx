@@ -28,7 +28,8 @@ export default function BrandSetup() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const canSubmit = businessName.trim() !== "" && logoUrl !== "" && !saving;
+  const canSubmit =
+    firstName.trim() !== "" && businessName.trim() !== "" && logoUrl !== "" && !saving;
 
   async function handleLogo(file: File) {
     setUploading(true);
@@ -94,7 +95,6 @@ export default function BrandSetup() {
             name="firstName"
             placeholder="Adaeze"
             autoComplete="given-name"
-            optional
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
@@ -160,9 +160,9 @@ export default function BrandSetup() {
         >
           {saving ? "Saving…" : "Save & continue"}
         </button>
-        {!logoUrl && (
+        {!canSubmit && !saving && (
           <p className="mt-2 text-center text-xs text-[#9A99A8]">
-            Add a logo and business name to continue.
+            Add a logo, your first name and business name to continue.
           </p>
         )}
       </form>

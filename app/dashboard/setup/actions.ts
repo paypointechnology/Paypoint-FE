@@ -54,14 +54,19 @@ export async function saveBrand(input: {
   businessName: string;
   logoUrl: string;
   brandColor: string;
-  firstName?: string;
+  firstName: string;
   lastName?: string;
 }): Promise<Result> {
+  // First name is required (it anchors the owner's BVN name-match later);
+  // last name is optional.
+  if (!input.firstName?.trim()) {
+    return { ok: false, error: "Please enter your first name." };
+  }
   return updateProfile({
     business_name: input.businessName.trim(),
     logo_url: input.logoUrl,
     brand_color: input.brandColor,
-    first_name: input.firstName?.trim() || null,
+    first_name: input.firstName.trim(),
     last_name: input.lastName?.trim() || null,
   });
 }
