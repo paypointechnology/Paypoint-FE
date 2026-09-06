@@ -6,6 +6,14 @@ import { createClient } from "@/lib/supabase/server";
  * Derived entirely from flags on the `profiles` row so the dashboard checklist
  * and the "create payment page" gate always agree.
  */
+
+/**
+ * WhatsApp OTP verification is PAUSED until the Meta business account is
+ * verified (template approval + production number). Flip this to true to
+ * restore the step everywhere: the checklist row, the setup gate, and the
+ * /dashboard/setup/whatsapp page all key off it.
+ */
+export const WHATSAPP_STEP_ENABLED = false;
 export type SetupStatus = {
   brand: boolean;
   whatsapp: boolean;
@@ -22,7 +30,7 @@ const EMPTY: SetupStatus = {
   kyb: false,
   bank: false,
   doneCount: 0,
-  total: 4,
+  total: WHATSAPP_STEP_ENABLED ? 4 : 3,
   complete: false,
 };
 
@@ -54,15 +62,20 @@ export async function getSetupStatus(): Promise<SetupStatus> {
     // A payout-ready settlement account: verified bank code + full NUBAN.
     const bank = Boolean(profile.bank_code) && Boolean(profile.account_number);
 
-    const doneCount = [brand, whatsapp, kyb, bank].filter(Boolean).length;
+    // Only enabled steps count toward the gate; whatsapp is still reported so
+    // Settings can show the number's verification state.
+    const required = WHATSAPP_STEP_ENABLED
+      ? [brand, whatsapp, kyb, bank]
+      : [brand, kyb, bank];
+    const doneCount = required.filter(Boolean).length;
     return {
       brand,
       whatsapp,
       kyb,
       bank,
       doneCount,
-      total: 4,
-      complete: doneCount === 4,
+      total: required.length,
+      complete: doneCount === required.length,
     };
   } catch {
     // No session, unreachable Supabase, or placeholder env — fail safe.

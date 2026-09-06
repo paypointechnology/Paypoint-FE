@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { SetupStatus } from "@/lib/setup";
+import { WHATSAPP_STEP_ENABLED, type SetupStatus } from "@/lib/setup";
 
 type Step = {
   key: keyof Pick<SetupStatus, "brand" | "whatsapp" | "kyb" | "bank">;
@@ -41,6 +41,8 @@ const STEPS: Step[] = [
  * here it just guides the seller through the four steps.
  */
 export default function SetupChecklist({ status }: { status: SetupStatus }) {
+  // WhatsApp verification is paused until Meta verifies the business account.
+  const steps = STEPS.filter((s) => s.key !== "whatsapp" || WHATSAPP_STEP_ENABLED);
   const pct = Math.round((status.doneCount / status.total) * 100);
 
   return (
@@ -69,7 +71,7 @@ export default function SetupChecklist({ status }: { status: SetupStatus }) {
 
       {/* Steps */}
       <ul className="mt-5 divide-y divide-[#F1F0F7]">
-        {STEPS.map((step) => {
+        {steps.map((step) => {
           const done = status[step.key];
           return (
             <li
