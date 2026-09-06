@@ -103,13 +103,27 @@ export async function resolveBankAccount(bankCode: string, accountNumber: string
     method: "POST",
     body: { id: accountNumber, bank_code: bankCode, verification_consent: true },
   });
-  if (!res.ok) return { ok: false, error: res.message, raw: res.raw };
+  if (!res.ok) {
+    // Provider messages are for the audit trail; sellers get actionable copy.
+    const raw = (res.message ?? "").toLowerCase();
+    const error =
+      raw.includes("invalid") || raw.includes("validation") || raw.includes("not found") || raw.includes("no record")
+        ? "We couldn't find that account. Check the 10-digit account number and make sure you picked the right bank."
+        : "The account check couldn't be completed right now. Please try again in a few minutes.";
+    return { ok: false, error, raw: res.raw };
+  }
   const d = res.data as {
     account_details?: { name?: string };
     bank_details?: { name?: string };
   } | null;
   const accountName = d?.account_details?.name;
-  if (!accountName) return { ok: false, error: "Could not confirm that account. Check the details.", raw: res.raw };
+  if (!accountName) {
+    return {
+      ok: false,
+      error: "We couldn't find that account. Check the 10-digit account number and make sure you picked the right bank.",
+      raw: res.raw,
+    };
+  }
   return { ok: true, accountName, bankName: d?.bank_details?.name, raw: res.raw };
 }
 

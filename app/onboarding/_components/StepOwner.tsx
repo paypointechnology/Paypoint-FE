@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import StepHeader from "./StepHeader";
+import ErrorNotice from "./ErrorNotice";
 
 /**
  * KYC stage 2 — verify the business owner by BVN.
@@ -149,11 +150,7 @@ export default function StepOwner({
             </p>
           </div>
 
-          {error && (
-            <p className="-mt-2 mb-4 text-sm text-[#B42318]" role="alert">
-              {error}
-            </p>
-          )}
+          {error && <ErrorNotice>{error}</ErrorNotice>}
 
           {/* Verify */}
           <button

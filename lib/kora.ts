@@ -17,15 +17,27 @@ export function koraConfigured(): boolean {
   return Boolean(key && key !== "placeholder");
 }
 
+export type IdentityErrorCode = "invalid_input" | "not_found" | "unavailable";
+
 export type IdentityResult = {
   ok: boolean;
   dev?: boolean;
   error?: string;
+  /** Coarse failure class so each flow can show actionable copy. */
+  code?: IdentityErrorCode;
   /** Registered/legal name returned by the registry, when available. */
   registeredName?: string;
   /** Raw provider response — persisted server-side for the audit trail. */
   raw?: unknown;
 };
+
+/** Classify a provider failure; the raw message stays in the audit trail. */
+function classifyIdentityError(httpStatus: number, json: { error?: unknown; message?: unknown } | null): IdentityErrorCode {
+  const raw = `${json?.error ?? ""} ${json?.message ?? ""}`.toLowerCase();
+  if (raw.includes("validation") || raw.includes("invalid")) return "invalid_input";
+  if (httpStatus === 404 || raw.includes("not found") || raw.includes("no record") || raw.includes("not_found")) return "not_found";
+  return "unavailable";
+}
 
 /** Registries name the company field inconsistently across ID types. */
 function pickRegisteredName(data: unknown): string | undefined {
@@ -57,6 +69,7 @@ async function identityRequest(
     if (!res.ok || !json?.status) {
       return {
         ok: false,
+        code: classifyIdentityError(res.status, json),
         error: json?.message || "Verification failed. Please try again.",
         raw: json ?? { http_status: res.status },
       };
@@ -64,7 +77,11 @@ async function identityRequest(
 
     return { ok: true, registeredName: pickRegisteredName(json.data), raw: json };
   } catch {
-    return { ok: false, error: "Could not reach the verification service. Please try again." };
+    return {
+      ok: false,
+      code: "unavailable",
+      error: "Could not reach the verification service. Please try again.",
+    };
   }
 }
 
@@ -90,7 +107,18 @@ export async function verifyCac(
     verification_consent: true,
   };
   if (registrationName) body.registration_name = registrationName;
-  return identityRequest("/identities/ng/cac", body);
+
+  const result = await identityRequest("/identities/ng/cac", body);
+  if (result.ok) return result;
+  const friendly: Record<IdentityErrorCode, string> = {
+    invalid_input:
+      "That registration number doesn't look right. Enter it exactly as it appears on your CAC certificate, with the RC or BN prefix (e.g. RC1234567).",
+    not_found:
+      "We couldn't find that number in the CAC registry. Double-check the digits and whether it's an RC or BN registration, then try again.",
+    unavailable:
+      "The CAC registry check couldn't be completed right now. Please try again in a few minutes.",
+  };
+  return { ...result, error: friendly[result.code ?? "unavailable"] };
 }
 
 export type BvnResult = IdentityResult & {
@@ -129,7 +157,14 @@ export async function verifyBvn(
   }
 
   const result = await identityRequest("/identities/ng/bvn", body);
-  if (!result.ok) return result;
+  if (!result.ok) {
+    const friendly: Record<IdentityErrorCode, string> = {
+      invalid_input: "That BVN doesn't look right — it should be exactly 11 digits. Dial *565*0# on your registered line to check it.",
+      not_found: "We couldn't find that BVN. Double-check the 11 digits and try again.",
+      unavailable: "The BVN check couldn't be completed right now. Please try again in a few minutes.",
+    };
+    return { ...result, error: friendly[result.code ?? "unavailable"] };
+  }
 
   const d = ((result.raw as { data?: unknown } | null)?.data ?? null) as {
     first_name?: string;

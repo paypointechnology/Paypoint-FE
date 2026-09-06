@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import StepHeader from "./StepHeader";
+import ErrorNotice from "./ErrorNotice";
 
 /**
  * Step 2 — Business Verification (KYB).
@@ -146,11 +147,7 @@ export default function StepVerify({
             </p>
           </div>
 
-          {error && (
-            <p className="-mt-2 mb-4 text-sm text-[#B42318]" role="alert">
-              {error}
-            </p>
-          )}
+          {error && <ErrorNotice>{error}</ErrorNotice>}
 
           {/* Verify */}
           <button

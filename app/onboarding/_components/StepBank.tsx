@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import StepHeader from "./StepHeader";
+import ErrorNotice from "./ErrorNotice";
 
 /**
  * Step — connect the settlement bank account.
@@ -249,7 +250,11 @@ function BankForm({
             <path d="m6 9 6 6 6-6" />
           </svg>
         </div>
-        {banksError && <p className="mt-1.5 text-xs text-[#B42318]">{banksError}</p>}
+        {banksError && (
+          <div className="mt-2">
+            <ErrorNotice>{banksError}</ErrorNotice>
+          </div>
+        )}
       </div>
 
       {/* Account number */}
@@ -279,11 +284,7 @@ function BankForm({
           Checking account&hellip;
         </div>
       )}
-      {status === "error" && resolveError && (
-        <p className="mb-4 text-sm text-[#B42318]" role="alert">
-          {resolveError}
-        </p>
-      )}
+      {status === "error" && resolveError && <ErrorNotice>{resolveError}</ErrorNotice>}
       {status === "verified" && (
         <div className="mb-4 flex items-center gap-2.5 rounded-[10px] border border-[#D4F3E2] bg-[#E7F8EF] px-3.5 py-3">
           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#12B76A] text-white">
