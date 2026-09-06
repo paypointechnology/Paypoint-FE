@@ -67,6 +67,13 @@ async function identityRequest(
       | null;
 
     if (!res.ok || !json?.status) {
+      // Billing/access failures are OPS problems (fund the Kora wallet,
+      // enable the Identity sub-product) — sellers see generic copy, but
+      // these must be loud in the server logs.
+      const msg = (json?.message ?? "").toLowerCase();
+      if (msg.includes("insufficient funds") || msg.includes("restricted")) {
+        console.error(`[kora:OPS] identity lookup blocked (${path}): ${json?.message}`);
+      }
       return {
         ok: false,
         code: classifyIdentityError(res.status, json),

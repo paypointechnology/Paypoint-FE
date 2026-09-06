@@ -40,6 +40,10 @@ async function koraFetch(
       | { status?: boolean; message?: string; data?: unknown }
       | null;
     if (!res.ok || !json?.status) {
+      const msg = (json?.message ?? "").toLowerCase();
+      if (msg.includes("insufficient funds") || msg.includes("restricted")) {
+        console.error(`[kora:OPS] request blocked (${path}): ${json?.message}`);
+      }
       return { ok: false, message: json?.message || `Request failed (${res.status})`, raw: json };
     }
     return { ok: true, data: json.data, raw: json };
