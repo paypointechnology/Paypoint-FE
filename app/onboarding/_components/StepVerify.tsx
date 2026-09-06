@@ -141,7 +141,8 @@ export default function StepVerify({
               className="h-11 w-full rounded-[10px] border border-[#E3E2EE] bg-white px-3.5 text-sm text-[#14132B] outline-none transition placeholder:text-[#9A99A8] focus:border-[#5F58F4] focus:ring-2 focus:ring-[#EEEDFE] disabled:opacity-60"
             />
             <p className="mt-1.5 text-xs text-[#9A99A8]">
-              Your CAC registration number, as it appears on your certificate.
+              As it appears on your CAC certificate — include the RC or BN prefix
+              (e.g. RC1234567 for companies, BN2345678 for business names).
             </p>
           </div>
 

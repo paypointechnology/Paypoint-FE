@@ -69,19 +69,26 @@ async function identityRequest(
 }
 
 /**
- * KYB: look up a business registration (RC/BN number) against CAC.
+ * KYB: look up a business registration against CAC.
+ * The live API (stricter than the docs) requires `id` as DIGITS ONLY plus a
+ * `registration_type` of "RC" (registered company) or "BN" (business name).
  * `registrationName` is optional context Kora can match against.
  */
 export async function verifyCac(
-  rcNumber: string,
+  registrationDigits: string,
+  registrationType: "RC" | "BN",
   registrationName?: string,
 ): Promise<IdentityResult> {
   if (!koraConfigured()) {
-    console.log(`[kora:dev] CAC lookup for ${rcNumber} — simulated success`);
+    console.log(`[kora:dev] CAC lookup for ${registrationType}${registrationDigits} — simulated success`);
     return { ok: true, dev: true, registeredName: registrationName };
   }
 
-  const body: Record<string, unknown> = { id: rcNumber, verification_consent: true };
+  const body: Record<string, unknown> = {
+    id: registrationDigits,
+    registration_type: registrationType,
+    verification_consent: true,
+  };
   if (registrationName) body.registration_name = registrationName;
   return identityRequest("/identities/ng/cac", body);
 }

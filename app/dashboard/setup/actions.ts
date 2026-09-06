@@ -193,10 +193,16 @@ export async function verifyWhatsappOtp(input: {
 // ── Business verification / KYB via Kora Identity (Phase 3) ──────────────────
 const KYB_MAX_LOOKUPS_PER_HOUR = 10;
 
-/** Normalize an RC/BN input: uppercase, strip spaces and separators. */
-function normalizeRcNumber(raw: string): string | null {
+/**
+ * Normalize an RC/BN input: uppercase, strip separators, split into the
+ * registration type (RC default, BN when prefixed) and the digits — Kora's
+ * live API takes them as separate fields.
+ */
+function normalizeRcNumber(raw: string): { type: "RC" | "BN"; digits: string } | null {
   const v = raw.toUpperCase().replace(/[\s./-]/g, "");
-  return /^(RC|BN)?\d{4,10}$/.test(v) ? v : null;
+  const m = /^(RC|BN)?(\d{4,10})$/.exec(v);
+  if (!m) return null;
+  return { type: (m[1] as "RC" | "BN") ?? "RC", digits: m[2] };
 }
 
 /**
@@ -215,7 +221,8 @@ export async function verifyBusiness(input: {
   if (!user) return { ok: false, error: "You need to be logged in." };
 
   const rc = normalizeRcNumber(input.rcNumber);
-  if (!rc) return { ok: false, error: "Enter a valid RC or BN number, e.g. RC1234567." };
+  if (!rc) return { ok: false, error: "Enter a valid RC or BN number, e.g. RC1234567 or BN2345678." };
+  const rcLabel = `${rc.type}${rc.digits}`;
 
   const admin = createAdminClient();
 
@@ -235,12 +242,12 @@ export async function verifyBusiness(input: {
     .eq("id", user.id)
     .maybeSingle();
 
-  const result = await verifyCac(rc, profile?.business_name ?? undefined);
+  const result = await verifyCac(rc.digits, rc.type, profile?.business_name ?? undefined);
 
   await admin.from("kyb_verifications").insert({
     user_id: user.id,
     id_type: "cac",
-    id_value: rc,
+    id_value: rcLabel,
     status: result.ok ? "verified" : "failed",
     provider: result.dev ? "dev" : "kora",
     response: result.raw ?? null,
@@ -254,7 +261,7 @@ export async function verifyBusiness(input: {
   // completes only after the owner's BVN check in verifyOwner.
   const save = await updateProfile({
     kyb_status: "business_verified",
-    rc_number: rc,
+    rc_number: rcLabel,
     kyb_registered_name: result.registeredName ?? null,
     kyb_verified_at: new Date().toISOString(),
   });
