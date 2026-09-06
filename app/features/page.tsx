@@ -453,7 +453,7 @@ export default function FeaturesPage() {
             payment platforms.
           </p>
           <Link
-            href="/early-access"
+            href="/signup"
             className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#5F58F4] px-7 text-sm font-semibold text-white transition hover:bg-[#4A43D6]"
           >
             Start free
@@ -560,7 +560,7 @@ export default function FeaturesPage() {
             Create your first payment page now, free, no card required.
           </p>
           <Link
-            href="/early-access"
+            href="/signup"
             className="relative mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-[#5F58F4] transition hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]"
           >
             Start free

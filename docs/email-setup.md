@@ -4,7 +4,7 @@ Paypoint uses **Brevo** for all outbound email. There are two independent paths:
 
 | Path | What it sends | How it's wired |
 |------|---------------|----------------|
-| **App transactional (Brevo API)** | Waitlist welcome (and future receipts/notifications) | Code: `lib/email/brevo.ts` + `lib/email/templates.ts`. Needs `BREVO_API_KEY`, `EMAIL_FROM`, `EMAIL_FROM_NAME`. |
+| **App transactional (Brevo API)** | Seller payment notifications and receipts | Code: `lib/email/brevo.ts` + `lib/email/templates.ts`. Needs `BREVO_API_KEY`, `EMAIL_FROM`, `EMAIL_FROM_NAME`. |
 | **Supabase Auth (Brevo SMTP)** | Signup confirmation, password reset, magic links | Supabase dashboard → custom SMTP pointing at Brevo. No code. |
 
 Do **both** so every email leaves through Brevo with your branding and deliverability.
@@ -28,13 +28,13 @@ Do **both** so every email leaves through Brevo with your branding and deliverab
    EMAIL_FROM=hello@paypoint.co        # a VERIFIED Brevo sender
    EMAIL_FROM_NAME=Paypoint
    ```
-3. That's it. The waitlist welcome email now sends on new signups. If `BREVO_API_KEY`
-   is empty, `sendEmail()` no-ops safely (it logs and returns `{ ok:false }`) so signups
+3. That's it. Transactional emails (e.g. the seller "you got paid" email) now send. If `BREVO_API_KEY`
+   is empty, `sendEmail()` no-ops safely (it logs and returns `{ ok:false }`) so payments
    never break.
 
-**Test:** with the key set and dev running, join the waitlist at
-`/early-access` with a real inbox you control. You should receive
-"You're in. Welcome to Paypoint early access" within a few seconds.
+**Test:** with the key set and dev running, complete a test payment against a
+seller whose account email is a real inbox you control. You should receive
+the "You got paid" email within a few seconds.
 
 ## 3. Supabase Auth emails (Brevo SMTP)
 
@@ -72,5 +72,5 @@ Keep Supabase's `{{ .ConfirmationURL }}` variable intact (it's already in the fi
 - [ ] Sender verified (or domain authenticated with SPF + DKIM).
 - [ ] `EMAIL_FROM` matches a verified Brevo sender.
 - [ ] Custom SMTP enabled in Supabase and a test signup email received.
-- [ ] `BREVO_API_KEY` set and a test waitlist welcome received.
+- [ ] `BREVO_API_KEY` set and a test "you got paid" email received.
 - [ ] In production, set `EMAIL_FROM` to your real domain address and add DMARC.

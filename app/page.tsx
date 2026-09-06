@@ -82,7 +82,7 @@ export default function Home() {
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a
-                  href="/early-access"
+                  href="/signup"
                   className="group inline-flex h-[54px] items-center justify-center gap-2 rounded-full bg-[#5F58F4] px-7 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(95,88,244,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#4A43D6] font-sans"
                 >
                   <span>Create your free checkout</span>
@@ -230,7 +230,7 @@ export default function Home() {
                 Create it once. Share it anywhere. Get paid.
               </p>
               <a
-                href="/early-access"
+                href="/signup"
                 className="group inline-flex h-[54px] items-center justify-center gap-2 rounded-full bg-[#5F58F4] px-8 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(95,88,244,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#4A43D6] font-sans"
               >
                 <span>Create your first checkout</span>
@@ -511,7 +511,7 @@ export default function Home() {
                   share one link, and start getting paid today.
                 </p>
                 <a
-                  href="/early-access"
+                  href="/signup"
                   className="group inline-flex h-[54px] items-center justify-center gap-2 rounded-full bg-white px-8 text-sm font-semibold text-[#5F58F4] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] font-sans"
                 >
                   <span>Create your free checkout</span>

@@ -28,13 +28,13 @@ export default function SiteHeader() {
 
         <div className="flex items-center gap-4">
           <a
-            href="/early-access"
+            href="/login"
             className="hidden md:inline-block text-xs font-medium text-[#33323F] px-3.5 py-2 rounded-full transition-all duration-200 hover:text-[#5F58F4] hover:bg-[#EEEDFE] hover:-translate-y-0.5 font-sans"
           >
             Log in
           </a>
           <a
-            href="/early-access"
+            href="/signup"
             className="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(95,88,244,0.35)] rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative items-center justify-center"
           >
             {/* Spinning Border Beam (Visible on Hover) */}

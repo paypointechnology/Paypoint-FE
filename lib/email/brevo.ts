@@ -4,7 +4,7 @@ import "server-only";
  * Transactional email via the Brevo (Sendinblue) HTTP API.
  * Server-only. Reads BREVO_API_KEY, EMAIL_FROM, EMAIL_FROM_NAME from the env.
  * Fails safe: if the key is missing or Brevo errors, it returns { ok:false }
- * and never throws, so callers (e.g. waitlist signup) are never blocked by
+ * and never throws, so callers (e.g. payment notifications) are never blocked by
  * email delivery.
  *
  * Docs: https://developers.brevo.com/reference/sendtransacemail

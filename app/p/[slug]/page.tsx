@@ -103,7 +103,7 @@ function Unavailable() {
         <div className="mt-7 border-t border-[#ECEBF3] pt-5 text-xs text-[#9A99A8]">
           Looking to accept payments yourself?
           <br />
-          <Link href="/early-access" className="font-bold text-[#5F58F4] hover:text-[#4A43D6]">
+          <Link href="/signup" className="font-bold text-[#5F58F4] hover:text-[#4A43D6]">
             Try Paypoint free →
           </Link>
         </div>
