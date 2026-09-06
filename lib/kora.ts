@@ -86,17 +86,30 @@ export async function verifyCac(
   return identityRequest("/identities/ng/cac", body);
 }
 
-/**
- * KYC: verify the owner's BVN, optionally matching name/date of birth.
- * Not yet wired to a setup step — used when owner-identity checks land.
- */
+export type BvnResult = IdentityResult & {
+  /** The registry's name for the BVN holder, when returned. */
+  ownerName?: string;
+  /**
+   * Name-match verdict when validation names were sent:
+   *   true  = at least one of first/last matched the registry
+   *   false = both were checked and neither matched
+   *   undefined = the provider returned no validation block
+   */
+  nameMatched?: boolean;
+};
+
+/** KYC: verify the owner's BVN, matching the given names against the registry. */
 export async function verifyBvn(
   bvn: string,
   validation?: { firstName?: string; lastName?: string; dateOfBirth?: string },
-): Promise<IdentityResult> {
+): Promise<BvnResult> {
   if (!koraConfigured()) {
     console.log(`[kora:dev] BVN lookup — simulated success`);
-    return { ok: true, dev: true };
+    const devName = [validation?.firstName, validation?.lastName]
+      .filter(Boolean)
+      .join(" ")
+      .toUpperCase();
+    return { ok: true, dev: true, ownerName: devName || "TEST ACCOUNT OWNER", nameMatched: true };
   }
 
   const body: Record<string, unknown> = { id: bvn, verification_consent: true };
@@ -107,5 +120,32 @@ export async function verifyBvn(
       ...(validation.dateOfBirth ? { date_of_birth: validation.dateOfBirth } : {}),
     };
   }
-  return identityRequest("/identities/ng/bvn", body);
+
+  const result = await identityRequest("/identities/ng/bvn", body);
+  if (!result.ok) return result;
+
+  const d = ((result.raw as { data?: unknown } | null)?.data ?? null) as {
+    first_name?: string;
+    last_name?: string;
+    middle_name?: string;
+    full_name?: string;
+    validation?: {
+      first_name?: { match?: boolean };
+      last_name?: { match?: boolean };
+    };
+  } | null;
+
+  const ownerName =
+    d?.full_name?.trim() ||
+    [d?.first_name, d?.middle_name, d?.last_name].filter(Boolean).join(" ").trim() ||
+    undefined;
+
+  let nameMatched: boolean | undefined;
+  const v = d?.validation;
+  if (v && (v.first_name || v.last_name)) {
+    const matches = [v.first_name?.match, v.last_name?.match].filter((m) => m !== undefined);
+    nameMatched = matches.some(Boolean);
+  }
+
+  return { ...result, ownerName, nameMatched };
 }

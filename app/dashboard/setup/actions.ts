@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeNgPhone } from "@/lib/phone";
 import { sendOtpTemplate } from "@/lib/whatsapp";
-import { verifyCac } from "@/lib/kora";
+import { verifyBvn, verifyCac } from "@/lib/kora";
 import {
   listBanks,
   resolveBankAccount as resolveBankAccountKora,
@@ -245,8 +245,10 @@ export async function verifyBusiness(input: {
     return { ok: false, error: result.error ?? "We couldn't verify that registration number." };
   }
 
+  // Stage 1 of 2: the business checks out. The step (and the setup gate)
+  // completes only after the owner's BVN check in verifyOwner.
   const save = await updateProfile({
-    kyb_status: "verified",
+    kyb_status: "business_verified",
     rc_number: rc,
     kyb_registered_name: result.registeredName ?? null,
     kyb_verified_at: new Date().toISOString(),
@@ -254,6 +256,86 @@ export async function verifyBusiness(input: {
   if (!save.ok) return save;
 
   return { ok: true, dev: result.dev, registeredName: result.registeredName };
+}
+
+/**
+ * Stage 2 of KYC/KYB: verify the business OWNER by BVN, name-matched against
+ * the profile. The raw BVN is never stored — only the last 4 digits, the
+ * registry's owner name, and a masked audit row. Sets kyb_status 'verified',
+ * which is what the setup gate and checkout require.
+ */
+export async function verifyOwner(input: {
+  bvn: string;
+}): Promise<Result & { dev?: boolean; ownerName?: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "You need to be logged in." };
+
+  const bvn = input.bvn.replace(/\D/g, "");
+  if (!/^\d{11}$/.test(bvn)) {
+    return { ok: false, error: "Enter your 11-digit BVN." };
+  }
+
+  const admin = createAdminClient();
+
+  const { count } = await admin
+    .from("kyb_verifications")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("id_type", "bvn")
+    .gte("created_at", new Date(Date.now() - 3_600_000).toISOString());
+  if ((count ?? 0) >= KYB_MAX_LOOKUPS_PER_HOUR) {
+    return { ok: false, error: "Too many verification attempts. Please try again later." };
+  }
+
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("first_name, last_name, kyb_status")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (!profile || profile.kyb_status === "pending") {
+    return { ok: false, error: "Verify your business registration first." };
+  }
+
+  const result = await verifyBvn(bvn, {
+    firstName: profile.first_name ?? undefined,
+    lastName: profile.last_name ?? undefined,
+  });
+
+  // Policy: a registry hit whose name matches nothing on the profile fails.
+  const policyOk = result.ok && result.nameMatched !== false;
+
+  await admin.from("kyb_verifications").insert({
+    user_id: user.id,
+    id_type: "bvn",
+    id_value: `****${bvn.slice(-4)}`,
+    status: policyOk ? "verified" : "failed",
+    provider: result.dev ? "dev" : "kora",
+    response: result.raw ?? null,
+  });
+
+  if (!result.ok) {
+    return { ok: false, error: result.error ?? "We couldn't verify that BVN." };
+  }
+  if (!policyOk) {
+    return {
+      ok: false,
+      error:
+        "The name on this BVN doesn't match the name on your account. Update your profile name to match your BVN, or check the number.",
+    };
+  }
+
+  const save = await updateProfile({
+    kyb_status: "verified",
+    bvn_last4: bvn.slice(-4),
+    kyc_owner_name: result.ownerName ?? null,
+    kyc_verified_at: new Date().toISOString(),
+  });
+  if (!save.ok) return save;
+
+  return { ok: true, dev: result.dev, ownerName: result.ownerName };
 }
 
 // ── Settlement account (bank) via Kora bank verification ─────────────────────
